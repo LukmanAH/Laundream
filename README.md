@@ -1,1 +1,1 @@
-wash-app-customer
+app-customer
