@@ -102,7 +102,7 @@ export default function SearchScreen({ navigation }) {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView style={styles.container}>
+      <View style={styles.container}>
 
         <TextInput
           style={styles.textInputStyle}
@@ -117,7 +117,7 @@ export default function SearchScreen({ navigation }) {
           ItemSeparatorComponent={ItemSeparatorView}
           renderItem={ItemView}
         />
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 };

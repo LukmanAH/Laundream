@@ -58,10 +58,9 @@ export default function RiwayatScreen({ navigation }) {
 
   const getItem = (item) =>
     Alert.alert(
-      "Hasil Pencarian",
+      "Detail Transaksi",
       'Kelurahan                          : ' + item.title, // + item.waktu + '\nMeninggal                         : ' + item.status + '\nSembuh                             : ' + item.harga + '\nVaksin Tahap Pertama  : ' + item.vpertama + '\nVaksin Tahap Kedua      : ' + item.vkedua + '\nZona                                  : ' + ((item.active == 0) ? "Merah" : "") + ((item.active == 1) ? "Oranye" : "") + ((item.active == 2) ? "Kuning" : "") + ((item.active == 3) ? "Hijau" : ""),
       [
-        { text: "OK", onPress: () => console.log("OK Pressed") },
         { text: "OK", onPress: () => console.log("OK Pressed") }
       ]
     );
