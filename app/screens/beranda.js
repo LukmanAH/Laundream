@@ -7,9 +7,9 @@ import {
   Text,
   TouchableOpacity,
   TextInput,
+  Alert,
   Image,
   View,
-  Alert,
   ActivityIndicator,
   RefreshControl,
 } from 'react-native';
@@ -18,16 +18,7 @@ import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import TouchableScale from 'react-native-touchable-scale';
 
 
-import {
-  Colors,
-  H1,
-  H2,
-  SPACING,
-  width,
-  H3,
-  SPAN,
-  height,
-} from '../../config/ui-config';
+import { Colors, H1, H2, SPACING, width, H3, SPAN, height, } from '../../config/ui-config';
 import { casesApi, statisticsApi } from '../../config/api';
 import Spacer from '../components/spacer';
 
@@ -142,19 +133,32 @@ export default function BerandaScreen({ navigation }) {
 function SaldoCard() {
   return (
     <View style={styles.analyticsCard}>
-      <Text
-        style={[
-          styles.title,
-          { fontSize: H2, color: Colors.dark, fontWeight: 'bold' },
-        ]}
-      >
-        Saldo :
-      </Text>
-      <View style={styles.analyticsCardItems}>
-        <Text style={{ color: 'green', fontWeight: 'bold', fontSize: H1 }}>
-          0
+      <View style={{ flex: 3 }}>
+        <Text
+          style={[
+            styles.title,
+            { fontSize: H2, color: Colors.dark, fontWeight: 'bold' },
+          ]}
+        >
+          Saldo :
         </Text>
+        <View style={styles.analyticsCardItems}>
+          <Text style={{ color: 'green', fontWeight: 'bold', fontSize: H1 }}>
+            0
+          </Text>
+        </View>
       </View>
+
+      <TouchableOpacity style={{ flex: 1 }}
+        onPress={() => alert(
+          'Fitur Belum Ada !!!'
+        )}>
+        <Image
+          source={require('./../../assets/Topup-icon.png')}
+          fadeDuration={0}
+          style={{ width: 70, height: 70, margin: 6 }}
+        />
+      </TouchableOpacity>
 
     </View>
 
@@ -176,6 +180,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: SPACING * 2,
   },
   analyticsCard: {
+    flexDirection: 'row',
     backgroundColor: 'white',
     marginTop: 150,
     padding: SPACING,

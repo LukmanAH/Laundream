@@ -5,49 +5,22 @@ import { View, ScrollView, Text, TouchableOpacity, Image, StyleSheet } from "rea
 
 import { Ionicons } from '@expo/vector-icons';
 
-export default function TransaksiScreen({ navigation }) {
+export default function Header(props) {
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.tittleHeader}>
-          <TouchableOpacity style={styles.back}
+    <View style={styles.header}>
+      <View style={styles.tittleHeader}>
+        {/* <TouchableOpacity style={styles.back}
             onPress={() => navigation.navigate('beranda')}>
             <Ionicons name="arrow-back-outline" size={40} color="white" />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
 
-          <View style={{ flex: 6, padding: 4 }}>
-            <Text style={styles.tittleText}>Transaksi</Text>
-          </View>
-
+        <View style={{ flex: 5, padding: 4 }}>
+          <Text style={styles.tittleText}>{Props.name}</Text>
         </View>
-        <View style={styles.tittleOpsi}>
-          <TouchableOpacity style={styles.opsi}>
-            <Text style={{ fontSize: H2, color: 'white' }}>
-              On Going
-            </Text>
-          </TouchableOpacity>
 
-          <TouchableOpacity
-            style={styles.opsi}
-            onPress={() => navigation.navigate('riwayat')}>
-            <Text style={{ fontSize: H2, color: '#bdc3c7' }}>
-              Riwayat
-            </Text>
-          </TouchableOpacity>
-
-        </View>
       </View>
 
-
-
-
-
-      <ScrollView>
-
-
-
-      </ScrollView>
-    </View >
+    </View>
   );
 }
 

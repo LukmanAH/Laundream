@@ -19,10 +19,17 @@ export const pages = [
   //   iconName: 'compass-outline',
   // },
   // {
-  //   name: 'News',
-  //   route: 'news',
-  //   iconName: 'newspaper-outline',
+  //   name: 'Login',
+  //   route: 'login',
+  //   iconName: 'login-outline',
   // },
+
+  {
+    name: 'search',
+    route: 'search',
+    iconName: 'search-outline',
+  },
+
   {
     name: 'analycis',
     route: 'beranda',
@@ -36,10 +43,16 @@ export const pages = [
   },
 
   {
-    name: 'Berita',
-    route: 'berita',
-    iconName: 'newspaper-outline',
+    name: 'Profile',
+    route: 'profile',
+    iconName: 'person-outline',
   },
+
+  // {
+  //   name: 'Berita',
+  //   route: 'berita',
+  //   iconName: 'newspaper-outline',
+  // },
 
 
 

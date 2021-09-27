@@ -172,7 +172,10 @@ function ArticleCard({ article }) {
   return (
     <TouchableOpacity onPress={() => Linking.openURL(article.url)}>
       <View style={styles.articleContainer}>
-        <Image style={styles.articleImg} source={{ uri: article.urlToImage }} />
+        <Image
+          style={styles.articleImg}
+          source={require('./../../assets/bedding-icon.png')}
+        />
         <Text style={styles.articleTime}>
           {new Date(article.publishedAt).toDateString()}
         </Text>

@@ -1,11 +1,70 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import { H1, H2, SPACING } from "../../config/ui-config";
-import { View, ScrollView, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
+import { View, ScrollView, Text, TouchableOpacity, FlatList, Alert, Image, StyleSheet } from "react-native";
 
 import { Ionicons } from '@expo/vector-icons';
+import { transaksiApi } from '../../config/api';
 
 export default function RiwayatScreen({ navigation }) {
+  const [masterDataSource, setMasterDataSource] = useState([]);
+
+  useEffect(() => {
+    fetch(transaksiApi)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        setMasterDataSource(responseJson);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  const ItemSeparatorView = () => {
+    return (
+      // Flat List Item Separator
+      <View
+        style={{
+          height: 0.5,
+          width: '100%',
+          backgroundColor: '#C8C8C8',
+        }}
+      />
+    );
+  };
+
+  const ItemView = ({ item }) => {
+    return (
+      // Flat List Item
+      <TouchableOpacity
+        style={styles.itemStyle}
+        onPress={() => getItem(item)}
+      >
+        <Image
+          style={styles.articleImg}
+          source={require('./../../assets/bedding-icon.png')}
+        />
+
+        <Text style={{ flex: 5 }}>
+          {item.title.toUpperCase()}
+        </Text>
+        <Text style={{ flex: 1 }}>
+          {item.id.toString()}
+        </Text>
+      </TouchableOpacity>
+
+    );
+  };
+
+  const getItem = (item) =>
+    Alert.alert(
+      "Hasil Pencarian",
+      'Kelurahan                          : ' + item.title, // + item.waktu + '\nMeninggal                         : ' + item.status + '\nSembuh                             : ' + item.harga + '\nVaksin Tahap Pertama  : ' + item.vpertama + '\nVaksin Tahap Kedua      : ' + item.vkedua + '\nZona                                  : ' + ((item.active == 0) ? "Merah" : "") + ((item.active == 1) ? "Oranye" : "") + ((item.active == 2) ? "Kuning" : "") + ((item.active == 3) ? "Hijau" : ""),
+      [
+        { text: "OK", onPress: () => console.log("OK Pressed") },
+        { text: "OK", onPress: () => console.log("OK Pressed") }
+      ]
+    );
 
   return (
     <View style={styles.container}>
@@ -16,7 +75,7 @@ export default function RiwayatScreen({ navigation }) {
             <Ionicons name="arrow-back-outline" size={40} color="white" />
           </TouchableOpacity>
 
-          <View style={{ flex: 5, padding: 4 }}>
+          <View style={{ flex: 6, padding: 4 }}>
             <Text style={styles.tittleText}>Transaksi</Text>
           </View>
 
@@ -44,13 +103,13 @@ export default function RiwayatScreen({ navigation }) {
 
 
 
+      <FlatList
+        data={masterDataSource}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={ItemView}
+      />
 
 
-      <ScrollView>
-
-
-
-      </ScrollView>
     </View >
   );
 }
@@ -59,6 +118,25 @@ export default function RiwayatScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+
+  itemStyle: {
+    flexDirection: 'row',
+    marginHorizontal: SPACING * 0.5,
+    marginVertical: SPACING * 0.25,
+    position: 'relative',
+    flexDirection: 'row',
+    backgroundColor: 'white',
+    padding: SPACING * 0.5,
+    borderRadius: SPACING / 4,
+  },
+
+  articleImg: {
+    width: 60,
+    height: 60,
+    borderRadius: SPACING * 0.5,
+    backgroundColor: Colors.lightGrey,
+    marginRight: SPACING * 0.5,
   },
 
   header: {
