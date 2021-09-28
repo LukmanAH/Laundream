@@ -89,36 +89,36 @@ export default function BerandaScreen({ navigation }) {
             <Image
               source={require('./../../assets/kiloan-icon.png')}
               fadeDuration={0}
-              style={{ width: 50, height: 50 }}
+              style={styles.iconMenu}
             />
-            <Text>Kiloan</Text>
+            <Text style={styles.textMenu}>Kiloan</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.caseContainer} >
             <Image
               source={require('./../../assets/satuan-icon.png')}
               fadeDuration={0}
-              style={{ width: 50, height: 50 }}
+              style={styles.iconMenu}
             />
-            <Text style={{ color: 'white', }}>menu 2</Text>
+            <Text style={styles.textMenu}>Satuan</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.caseContainer} >
             <Image
               source={require('./../../assets/bedding-icon.png')}
               fadeDuration={0}
-              style={{ width: 50, height: 50 }}
+              style={styles.iconMenu}
             />
-            <Text>menu 3</Text>
+            <Text style={styles.textMenu}>menu 3</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.caseContainer} >
             <Image
               source={require('./../../assets/bedding-icon.png')}
               fadeDuration={0}
-              style={{ width: 50, height: 50 }}
+              style={styles.iconMenu}
             />
-            <Text>menu 4</Text>
+            <Text style={styles.textMenu}>Catalog</Text>
           </TouchableOpacity>
         </View>
         <Spacer />
@@ -217,12 +217,13 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   caseContainer: {
-    padding: SPACING * 1.5,
+    padding: SPACING * 1,
     // elevation: 5,
-    width: (width - SPACING * 2 - SPACING) * 0.4,
+    width: (width - SPACING * 2) * 0.4,
     backgroundColor: '#64B8CB',
     borderRadius: SPACING,
     marginVertical: SPACING * 0.5,
+    alignItems: 'center',
   },
 
   searchContainer: {
@@ -235,6 +236,16 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: SPACING * 3,
     top: 18,
+  },
+
+  iconMenu: {
+    width: 50,
+    height: 50
+  },
+
+  textMenu: {
+    color: 'white',
+    fontSize: H3,
   },
 
   indicator: {

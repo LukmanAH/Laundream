@@ -45,19 +45,19 @@ export default function ProfileScreen({ navigation }) {
       <View>
 
 
-        <View style={{ flexDirection: 'row' }}>
+        <View style={styles.viewData}>
           <Ionicons name="person-outline" size={30} color={Colors.primary} />
-          <Text>DIsini username</Text>
+          <Text style={styles.viewData}>DIsini username</Text>
         </View>
 
-        <View style={{ flexDirection: 'row' }}>
+        <View style={styles.viewData}>
           <Ionicons name="call-outline" size={30} color={Colors.primary} />
-          <Text>DIsini no hp</Text>
+          <Text style={styles.viewData}>DIsini no hp</Text>
         </View>
 
-        <View style={{ flexDirection: 'row' }}>
+        <View style={styles.viewData}>
           <Ionicons name="mail-outline" size={30} color={Colors.primary} />
-          <Text>DIsini gtau</Text>
+          <Text style={styles.viewData}>DIsini gtau</Text>
         </View>
 
       </View>
@@ -105,6 +105,16 @@ const styles = StyleSheet.create({
   back: {
     flex: 1,
     paddingLeft: SPACING * 1.5,
+  },
+
+  viewData: {
+    flexDirection: 'row',
+    margin: 10,
+    alignItems: 'center',
+  },
+
+  textData: {
+    margin: 5,
   },
 
   opsi: {

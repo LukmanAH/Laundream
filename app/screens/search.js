@@ -11,7 +11,7 @@ import {
   Alert,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { transaksiApi } from '../../config/api';
+import { riwayatApi } from '../../config/api';
 
 import {
   Colors,
@@ -30,7 +30,7 @@ export default function SearchScreen({ navigation }) {
   const [masterDataSource, setMasterDataSource] = useState([]);
 
   useEffect(() => {
-    fetch(transaksiApi)
+    fetch(riwayatApi)
       .then((response) => response.json())
       .then((responseJson) => {
         setFilteredDataSource(responseJson);

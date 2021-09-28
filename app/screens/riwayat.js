@@ -4,13 +4,13 @@ import { H1, H2, SPACING } from "../../config/ui-config";
 import { View, ScrollView, Text, TouchableOpacity, FlatList, Alert, Image, StyleSheet } from "react-native";
 
 import { Ionicons } from '@expo/vector-icons';
-import { transaksiApi } from '../../config/api';
+import { riwayatUserApi } from '../../config/api';
 
 export default function RiwayatScreen({ navigation }) {
   const [masterDataSource, setMasterDataSource] = useState([]);
 
   useEffect(() => {
-    fetch(transaksiApi)
+    fetch(riwayatUserApi)
       .then((response) => response.json())
       .then((responseJson) => {
         setMasterDataSource(responseJson);
@@ -19,19 +19,6 @@ export default function RiwayatScreen({ navigation }) {
         console.error(error);
       });
   }, []);
-
-  const ItemSeparatorView = () => {
-    return (
-      // Flat List Item Separator
-      <View
-        style={{
-          height: 0.5,
-          width: '100%',
-          backgroundColor: '#C8C8C8',
-        }}
-      />
-    );
-  };
 
   const ItemView = ({ item }) => {
     return (
