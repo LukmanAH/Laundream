@@ -52,7 +52,7 @@ const LoginScreen = ({navigation}) => {
         </TouchableOpacity>
         <View style={{flexDirection: 'row', marginTop: 10, alignItems:'center'}}>
           <Text>Belum Punya Akun?</Text>
-          <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+          <TouchableOpacity onPress={() => navigation.navigate("RegisterScreen")}>
           <Text
             style={{
               fontWeight: "500",
