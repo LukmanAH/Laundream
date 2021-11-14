@@ -9,6 +9,10 @@ const LoginScreen = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  function login() {
+    navigation.replace('HomePage');
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.headerText}>Masuk Laundream</Text>
@@ -39,16 +43,25 @@ const LoginScreen = ({navigation}) => {
         autoCapitalize="none"
         value={password}
         style={styles.textInput}
+        secureTextEntry={true}
       />
 
       <View style={styles.bottom}>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={() => login()}>
           <Text style={styles.textLogin}>Masuk</Text>
         </TouchableOpacity>
-        <View style={{flexDirection: 'row', marginTop: 10}}>
-          <Text>Belum Punya Akun ?</Text>
-          <TouchableOpacity>
-            <Text>Daftar</Text>
+        <View style={{flexDirection: 'row', marginTop: 10, alignItems:'center'}}>
+          <Text>Belum Punya Akun?</Text>
+          <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+          <Text
+            style={{
+              fontWeight: "500",
+              color: ColorPrimary,
+              marginLeft:5
+            }}
+          >
+            Daftar
+          </Text>
           </TouchableOpacity>
         </View>
       </View>
