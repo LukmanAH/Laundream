@@ -3,5 +3,6 @@ import LoginScreen from "./Login";
 import HomePage from "./Admin/HomeAdmin";
 import RegisterScreen from "./Register";
 import KelolaOutlet from "./Admin/KelolaOutletScreen";
+import EditProfileOutlet from "./Admin/EditProfileOutletScreen";
 
-export {SplashScreen, LoginScreen, HomePage, RegisterScreen, KelolaOutlet};
+export {SplashScreen, LoginScreen, HomePage, RegisterScreen, KelolaOutlet, EditProfileOutlet};

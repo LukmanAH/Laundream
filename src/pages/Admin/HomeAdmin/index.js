@@ -1,4 +1,3 @@
-import {transform} from '@babel/core';
 import React from 'react';
 import {
   View,
@@ -10,7 +9,6 @@ import {
   ScrollView,
 } from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import { color } from 'react-native-reanimated';
 import {
   iconKonfirmasi,
   iconMesinCuci,
