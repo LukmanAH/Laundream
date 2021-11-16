@@ -7,7 +7,12 @@ import {
   RegisterScreen,
   KelolaOutlet,
   EditProfileOutlet,
+  JamOperasional,
+  TarifOngkirScreen,
 } from '../pages';
+import KelolaLayanan from '../pages/Admin/KelolaLayananScreen';
+import TambahLayanan from '../pages/Admin/TambahLayananScreen';
+import LayananRegular from '../pages/Admin/LayananRegulerScreen';
 
 const Stack = createStackNavigator();
 
@@ -33,10 +38,33 @@ const Route = () => {
         name="KelolaOutlet"
         component={KelolaOutlet}
       />
-
       <Stack.Screen
         name="EditProfileOutlet"
         component={EditProfileOutlet}
+      />
+      <Stack.Screen
+        name="JamOperasional"
+        component={JamOperasional}
+      />
+      <Stack.Screen
+        name="TarifOngkirScreen"
+        component={TarifOngkirScreen}
+      />
+      <Stack.Screen
+        name="KelolaLayanan"
+        component={KelolaLayanan}
+      />
+      <Stack.Screen
+        name="TambahLayanan"
+        component={TambahLayanan}
+      />
+      <Stack.Screen
+        name="TarifOngkir"
+        component={TarifOngkirScreen}
+      />
+      <Stack.Screen
+        name="LayananRegular"
+        component={LayananRegular}
       />
     </Stack.Navigator>
   );
