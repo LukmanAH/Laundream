@@ -1,6 +1,6 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import {SplashScreen, LoginScreen, HomePage, RegisterScreen} from '../pages';
+import {SplashScreen, LoginScreen, HomePage, RegisterScreen, KelolaOutlet} from '../pages';
 
 const Stack = createStackNavigator();
 
@@ -24,13 +24,18 @@ const Route = () => {
         component={LoginScreen}
         options={{gesturesEnabled: false}}
       />
+        <Stack.Screen
+          name="RegisterScreen"
+          component={RegisterScreen}
+        />
       <Stack.Screen
         name="HomePage"
         component={HomePage}
       />
       <Stack.Screen
-        name="RegisterScreen"
-        component={RegisterScreen}
+        name="KelolaOutlet"
+        component={KelolaOutlet}
+        headerShown= {true}
       />
       
     </Stack.Navigator>

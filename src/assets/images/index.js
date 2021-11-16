@@ -10,6 +10,9 @@ import markIcon from './markIcon.png';
 import iconMotor from './motor.png';
 import iconMesinCuci from './mesinCuci.png';
 import iconMoney from './money.png';
+import bgHeader from './header.png';
+import iconOutlet from './OutletIcon.png';
+import iconScooter from './noto_motor-scooter.png'
 
 export {
   Logo,
@@ -23,5 +26,8 @@ export {
   markIcon,
   iconKonfirmasi,
   iconMesinCuci,
-  iconMoney
+  iconMoney,
+  bgHeader,
+  iconOutlet,
+  iconScooter
 };

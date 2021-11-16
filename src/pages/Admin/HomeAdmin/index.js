@@ -24,7 +24,7 @@ import {
 } from '../../../assets/images';
 import SIZES, {ColorPrimary} from '../../../utils/constanta';
 
-const HomePage = () => {
+const HomePage = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar animated={true} barStyle="default" hidden={false} />
@@ -107,7 +107,7 @@ const HomePage = () => {
                 width: SIZES.width,
                 paddingHorizontal: 20,
               }}>
-              <TouchableOpacity style={{alignItems: 'center'}}>
+              <TouchableOpacity style={{alignItems: 'center'}} onPress={() => navigation.navigate("KelolaOutlet")}>
                 <View style={styles.menuNavigation} />
                 <Text style={styles.labelNavigation}>Kelola Outlet</Text>
               </TouchableOpacity>
