@@ -13,6 +13,7 @@ import {
   iconScooter,
 } from '../../../assets/images';
 import { HeaderBar } from '../../../components';
+
 const MenuOutlet = ({title, screenName, navigation, icon}) => {
   return (
     <TouchableOpacity
@@ -49,8 +50,8 @@ const KelolaOutlet = ({navigation}) => {
       <HeaderBar navigation={navigation} screenName='HomePage' title='Kelola Outlet' />
       <ScrollView>
         <MenuOutlet icon={iconOutlet} title="Profile Outlet" navigation={navigation} screenName='EditProfileOutlet'/>
-        <MenuOutlet icon={iconJam} title="Jam Operasional" />
-        <MenuOutlet icon={iconScooter} title="Tarif Ongkir" />
+        <MenuOutlet icon={iconJam} title="Jam Operasional"  navigation={navigation} screenName='JamOperasional'/>
+        <MenuOutlet icon={iconScooter} title="Tarif Ongkir" navigation={navigation} screenName='TarifOngkirScreen'/>
       </ScrollView>
     </View>
   );

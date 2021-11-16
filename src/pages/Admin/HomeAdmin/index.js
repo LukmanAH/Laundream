@@ -110,7 +110,8 @@ const HomePage = ({navigation}) => {
                 <Text style={styles.labelNavigation}>Kelola Outlet</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={{alignItems: 'center'}}>
+              <TouchableOpacity style={{alignItems: 'center'}} 
+              onPress={() => navigation.navigate("KelolaLayanan")}>
                 <View style={styles.menuNavigation} />
                 <Text style={styles.labelNavigation}>Kelola Layanan</Text>
               </TouchableOpacity>
