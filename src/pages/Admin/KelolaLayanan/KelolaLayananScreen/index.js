@@ -1,7 +1,7 @@
 import React from 'react';
 import {Text, View, TouchableOpacity, Image} from 'react-native';
-import { iconJam, iconOutlet } from '../../../assets/images';
-import {HeaderBar} from '../../../components';
+import { iconJam, iconOutlet } from '../../../../assets/images';
+import { HeaderBar } from '../../../../components';
 
 const MenuLayanan = ({title, screenName, navigation, icon}) => {
     return (

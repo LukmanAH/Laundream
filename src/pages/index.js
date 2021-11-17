@@ -2,10 +2,13 @@ import SplashScreen from './SplashScreen';
 import LoginScreen from './Login';
 import HomePage from './Admin/HomeAdmin';
 import RegisterScreen from './Register';
-import KelolaOutlet from './Admin/KelolaOutletScreen';
-import EditProfileOutlet from './Admin/EditProfileOutletScreen';
-import JamOperasional from './Admin/JamOperasionalScreen';
-import TarifOngkirScreen from './Admin/TarifOngkirScreen';
+import KelolaOutlet from './Admin/KelolaOutlet/KelolaOutletScreen';
+import EditProfileOutlet from './Admin/KelolaOutlet/EditProfileOutletScreen';
+import JamOperasional from './Admin/KelolaOutlet/JamOperasionalScreen';
+import TarifOngkirScreen from './Admin/KelolaOutlet/TarifOngkirScreen';
+import KelolaLayanan from './Admin/KelolaLayanan/KelolaLayananScreen';
+import TambahLayanan from './Admin/KelolaLayanan/LayananRegular/TambahLayananScreen';
+import LayananRegular from './Admin/KelolaLayanan/LayananRegular/LayananRegulerScreen';
 
 export {
   SplashScreen,
@@ -15,5 +18,8 @@ export {
   KelolaOutlet,
   EditProfileOutlet,
   JamOperasional,
-  TarifOngkirScreen
+  TarifOngkirScreen,
+  KelolaLayanan,
+  TambahLayanan,
+  LayananRegular
 };

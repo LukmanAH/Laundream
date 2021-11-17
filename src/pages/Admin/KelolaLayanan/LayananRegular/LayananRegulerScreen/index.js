@@ -1,7 +1,7 @@
 import React from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
-import {HeaderBar} from '../../../components';
-import { ColorPrimary } from '../../../utils/constanta';
+import {HeaderBar} from '../../../../../components';
+import { ColorPrimary } from '../../../../../utils/constanta';
 
 const LayananRegular = ({navigation}) => {
   return (
@@ -17,7 +17,7 @@ const LayananRegular = ({navigation}) => {
       <Text>Layanan Regular</Text>
       <View style={{
           paddingHorizontal:20,
-          marginTop:10
+          marginTop:10  
       }}>
 
       <TouchableOpacity style={{

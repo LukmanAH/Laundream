@@ -11,8 +11,8 @@ import {
   iconJam,
   iconOutlet,
   iconScooter,
-} from '../../../assets/images';
-import { HeaderBar } from '../../../components';
+} from '../../../../assets/images';
+import { HeaderBar } from '../../../../components';
 
 const MenuOutlet = ({title, screenName, navigation, icon}) => {
   return (

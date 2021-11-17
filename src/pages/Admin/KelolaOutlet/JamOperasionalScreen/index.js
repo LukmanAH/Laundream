@@ -1,6 +1,6 @@
 import React from 'react';
 import {Text, View} from 'react-native';
-import {HeaderBar} from '../../../components';
+import {HeaderBar} from '../../../../components';
 
 const JamOperasional = ({navigation}) => {
   return (

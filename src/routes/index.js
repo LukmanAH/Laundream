@@ -9,10 +9,10 @@ import {
   EditProfileOutlet,
   JamOperasional,
   TarifOngkirScreen,
+  KelolaLayanan,
+  LayananRegular,
+  TambahLayanan,
 } from '../pages';
-import KelolaLayanan from '../pages/Admin/KelolaLayananScreen';
-import TambahLayanan from '../pages/Admin/TambahLayananScreen';
-import LayananRegular from '../pages/Admin/LayananRegulerScreen';
 
 const Stack = createStackNavigator();
 

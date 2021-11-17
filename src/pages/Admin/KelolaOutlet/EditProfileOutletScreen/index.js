@@ -8,10 +8,10 @@ import {
   Text,
 } from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
-import {outletLogo} from '../../../assets/images';
-import {HeaderBar} from '../../../components';
+import {outletLogo} from '../../../../assets/images';
+import {HeaderBar} from '../../../../components';
 import DropDownPicker from 'react-native-dropdown-picker';
-import SIZES, {ColorPrimary} from '../../../utils/constanta';
+import SIZES, {ColorPrimary} from '../../../../utils/constanta';
 
 const EditProfileOutlet = ({navigation}) => {
   return (
@@ -76,7 +76,9 @@ const EditProfileOutlet = ({navigation}) => {
           alignItems: 'center',
           marginBottom: 20,
         }}>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("HomePage")}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate('HomePage')}>
           <Text style={styles.btnText}>Simpan</Text>
         </TouchableOpacity>
       </View>
@@ -101,7 +103,7 @@ const styles = StyleSheet.create({
   btnText: {
     fontSize: 20,
     fontWeight: '700',
-    color:'white'
+    color: 'white',
   },
 });
 
