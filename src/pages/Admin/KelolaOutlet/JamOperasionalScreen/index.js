@@ -1,11 +1,9 @@
 import React, {useState, useCallback} from 'react';
 import {SafeAreaView, TouchableOpacity, View, StyleSheet} from 'react-native';
-import {HeaderBar} from '../../../../components';
-
-import {Button, Text} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import {TimePickerModal} from 'react-native-paper-dates';
-import {ThemeProvider} from '@react-navigation/native';
-import SIZES, { ColorPrimary } from '../../../../utils/constanta';
+import {HeaderBar} from '../../../../components';
+import SIZES, {ColorPrimary} from '../../../../utils/constanta';
 
 const JamOperasional = ({navigation}) => {
   const [visible, setVisible] = useState(false);
@@ -81,8 +79,8 @@ const JamOperasional = ({navigation}) => {
             </TouchableOpacity>
           </View>
         </View>
-        
-{/* Sabtu Minggu */}
+
+        {/* Sabtu Minggu */}
         <View style={styles.wrapper}>
           <Text>Sabtu - Minggu</Text>
           <View>
@@ -109,18 +107,6 @@ const JamOperasional = ({navigation}) => {
           </View>
           <View>
             <Text>Jam Tutup</Text>
-            <TimePickerModal
-              visible={visible}
-              onDismiss={onDismiss}
-              onConfirm={onConfirm}
-              hours={12} // default: current hours
-              minutes={14} // default: current minutes
-              label="Pilih Jam" // optional, default 'Select time'
-              cancelLabel="Cancel" // optional, default: 'Cancel'
-              confirmLabel="Ok" // optional, default: 'Ok'
-              animationType="fade" // optional, default is 'none'
-              locale="en" // optional, default is automically detected by your system
-            />
             <TouchableOpacity
               onPress={() => setVisible(true)}
               style={styles.inputTime}>
@@ -132,10 +118,12 @@ const JamOperasional = ({navigation}) => {
         </View>
       </View>
       <View style={styles.bottom}>
-      <TouchableOpacity style={styles.button} onPress={() => console.log('simpan')}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => console.log('simpan')}>
           <Text style={styles.textLogin}>Simpan</Text>
         </TouchableOpacity>
-        </View>
+      </View>
     </SafeAreaView>
   );
 };
@@ -158,7 +146,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'white',
     padding: 5,
-    borderRadius:8
+    borderRadius: 8,
   },
   button: {
     backgroundColor: ColorPrimary,
@@ -172,7 +160,7 @@ const styles = StyleSheet.create({
   textLogin: {
     fontSize: 20,
     fontWeight: '700',
-    color:'white'
+    color: 'white',
   },
   bottom: {
     flex: 1,
