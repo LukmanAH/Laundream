@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   StyleSheet,
   View,
@@ -7,13 +7,30 @@ import {
   TouchableOpacity,
   Text,
 } from 'react-native';
-import {TextInput} from 'react-native-gesture-handler';
+import { TextInput } from 'react-native-paper';
+import DropDown from 'react-native-paper-dropdown';
 import {outletLogo} from '../../../../assets/images';
 import {HeaderBar} from '../../../../components';
-import DropDownPicker from 'react-native-dropdown-picker';
 import SIZES, {ColorPrimary} from '../../../../utils/constanta';
 
 const EditProfileOutlet = ({navigation}) => {
+  const [showDropDown, setShowDropDown] = useState(false);
+  const [kota, setKota] = useState('');
+  const kotaList = [
+    {
+      label: 'Bandar Lampung',
+      value: 'Bandar Lampung',
+    },
+    {
+      label: 'Jakarta',
+      value: 'Jakarta',
+    },
+    {
+      label: 'Palembang',
+      value: 'Palembang',
+    },
+  ];
+  
   return (
     <View style={styles.container}>
       <HeaderBar
@@ -35,40 +52,40 @@ const EditProfileOutlet = ({navigation}) => {
           />
           <TextInput
             style={{
-              borderWidth: 1,
               flex: 3,
               marginLeft: 16,
-              padding: 20,
-              borderRadius: 16,
             }}
-            placeholder="Outlet kamu"
+            label="Outlet kamu"
           />
         </View>
 
-        <DropDownPicker
-          items={[
-            {label: 'Indonesia', value: 'item1'},
-            {label: 'Russia', value: 'item2'},
-          ]}
-          defaultIndex={1}
-          containerStyle={{height: 90}}
-          onChangeItem={item => console.log(item.label, item.value)}
-          placeholder="Pilih kota kamu"
-          style={{height: 69, borderRadius: 16, marginTop: 20}}
-        />
         <TextInput
           style={{
-            borderWidth: 1,
-            flex: 1,
-            padding: 20,
-            borderRadius: 16,
-            height: 69,
-            marginTop: 20,
+            marginVertical:20
           }}
-          placeholder="Nomor Ponsel"
+          label='Nomor Ponsel'
           keyboardType="number-pad"
         />
+        <DropDown
+              label={"Kota"}
+              mode={"outlined"}
+              visible={showDropDown}
+              showDropDown={() => setShowDropDown(true)}
+              onDismiss={() => setShowDropDown(false)}
+              value={kota}
+              setValue={setKota}
+              list={kotaList}
+            />
+            <TextInput
+          style={{
+            marginVertical:20
+          }}
+          label='Alamat Lengkap'
+          multiline={true}
+          numberOfLines={4}
+        />
       </ScrollView>
+      
       <View
         style={{
           flex: 1,
