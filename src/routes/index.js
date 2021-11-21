@@ -12,6 +12,7 @@ import {
   KelolaLayanan,
   LayananRegular,
   TambahLayanan,
+  TambahTarifOngkirScreen,
 } from '../pages';
 
 const Stack = createStackNavigator();
@@ -61,6 +62,10 @@ const Route = () => {
       <Stack.Screen
         name="TarifOngkir"
         component={TarifOngkirScreen}
+      />
+      <Stack.Screen
+        name="TambahTarifOngkir"
+        component={TambahTarifOngkirScreen}
       />
       <Stack.Screen
         name="LayananRegular"
