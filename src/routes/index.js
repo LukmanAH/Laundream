@@ -13,6 +13,7 @@ import {
   LayananRegular,
   TambahLayanan,
   TambahTarifOngkirScreen,
+  EditLayanan
 } from '../pages';
 
 const Stack = createStackNavigator();
@@ -70,6 +71,10 @@ const Route = () => {
       <Stack.Screen
         name="LayananRegular"
         component={LayananRegular}
+      />
+      <Stack.Screen
+        name="EditLayanan"
+        component={EditLayanan}
       />
     </Stack.Navigator>
   );

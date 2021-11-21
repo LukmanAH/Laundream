@@ -10,6 +10,7 @@ import KelolaLayanan from './Admin/KelolaLayanan/KelolaLayananScreen';
 import TambahLayanan from './Admin/KelolaLayanan/LayananRegular/TambahLayananScreen';
 import LayananRegular from './Admin/KelolaLayanan/LayananRegular/LayananRegulerScreen';
 import TambahTarifOngkirScreen from './Admin/KelolaOutlet/TarifOngkirScreen/TambahTarifOngkir';
+import EditLayanan from './Admin/KelolaLayanan/LayananRegular/EditLayananRegularScreen';
 
 export {
   SplashScreen,
@@ -23,5 +24,6 @@ export {
   KelolaLayanan,
   TambahLayanan,
   LayananRegular,
-  TambahTarifOngkirScreen
+  TambahTarifOngkirScreen,
+  EditLayanan
 };
