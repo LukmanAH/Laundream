@@ -14,6 +14,10 @@ import EditLayanan from './Admin/KelolaLayanan/LayananRegular/EditLayananRegular
 import ParfumScreen from './Admin/KelolaLayanan/Parfum/ParfumScreen';
 import TambahParfum from './Admin/KelolaLayanan/Parfum/TambahParfum';
 import EditParfum from './Admin/KelolaLayanan/Parfum/EditParfum';
+import EditPegawaiScreen from './Admin/KelolaPegawai/EditPegawaiScreen';
+import PegawaiScreen from './Admin/KelolaPegawai';
+import TambahPegawaiScreen from './Admin/KelolaPegawai/TambahPegawaiScreen';
+import DetailPegawaiScreen from './Admin/KelolaPegawai/LihatPegawaiScreen';
 
 export {
   SplashScreen,
@@ -31,5 +35,9 @@ export {
   EditLayanan,
   ParfumScreen,
   TambahParfum,
-  EditParfum
+  EditParfum,
+  EditPegawaiScreen,
+  PegawaiScreen,
+  TambahPegawaiScreen,
+  DetailPegawaiScreen
 };
