@@ -11,6 +11,9 @@ import TambahLayanan from './Admin/KelolaLayanan/LayananRegular/TambahLayananScr
 import LayananRegular from './Admin/KelolaLayanan/LayananRegular/LayananRegulerScreen';
 import TambahTarifOngkirScreen from './Admin/KelolaOutlet/TarifOngkirScreen/TambahTarifOngkir';
 import EditLayanan from './Admin/KelolaLayanan/LayananRegular/EditLayananRegularScreen';
+import ParfumScreen from './Admin/KelolaLayanan/Parfum/ParfumScreen';
+import TambahParfum from './Admin/KelolaLayanan/Parfum/TambahParfum';
+import EditParfum from './Admin/KelolaLayanan/Parfum/EditParfum';
 
 export {
   SplashScreen,
@@ -25,5 +28,8 @@ export {
   TambahLayanan,
   LayananRegular,
   TambahTarifOngkirScreen,
-  EditLayanan
+  EditLayanan,
+  ParfumScreen,
+  TambahParfum,
+  EditParfum
 };

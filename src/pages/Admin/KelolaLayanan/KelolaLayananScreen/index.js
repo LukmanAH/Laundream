@@ -42,7 +42,7 @@ const KelolaLayanan = ({navigation}) => {
         title="Kelola Layanan"
       />
       <MenuLayanan icon={iconOutlet} title="Layanan Regular" navigation={navigation} screenName='LayananRegular'/>
-        <MenuLayanan icon={iconJam} title="Parfum"  navigation={navigation} screenName='JamOperasional'/>
+        <MenuLayanan icon={iconJam} title="Parfum"  navigation={navigation} screenName='Parfum'/>
         
     </View>
   );

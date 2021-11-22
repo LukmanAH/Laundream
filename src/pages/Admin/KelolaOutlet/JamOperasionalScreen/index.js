@@ -35,12 +35,12 @@ const JamOperasional = ({navigation}) => {
         <View style={styles.wrapper}>
           <Text>Senin - Jumat</Text>
           <View>
-            <Text>Jam Buka</Text>
+            <Text>Jam Buka</Text> 
             <TimePickerModal
               visible={visible}
               onDismiss={onDismiss}
               onConfirm={onConfirm}
-              hours={12} // default: current hours
+              hours={24} // default: current hours
               minutes={14} // default: current minutes
               label="Pilih Jam" // optional, default 'Select time'
               cancelLabel="Cancel" // optional, default: 'Cancel'
@@ -62,7 +62,7 @@ const JamOperasional = ({navigation}) => {
               visible={visible}
               onDismiss={onDismiss}
               onConfirm={onConfirm}
-              hours={12} // default: current hours
+              hours={24} // default: current hours
               minutes={14} // default: current minutes
               label="Pilih Jam" // optional, default 'Select time'
               cancelLabel="Cancel" // optional, default: 'Cancel'
@@ -89,7 +89,7 @@ const JamOperasional = ({navigation}) => {
               visible={visible}
               onDismiss={onDismiss}
               onConfirm={onConfirm}
-              hours={12} // default: current hours
+              hours={24} // default: current hours
               minutes={14} // default: current minutes
               label="Pilih Jam" // optional, default 'Select time'
               cancelLabel="Cancel" // optional, default: 'Cancel'
