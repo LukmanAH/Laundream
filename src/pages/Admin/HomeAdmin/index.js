@@ -124,7 +124,7 @@ const HomePage = ({navigation}) => {
                 width: SIZES.width,
                 paddingHorizontal: 20,
               }}>
-              <TouchableOpacity style={{alignItems: 'center'}}>
+              <TouchableOpacity style={{alignItems: 'center'}} onPress={() => navigation.navigate("Pegawai")}>
                 <View style={styles.menuNavigation} />
                 <Text style={styles.labelNavigation}>Kelola Pegawai</Text>
               </TouchableOpacity>
