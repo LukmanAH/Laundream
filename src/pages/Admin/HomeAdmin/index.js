@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -8,7 +8,7 @@ import {
   StatusBar,
   ScrollView,
 } from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import {
   iconKonfirmasi,
   iconMesinCuci,
@@ -20,39 +20,56 @@ import {
   markIcon,
   outletLogo,
 } from '../../../assets/images';
-import SIZES, {ColorPrimary} from '../../../utils/constanta';
+import SIZES, { ColorPrimary, ROLE_EMPLOYEE } from '../../../utils/constanta';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const HomePage = ({navigation}) => {
+const HomePage = ({ navigation }) => {
+  const [user, setUser] = useState('');
+  const [role, setRole] = useState(ROLE_EMPLOYEE);
+
+  async function getUser() {
+    if (!user) {
+      const getUser = await AsyncStorage.getItem('user');
+      const parseObject = JSON.parse(getUser);
+      setUser(parseObject.name);
+      setRole(parseObject.role)
+    }
+  }
+
+  useEffect(() => {
+    getUser()
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar animated={true} barStyle="default" hidden={false} />
       <ScrollView>
         <View style={styles.header}>
           <Image source={outletLogo} />
-          <View style={{flexDirection: 'column', marginLeft: 10}}>
-            <Text style={{fontSize: 16}}>Hai,</Text>
-            <Text style={{fontWeight: '700', fontSize: 20}}>
-              Dennis Laundry
+          <View style={{ flexDirection: 'column', marginLeft: 10 }}>
+            <Text style={{ fontSize: 16 }}>Hai,</Text>
+            <Text style={{ fontWeight: '700', fontSize: 20 }}>
+              {user}
             </Text>
           </View>
         </View>
 
-        <View style={{justifyContent: 'center', alignItems: 'center'}}>
+        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
           <View style={styles.hero}>
-            <View style={{flexDirection: 'column'}}>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <View style={{ flexDirection: 'column' }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Image source={iconMoney} />
-                <Text style={{fontSize: 24, fontWeight: '600', marginLeft: 5}}>
+                <Text style={{ fontSize: 24, fontWeight: '600', marginLeft: 5 }}>
                   Keuangan
                 </Text>
               </View>
-              <Text style={{fontWeight: '500', fontSize: 16}}>Pendapatan</Text>
-              <Text style={{fontWeight: '700', fontSize: 36}}>Rp2.000.000</Text>
+              <Text style={{ fontWeight: '500', fontSize: 16 }}>Pendapatan</Text>
+              <Text style={{ fontWeight: '700', fontSize: 36 }}>Rp2.000.000</Text>
             </View>
             <Image source={iconRT} />
           </View>
 
-          <View style={{marginTop: 24}}>
+          <View style={{ marginTop: 24 }}>
             <View
               style={{
                 flexDirection: 'row',
@@ -105,13 +122,13 @@ const HomePage = ({navigation}) => {
                 width: SIZES.width,
                 paddingHorizontal: 20,
               }}>
-              <TouchableOpacity style={{alignItems: 'center'}} onPress={() => navigation.navigate("KelolaOutlet")}>
+              <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => navigation.navigate("KelolaOutlet")}>
                 <View style={styles.menuNavigation} />
                 <Text style={styles.labelNavigation}>Kelola Outlet</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={{alignItems: 'center'}} 
-              onPress={() => navigation.navigate("KelolaLayanan")}>
+              <TouchableOpacity style={{ alignItems: 'center' }}
+                onPress={() => navigation.navigate("KelolaLayanan")}>
                 <View style={styles.menuNavigation} />
                 <Text style={styles.labelNavigation}>Kelola Layanan</Text>
               </TouchableOpacity>
@@ -124,12 +141,12 @@ const HomePage = ({navigation}) => {
                 width: SIZES.width,
                 paddingHorizontal: 20,
               }}>
-              <TouchableOpacity style={{alignItems: 'center'}} onPress={() => navigation.navigate("Pegawai")}>
+              <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => navigation.navigate("Pegawai")}>
                 <View style={styles.menuNavigation} />
                 <Text style={styles.labelNavigation}>Kelola Pegawai</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={{alignItems: 'center'}}>
+              <TouchableOpacity style={{ alignItems: 'center' }}>
                 <View style={styles.menuNavigation} />
                 <Text style={styles.labelNavigation}>Laporan Transaksi</Text>
               </TouchableOpacity>
@@ -156,8 +173,8 @@ const styles = StyleSheet.create({
     backgroundColor: ColorPrimary,
     alignItems: 'center',
     width: SIZES.width,
-    borderBottomEndRadius:10,
-    borderBottomStartRadius:10
+    borderBottomEndRadius: 10,
+    borderBottomStartRadius: 10
   },
   hero: {
     flexDirection: 'row',
@@ -180,21 +197,21 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontSize: 12,
   },
-  wrapNavigation:{
-    backgroundColor:ColorPrimary,
-    paddingTop:20,
-    borderTopEndRadius:20,
-    borderTopStartRadius:20,
+  wrapNavigation: {
+    backgroundColor: ColorPrimary,
+    paddingTop: 20,
+    borderTopEndRadius: 20,
+    borderTopStartRadius: 20,
   },
   menuNavigation: {
     backgroundColor: '#f6f6f6',
     width: SIZES.width * 0.44,
     height: 90,
-    borderRadius:20
+    borderRadius: 20
   },
-  labelNavigation:{
-      fontSize:16,
-      fontWeight:'700',
-      color:'white'
+  labelNavigation: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: 'white'
   }
 });
