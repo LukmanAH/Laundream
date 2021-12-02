@@ -1,13 +1,102 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, TouchableOpacity, View, Alert, ToastAndroid } from 'react-native';
 import { FAB, Text } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { HeaderBar } from '../../../components';
 import { ColorDanger, ColorPrimary, token } from '../../../utils/constanta';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const Pegawai = ({ navigation }) => {
-  const [pegawai, setPegawai] = useState();
+const Pegawai = ({ navigation, data }) => {
+
+  const deleteEmployeePressed = async () => {
+    const laundry = await AsyncStorage.getItem('laundry')
+    const laundryParse = JSON.parse(laundry);
+
+    const token = await AsyncStorage.getItem('token');
+
+    Alert.alert(
+      `Peringatan`,
+      `Hapus karyawan ${data.user.name}`,
+      [
+        {
+          text: 'Tidak',
+          style: 'cancel',
+        },
+        {
+          text: 'Ya',
+          onPress: async () => {
+            await fetch(`http://192.168.42.63:8000/api/v1/owner/laundries/${laundryParse.id}/employees/${data.id}`, {
+              method: 'DELETE',
+              headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+              },
+            })
+              .then(response => response.json())
+              .then(responseJson => {
+                console.log(responseJson)
+              });
+            ToastAndroid.show(`Sukses menghapus karyawan ${data.user.name}`, ToastAndroid.SHORT)
+          },
+        },
+      ],
+    );
+
+  }
+
+  return (
+    <View
+      style={{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        backgroundColor: '#F6F6F6',
+        padding: 10,
+        alignItems: 'center',
+        borderRadius: 20,
+        marginTop: 10
+      }}>
+      <Text style={{ fontSize: 16, fontWeight: '600' }}>{data.user.name}</Text>
+      <View style={{ flexDirection: 'row' }}>
+        <TouchableOpacity
+          style={{
+            backgroundColor: '#64CB7B',
+            padding: 5,
+            borderRadius: 10,
+            justifyContent: 'center',
+            marginRight: 10,
+          }}
+          onPress={() => navigation.navigate('DetailPegawai', { data: data })}>
+          <Icon name="eye-outline" size={25} color="white" />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            backgroundColor: ColorPrimary,
+            padding: 5,
+            borderRadius: 10,
+            justifyContent: 'center',
+            marginRight: 10,
+          }}
+          onPress={() => navigation.navigate('EditPegawai', { data: data })}>
+          <Icon name="create-outline" size={25} color="white" />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            backgroundColor: ColorDanger,
+            padding: 5,
+            borderRadius: 10,
+            justifyContent: 'center',
+          }}
+          onPress={deleteEmployeePressed}>
+          <Icon name="trash-outline" size={25} color="white" />
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+};
+
+const PegawaiScreen = ({ navigation }) => {
+  const [pegawai, setPegawai] = useState([]);
 
   const fetchPegawaiApi = async () => {
     const laundry = await AsyncStorage.getItem('laundry')
@@ -25,65 +114,14 @@ const Pegawai = ({ navigation }) => {
     })
       .then(response => response.json())
       .then(responseJson => {
-        console.log(responseJson)
+        setPegawai(responseJson)
       });
   }
 
   useEffect(() => {
     fetchPegawaiApi();
-  }, [])
+  }, [pegawai])
 
-  return (
-    <View
-      style={{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        backgroundColor: '#F6F6F6',
-        padding: 10,
-        alignItems: 'center',
-        borderRadius: 20,
-        marginTop: 10
-      }}>
-      <Text style={{ fontSize: 16, fontWeight: '600' }}>Lastri</Text>
-      <View style={{ flexDirection: 'row' }}>
-        <TouchableOpacity
-          style={{
-            backgroundColor: '#64CB7B',
-            padding: 5,
-            borderRadius: 10,
-            justifyContent: 'center',
-            marginRight: 10,
-          }}
-          onPress={() => navigation.navigate('DetailPegawai')}>
-          <Icon name="eye-outline" size={25} color="white" />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            backgroundColor: ColorPrimary,
-            padding: 5,
-            borderRadius: 10,
-            justifyContent: 'center',
-            marginRight: 10,
-          }}
-          onPress={() => navigation.navigate('EditPegawai')}>
-          <Icon name="create-outline" size={25} color="white" />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            backgroundColor: ColorDanger,
-            padding: 5,
-            borderRadius: 10,
-            justifyContent: 'center',
-          }}
-          onPress={() => alert('Hapus')}>
-          <Icon name="trash-outline" size={25} color="white" />
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
-};
-
-const PegawaiScreen = ({ navigation }) => {
   return (
     <View style={{ backgroundColor: 'white', flex: 1 }}>
       <HeaderBar
@@ -93,8 +131,9 @@ const PegawaiScreen = ({ navigation }) => {
       />
       <ScrollView
         style={{ paddingHorizontal: 20, paddingVertical: 5 }}>
-        <Pegawai navigation={navigation} />
-        <Pegawai navigation={navigation} />
+        {pegawai.length > 0 && pegawai.map((data, index) => {
+          return <Pegawai navigation={navigation} key={index} data={data} />
+        })}
       </ScrollView>
 
       <FAB
