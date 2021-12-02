@@ -187,10 +187,11 @@ const styles = StyleSheet.create({
   },
   menuOption: {
     alignItems: 'center',
-    borderWidth: 0.8,
+    borderWidth: 1,
     padding: 17,
     borderRadius: 20,
     width: SIZES.width * 0.28,
+    borderColor:'#c6c6c6'
   },
   labelMenu: {
     marginTop: 5,
