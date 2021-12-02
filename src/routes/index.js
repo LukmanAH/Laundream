@@ -20,7 +20,15 @@ import {
   PegawaiScreen,
   EditPegawaiScreen,
   TambahPegawaiScreen,
-  DetailPegawaiScreen
+  DetailPegawaiScreen,
+  StatusPesanan,
+  Konfirmasi,
+  Pengantaran,
+  Pengambilan,
+  Penjemputan,
+  Antrian,
+  Proses,
+  StatusSelesai
 } from '../pages';
 
 const Stack = createStackNavigator();
@@ -110,6 +118,38 @@ const Route = () => {
       <Stack.Screen
         name="DetailPegawai"
         component={DetailPegawaiScreen}
+      />
+      <Stack.Screen
+        name="StatusPesanan"
+        component={StatusPesanan}
+      />
+      <Stack.Screen
+        name="Konfirmasi"
+        component={Konfirmasi}
+      />
+      <Stack.Screen
+        name="Pengantaran"
+        component={Pengantaran}
+      />
+      <Stack.Screen
+        name="Pengambilan"
+        component={Pengambilan}
+      />
+      <Stack.Screen
+        name="Penjemputan"
+        component={Penjemputan}
+      />
+      <Stack.Screen
+        name="Antrian"
+        component={Antrian}
+      />
+      <Stack.Screen
+        name="Proses"
+        component={Proses}
+      />
+      <Stack.Screen
+        name="StatusSelesai"
+        component={StatusSelesai}
       />
     </Stack.Navigator>
   );

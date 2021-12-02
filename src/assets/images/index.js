@@ -13,6 +13,7 @@ import iconMoney from './money.png';
 import bgHeader from './header.png';
 import iconOutlet from './OutletIcon.png';
 import iconScooter from './noto_motor-scooter.png'
+import iconTimbangan from './iconTimbangan.png'
 
 export {
   Logo,
@@ -29,5 +30,6 @@ export {
   iconMoney,
   bgHeader,
   iconOutlet,
-  iconScooter
+  iconScooter,
+  iconTimbangan
 };
