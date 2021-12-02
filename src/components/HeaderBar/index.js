@@ -13,7 +13,7 @@ export default Header = ({navigation, screenName, title}) => {
     return (
       <ImageBackground
         source={bgHeader}
-        style={{width: SIZES.width, height: 120}}>
+        style={{width: SIZES.width, height: 120,}}>
         <View
           style={{
             flex: 1,
