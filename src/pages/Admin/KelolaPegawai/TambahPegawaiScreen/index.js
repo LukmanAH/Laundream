@@ -3,8 +3,48 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { RadioButton, Text, TextInput } from 'react-native-paper';
 import { HeaderBar } from '../../../../components';
 import SIZES, { ColorPrimary } from '../../../../utils/constanta';
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import { Fumi } from 'react-native-textinput-effects';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const TambahPegawaiScreen = ({ navigation }) => {
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [phone, setPhone] = useState('')
+
+  const addEmployeePressed = async () => {
+    if (name && email && phone) {
+      const laundry = await AsyncStorage.getItem('laundry')
+      const laundryParse = JSON.parse(laundry);
+
+      const token = await AsyncStorage.getItem('token');
+
+      await fetch(`http://192.168.42.63:8000/api/v1/owner/laundries/${laundryParse.id}/employees`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          name: name,
+          email: email,
+          no_hp: parseInt(phone)
+        })
+      })
+        .then(response => response.json())
+        .then(responseJson => {
+          if (responseJson.errors == null) {
+            navigation.replace('Pegawai')
+          } else {
+            alert('Email telah digunakan');
+          }
+        });
+    } else {
+      alert('Masukkan semua field');
+    }
+  }
+
   return (
     <View style={{ backgroundColor: 'white', flex: 1 }}>
       <HeaderBar
@@ -14,47 +54,49 @@ const TambahPegawaiScreen = ({ navigation }) => {
       />
 
       <View style={{ paddingVertical: 10, paddingHorizontal: 20 }}>
-        <Text style={styles.titleText}>Nama Pegawai</Text>
-        <TextInput
-          placeholder="Nama Pegawai"
-          mode="outlined"
-          outlineColor={ColorPrimary}
-          activeOutlineColor={ColorPrimary}
+        <Fumi
+          label={'Nama'}
+          iconClass={FontAwesomeIcon}
+          iconName={'user'}
+          iconColor={ColorPrimary}
+          iconSize={20}
+          iconWidth={40}
+          inputPadding={20}
+          onChangeText={text => setName(text)}
+          autoCapitalize="none"
+          value={name}
+          style={styles.textInput}
         />
 
-        <Text style={styles.titleText}>Telepon</Text>
-        <TextInput
-          placeholder="Nomor HP"
-          mode="outlined"
-          outlineColor={ColorPrimary}
-          activeOutlineColor={ColorPrimary} h
-          keyboardType='phone-pad'
+        <Fumi
+          label={'Telepon'}
+          iconClass={FontAwesomeIcon}
+          iconName={'phone'}
+          iconColor={ColorPrimary}
+          iconSize={20}
+          iconWidth={40}
+          inputPadding={20}
+          onChangeText={text => setPhone(text)}
+          autoCapitalize="none"
+          value={phone}
+          style={styles.textInput}
+          keyboardType="phone-pad"
         />
 
-        <Text style={styles.titleText}>Email</Text>
-        <TextInput
-          placeholder="Email"
-          mode="outlined"
-          outlineColor={ColorPrimary}
-          activeOutlineColor={ColorPrimary} h
-          keyboardType='email-address'
+        <Fumi
+          label={'Email'}
+          iconClass={FontAwesomeIcon}
+          iconName={'envelope'}
+          iconColor={ColorPrimary}
+          iconSize={20}
+          iconWidth={40}
+          inputPadding={20}
+          onChangeText={text => setEmail(text)}
+          autoCapitalize="none"
+          value={email}
+          keyboardType="email-address"
+          style={styles.textInput}
         />
-
-        {/* <Text style={styles.titleText}>Role</Text>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <RadioButton
-            value="Admin"
-            status={checked === 'Admin' ? 'checked' : 'unchecked'}
-            onPress={() => setChecked('Admin')}
-          />
-          <Text>Admin </Text>
-          <RadioButton
-            value="Karyawan"
-            status={checked === 'Karyawan' ? 'checked' : 'unchecked'}
-            onPress={() => setChecked('Karyawan')}
-          />
-          <Text>Karyawan</Text>
-        </View> */}
       </View>
       <View
         style={{
@@ -65,7 +107,7 @@ const TambahPegawaiScreen = ({ navigation }) => {
         }}>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate('Pegawai')}>
+          onPress={addEmployeePressed}>
           <Text style={styles.btnText}>Simpan</Text>
         </TouchableOpacity>
       </View>
@@ -90,5 +132,11 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '700',
     color: 'white',
+  },
+  textInput: {
+    width: SIZES.width - 50,
+    borderRadius: 16,
+    marginTop: 20,
+    borderWidth: 1,
   },
 });
