@@ -1,11 +1,38 @@
-import React from 'react';
-import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {FAB, Text} from 'react-native-paper';
+import React, { useEffect, useState } from 'react';
+import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { FAB, Text } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {HeaderBar} from '../../../components';
-import {ColorDanger, ColorPrimary} from '../../../utils/constanta';
+import { HeaderBar } from '../../../components';
+import { ColorDanger, ColorPrimary, token } from '../../../utils/constanta';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const Pegawai = ({navigation}) => {
+const Pegawai = ({ navigation }) => {
+  const [pegawai, setPegawai] = useState();
+
+  const fetchPegawaiApi = async () => {
+    const laundry = await AsyncStorage.getItem('laundry')
+    const laundryParse = JSON.parse(laundry);
+
+    const token = await AsyncStorage.getItem('token');
+
+    await fetch(`http://192.168.42.63:8000/api/v1/owner/laundries/${laundryParse.id}/employees`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+    })
+      .then(response => response.json())
+      .then(responseJson => {
+        console.log(responseJson)
+      });
+  }
+
+  useEffect(() => {
+    fetchPegawaiApi();
+  }, [])
+
   return (
     <View
       style={{
@@ -15,10 +42,10 @@ const Pegawai = ({navigation}) => {
         padding: 10,
         alignItems: 'center',
         borderRadius: 20,
-        marginTop:10
+        marginTop: 10
       }}>
-      <Text style={{fontSize: 16, fontWeight: '600'}}>Lastri</Text>
-      <View style={{flexDirection: 'row'}}>
+      <Text style={{ fontSize: 16, fontWeight: '600' }}>Lastri</Text>
+      <View style={{ flexDirection: 'row' }}>
         <TouchableOpacity
           style={{
             backgroundColor: '#64CB7B',
@@ -56,21 +83,21 @@ const Pegawai = ({navigation}) => {
   );
 };
 
-const PegawaiScreen = ({navigation}) => {
+const PegawaiScreen = ({ navigation }) => {
   return (
-    <View style={{backgroundColor: 'white', flex: 1}}>
+    <View style={{ backgroundColor: 'white', flex: 1 }}>
       <HeaderBar
         navigation={navigation}
         screenName="HomePage"
         title="Kelola Pegawai"
       />
       <ScrollView
-        style={{paddingHorizontal: 20, paddingVertical: 5}}>
-            <Pegawai navigation={navigation} />
-            <Pegawai navigation={navigation} />
-        </ScrollView>
+        style={{ paddingHorizontal: 20, paddingVertical: 5 }}>
+        <Pegawai navigation={navigation} />
+        <Pegawai navigation={navigation} />
+      </ScrollView>
 
-        <FAB
+      <FAB
         style={styles.fab}
         medium
         icon="plus"
@@ -83,12 +110,12 @@ const PegawaiScreen = ({navigation}) => {
 export default PegawaiScreen;
 
 const styles = StyleSheet.create({
-    fab: {
-      position: 'absolute',
-      margin: 16,
-      right: 0,
-      bottom: 0,
-      backgroundColor: ColorPrimary,
-    },
-  });
-  
+  fab: {
+    position: 'absolute',
+    margin: 16,
+    right: 0,
+    bottom: 0,
+    backgroundColor: ColorPrimary,
+  },
+});
+

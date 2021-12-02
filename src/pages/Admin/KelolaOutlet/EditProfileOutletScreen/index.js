@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -9,11 +9,11 @@ import {
 } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import DropDown from 'react-native-paper-dropdown';
-import {outletLogo} from '../../../../assets/images';
-import {HeaderBar} from '../../../../components';
-import SIZES, {ColorPrimary} from '../../../../utils/constanta';
+import { outletLogo } from '../../../../assets/images';
+import { HeaderBar } from '../../../../components';
+import SIZES, { ColorPrimary } from '../../../../utils/constanta';
 
-const EditProfileOutlet = ({navigation}) => {
+const EditProfileOutlet = ({ navigation }) => {
   const [showDropDown, setShowDropDown] = useState(false);
   const [kota, setKota] = useState('');
   const kotaList = [
@@ -30,7 +30,7 @@ const EditProfileOutlet = ({navigation}) => {
       value: 'Palembang',
     },
   ];
-  
+
   return (
     <View style={styles.container}>
       <HeaderBar
@@ -43,7 +43,7 @@ const EditProfileOutlet = ({navigation}) => {
           paddingHorizontal: 20,
           marginTop: 20,
         }}>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Image
             source={outletLogo}
             style={{
@@ -61,31 +61,31 @@ const EditProfileOutlet = ({navigation}) => {
 
         <TextInput
           style={{
-            marginVertical:20
+            marginVertical: 20
           }}
           label='Nomor Ponsel'
           keyboardType="number-pad"
         />
         <DropDown
-              label={"Kota"}
-              mode={"outlined"}
-              visible={showDropDown}
-              showDropDown={() => setShowDropDown(true)}
-              onDismiss={() => setShowDropDown(false)}
-              value={kota}
-              setValue={setKota}
-              list={kotaList}
-            />
-            <TextInput
+          label={"Kota"}
+          mode={"outlined"}
+          visible={showDropDown}
+          showDropDown={() => setShowDropDown(true)}
+          onDismiss={() => setShowDropDown(false)}
+          value={kota}
+          setValue={setKota}
+          list={kotaList}
+        />
+        <TextInput
           style={{
-            marginVertical:20
+            marginVertical: 20
           }}
           label='Alamat Lengkap'
           multiline={true}
           numberOfLines={4}
         />
       </ScrollView>
-      
+
       <View
         style={{
           flex: 1,

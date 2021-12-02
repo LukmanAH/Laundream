@@ -1,16 +1,53 @@
-import React, {useState} from 'react';
-import {Text, View, StyleSheet, Button} from 'react-native';
-import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
-import SIZES, {ColorPrimary} from '../../utils/constanta';
+import React, { useState } from 'react';
+import { Text, View, StyleSheet, Button } from 'react-native';
+import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
+import SIZES, { ColorPrimary } from '../../utils/constanta';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
-import {Fumi} from 'react-native-textinput-effects';
+import { Fumi } from 'react-native-textinput-effects';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const LoginScreen = ({navigation}) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+const LoginScreen = ({ navigation }) => {
+  const [email, setEmail] = useState('owner@owner.com');
+  const [password, setPassword] = useState('password');
 
-  function login() {
-    navigation.replace('HomePage');
+  const loginPressed = async () => {
+    const emailRegex = /\S+@\S+\.\S+/;
+    if (email && password) {
+      if (emailRegex.test(email)) {
+        await fetch('http://192.168.42.63:8000/api/v1/login', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password,
+          }),
+        })
+          .then(response => response.json())
+          .then(responseJson => {
+            if (responseJson.error == null) {
+              AsyncStorage.setItem('token', responseJson.token);
+              AsyncStorage.setItem('user', JSON.stringify(responseJson.user));
+
+              if (responseJson.laundry != null) {
+                AsyncStorage.setItem('laundry', JSON.stringify(responseJson.laundry))
+              }
+
+              setEmail('');
+              setPassword('');
+              navigation.replace('HomePage');
+            } else {
+              alert(responseJson.error);
+            }
+          });
+      } else {
+        alert('Email tidak sesuai');
+      }
+    } else {
+      alert('Masukkan email dan password');
+    }
   }
 
   return (
@@ -47,21 +84,21 @@ const LoginScreen = ({navigation}) => {
       />
 
       <View style={styles.bottom}>
-        <TouchableOpacity style={styles.button} onPress={() => login()}>
+        <TouchableOpacity style={styles.button} onPress={loginPressed}>
           <Text style={styles.textLogin}>Masuk</Text>
         </TouchableOpacity>
-        <View style={{flexDirection: 'row', marginTop: 10, alignItems:'center'}}>
+        <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center' }}>
           <Text>Belum Punya Akun?</Text>
           <TouchableOpacity onPress={() => navigation.navigate("RegisterScreen")}>
-          <Text
-            style={{
-              fontWeight: "500",
-              color: ColorPrimary,
-              marginLeft:5
-            }}
-          >
-            Daftar
-          </Text>
+            <Text
+              style={{
+                fontWeight: "500",
+                color: ColorPrimary,
+                marginLeft: 5
+              }}
+            >
+              Daftar
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
