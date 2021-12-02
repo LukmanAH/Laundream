@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { HeaderBar } from '../../../../components';
 
-const Penjemputan = ({navigation}) => {
+const Pengambilan = ({navigation}) => {
     return(
         <SafeAreaView>
 <HeaderBar
@@ -17,9 +17,9 @@ const Penjemputan = ({navigation}) => {
         screenName="StatusPesanan"
         title="Detail Pesanan"
       />
-      <Text>Penjemputan</Text>
+      <Text>Pengambilan</Text>
         </SafeAreaView>
     )
 }
 
-export default Penjemputan;
+export default Pengambilan;

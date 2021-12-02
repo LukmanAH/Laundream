@@ -109,16 +109,37 @@ const data = [
 
 const StatusPesanan = ({navigation}) => {
   const [status, setStatus] = useState('Konfirmasi');
-  const [dataList, setDataList] = useState(data)
+  const [dataList, setDataList] = useState(
+    data.filter(e => e.status === 'Konfirmasi'),
+  );
   const setStatusFilter = status => {
-    setDataList([...data.filter(e => e.status === status)])
+    setDataList([...data.filter(e => e.status === status)]);
     setStatus(status);
   };
+
+  function movePage() {
+    if (status == 'Konfirmasi') {
+      navigation.navigate('Konfirmasi');
+    } else if (status == 'Penjemputan') {
+      navigation.navigate('Penjemputan');
+    } else if (status == 'Antrian') {
+      navigation.navigate('Antrian');
+    } else if (status == 'Proses') {
+      navigation.navigate('Proses');
+    } else if (status == 'Siap Ambil') {
+      navigation.navigate('Pengambilan');
+    } else if (status == 'Siap Antar') {
+      navigation.navigate('Pengantaran');
+    }
+  }
 
   const renderItem = ({item, index}) => {
     return (
       <View style={{flex: 1}}>
-        <TouchableOpacity key={index} style={styles.wrapItem}>
+        <TouchableOpacity
+          key={index}
+          style={styles.wrapItem}
+          onPress={() => movePage()}>
           <View style={{flexDirection: 'row'}}>
             <Image
               source={item.icon}
@@ -186,7 +207,7 @@ const StatusPesanan = ({navigation}) => {
           data={dataList}
           keyExtractor={(e, i) => i.toString()}
           renderItem={renderItem}
-          ListFooterComponent={<View style={{height: 210}}/>}
+          ListFooterComponent={<View style={{height: 210}} />}
           showsVerticalScrollIndicator={false}
         />
       </View>

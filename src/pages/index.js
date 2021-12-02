@@ -19,6 +19,13 @@ import PegawaiScreen from './Admin/KelolaPegawai';
 import TambahPegawaiScreen from './Admin/KelolaPegawai/TambahPegawaiScreen';
 import DetailPegawaiScreen from './Admin/KelolaPegawai/LihatPegawaiScreen';
 import StatusPesanan from './Admin/StatusPesanan';
+import Konfirmasi from './Admin/StatusPesanan/Konfirmasi';
+import Pengambilan from './Admin/StatusPesanan/SiapAmbil';
+import Proses from './Admin/StatusPesanan/Proses';
+import Antrian from './Admin/StatusPesanan/Antrian';
+import Penjemputan from './Admin/StatusPesanan/Penjemputan';
+import Pengantaran from './Admin/StatusPesanan/SiapAntar';
+import StatusSelesai from './Admin/StatusPesanan/Selesai';
 
 export {
   SplashScreen,
@@ -41,5 +48,12 @@ export {
   PegawaiScreen,
   TambahPegawaiScreen,
   DetailPegawaiScreen,
-  StatusPesanan
+  StatusPesanan,
+  Konfirmasi,
+  Pengambilan,
+  Proses,
+  Antrian,
+  Penjemputan,
+  Pengantaran,
+  StatusSelesai
 };
