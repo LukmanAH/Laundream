@@ -20,7 +20,8 @@ import {
   PegawaiScreen,
   EditPegawaiScreen,
   TambahPegawaiScreen,
-  DetailPegawaiScreen
+  DetailPegawaiScreen,
+  StatusPesanan
 } from '../pages';
 
 const Stack = createStackNavigator();
@@ -110,6 +111,10 @@ const Route = () => {
       <Stack.Screen
         name="DetailPegawai"
         component={DetailPegawaiScreen}
+      />
+      <Stack.Screen
+        name="StatusPesanan"
+        component={StatusPesanan}
       />
     </Stack.Navigator>
   );

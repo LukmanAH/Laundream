@@ -61,7 +61,7 @@ const HomePage = ({navigation}) => {
                 width: SIZES.width,
                 paddingHorizontal: 20,
               }}>
-              <TouchableOpacity style={styles.menuOption}>
+              <TouchableOpacity style={styles.menuOption} onPress={() => navigation.navigate("StatusPesanan")}>
                 <Image source={iconKonfirmasi} />
                 <Text style={styles.labelMenu}>Konfirmasi</Text>
               </TouchableOpacity>

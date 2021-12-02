@@ -18,6 +18,7 @@ import EditPegawaiScreen from './Admin/KelolaPegawai/EditPegawaiScreen';
 import PegawaiScreen from './Admin/KelolaPegawai';
 import TambahPegawaiScreen from './Admin/KelolaPegawai/TambahPegawaiScreen';
 import DetailPegawaiScreen from './Admin/KelolaPegawai/LihatPegawaiScreen';
+import StatusPesanan from './Admin/StatusPesanan';
 
 export {
   SplashScreen,
@@ -39,5 +40,6 @@ export {
   EditPegawaiScreen,
   PegawaiScreen,
   TambahPegawaiScreen,
-  DetailPegawaiScreen
+  DetailPegawaiScreen,
+  StatusPesanan
 };
