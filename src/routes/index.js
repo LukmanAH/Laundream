@@ -30,6 +30,7 @@ import {
   Proses,
   StatusSelesai
 } from '../pages';
+import Tabs from '../bottomTabs';
 
 const Stack = createStackNavigator();
 
@@ -150,6 +151,10 @@ const Route = () => {
       <Stack.Screen
         name="StatusSelesai"
         component={StatusSelesai}
+      />
+      <Stack.Screen
+        name="Tabs"
+        component={Tabs}
       />
     </Stack.Navigator>
   );

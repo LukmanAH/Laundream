@@ -14,6 +14,8 @@ import bgHeader from './header.png';
 import iconOutlet from './OutletIcon.png';
 import iconScooter from './noto_motor-scooter.png'
 import iconTimbangan from './iconTimbangan.png'
+import userHeader from './userHeader.png'
+import smatLaundry from './smatLaundry.png'
 
 export {
   Logo,
@@ -31,5 +33,7 @@ export {
   bgHeader,
   iconOutlet,
   iconScooter,
-  iconTimbangan
+  iconTimbangan,
+  userHeader,
+  smatLaundry
 };
