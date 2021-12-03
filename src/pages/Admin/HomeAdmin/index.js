@@ -82,7 +82,7 @@ const HomePage = ({ navigation }) => {
                 <Image source={iconKonfirmasi} />
                 <Text style={styles.labelMenu}>Konfirmasi</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.menuOption}>
+              <TouchableOpacity style={styles.menuOption} onPress={() => navigation.navigate("HomeUser")}>
                 <Image source={markIcon} />
                 <Text style={styles.labelMenu}>Penjemputan</Text>
               </TouchableOpacity>

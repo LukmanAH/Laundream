@@ -84,7 +84,8 @@ const LoginScreen = ({ navigation }) => {
       />
 
       <View style={styles.bottom}>
-        <TouchableOpacity style={styles.button} onPress={loginPressed}>
+        {/* ganti ke user screen bentar */}
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Tabs")}>
           <Text style={styles.textLogin}>Masuk</Text>
         </TouchableOpacity>
         <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center' }}>

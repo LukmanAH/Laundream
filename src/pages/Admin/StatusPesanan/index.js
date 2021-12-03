@@ -205,7 +205,6 @@ const StatusPesanan = ({navigation}) => {
 
         <FlatList
           data={dataList}
-          keyExtractor={(e, i) => i.toString()}
           renderItem={renderItem}
           ListFooterComponent={<View style={{height: 210}} />}
           showsVerticalScrollIndicator={false}

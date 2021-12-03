@@ -26,6 +26,10 @@ import Antrian from './Admin/StatusPesanan/Antrian';
 import Penjemputan from './Admin/StatusPesanan/Penjemputan';
 import Pengantaran from './Admin/StatusPesanan/SiapAntar';
 import StatusSelesai from './Admin/StatusPesanan/Selesai';
+import Home from './User/HomeUser';
+import Profil from './User/Profil';
+import Transaksi from './User/Transaksi';
+
 
 export {
   SplashScreen,
@@ -55,5 +59,8 @@ export {
   Antrian,
   Penjemputan,
   Pengantaran,
-  StatusSelesai
+  StatusSelesai,
+  Home,
+  Transaksi,
+  Profil
 };
