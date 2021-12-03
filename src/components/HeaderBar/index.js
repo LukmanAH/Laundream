@@ -25,6 +25,7 @@ export default Header = ({navigation, screenName, title}) => {
             style={{
               flexDirection: 'row',
               alignItems: 'center',
+              paddingRight:25
             }}>
             <TouchableOpacity
               style={{
@@ -44,7 +45,7 @@ export default Header = ({navigation, screenName, title}) => {
                 fontWeight: 'bold',
                 marginLeft: 10,
                 color: '#fff',
-              }}>
+              }} numberOfLines={1}>
               {title}
             </Text>
           </View>

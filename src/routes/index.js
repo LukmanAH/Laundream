@@ -28,7 +28,9 @@ import {
   Penjemputan,
   Antrian,
   Proses,
-  StatusSelesai
+  StatusSelesai,
+  DetailPesanan,
+  KonfirmasiPesanan
 } from '../pages';
 import Tabs from '../bottomTabs';
 
@@ -155,6 +157,14 @@ const Route = () => {
       <Stack.Screen
         name="Tabs"
         component={Tabs}
+      />
+      <Stack.Screen
+        name="DetailPesanan"
+        component={DetailPesanan}
+      />
+      <Stack.Screen
+        name="KonfirmasiPesanan"
+        component={KonfirmasiPesanan}
       />
     </Stack.Navigator>
   );

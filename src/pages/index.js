@@ -29,7 +29,8 @@ import StatusSelesai from './Admin/StatusPesanan/Selesai';
 import Home from './User/HomeUser';
 import Profil from './User/Profil';
 import Transaksi from './User/Transaksi';
-
+import DetailPesanan from './User/HomeUser/PesanScreenUser';
+import KonfirmasiPesanan from './User/HomeUser/KonfirmasiPesananUser';
 
 export {
   SplashScreen,
@@ -62,5 +63,7 @@ export {
   StatusSelesai,
   Home,
   Transaksi,
-  Profil
+  Profil,
+  DetailPesanan,
+  KonfirmasiPesanan
 };
