@@ -33,13 +33,14 @@ const data = [
   },
   {
     status: 'offline',
-    nama: 'Low Laundry',
-    alamat: 'Jl. Ryacudu No.05, Sukarame, Bandar Lampung',
+    nama: 'Low Laundry asdasdsda',
+    alamat: 'Jl. Ryacudu No.05, Sukarame, Bandar Lampung sdfhkjhsdfkjhsdkjfhkjsdfh',
     image: smatLaundry,
   },
 ];
 
 const Home = ({navigation}) => {
+    
   const renderItem = ({item, index}) => {
     return (
       <TouchableOpacity
@@ -51,7 +52,8 @@ const Home = ({navigation}) => {
           marginRight: 16,
           marginBottom: 16,
           ...styles.shadow,
-        }}>
+        }}
+        onPress={() => navigation.navigate('DetailPesanan')}>
         <View
           style={{
             width: 20,
@@ -78,10 +80,10 @@ const Home = ({navigation}) => {
             borderBottomRightRadius: 24,
             padding: 16,
           }}>
-          <Text style={{fontWeight: '700', fontSize: 12, color: 'black'}}>
+          <Text style={{fontWeight: '700', fontSize: 12, color: 'black'}} numberOfLines={1}>
             {item.nama}
           </Text>
-          <Text style={{fontWeight: '400', fontSize: 9, color: '#6D6D6D'}}>
+          <Text style={{fontWeight: '400', fontSize: 9, color: '#6D6D6D'}} numberOfLines={2}>
             {item.alamat}
           </Text>
         </View>
