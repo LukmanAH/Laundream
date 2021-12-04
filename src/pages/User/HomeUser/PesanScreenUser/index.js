@@ -34,9 +34,9 @@ const data = [
 ];
 
 const DetailPesanan = ({navigation}) => {
-  var [isPress, setIsPress] = useState(false);
+  const [isPress, setIsPress] = useState(false);
 
-  var touchProps = {
+  const touchProps = {
     style: isPress ? styles.btnPress : styles.btnNormal,
     onPress: () => {
       setIsPress(!isPress);
@@ -74,83 +74,90 @@ const DetailPesanan = ({navigation}) => {
     );
   }
   return (
-    <ScrollView style={{flex: 1, backgroundColor: 'white'}}>
-      <HeaderBar
-        navigation={navigation}
-        screenName="Tabs"
-        title="Nama Outlet Laundry"
-      />
-      <View style={{paddingHorizontal: 20}}>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginVertical: 20,
-          }}>
-          <Image
-            source={outletLogo}
-            style={{width: 100, height: 100}}
-            resizeMode="contain"
-          />
-          <View style={{flex: 1}}>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <View
-                style={{
-                  width: 10,
-                  height: 10,
-                  borderRadius: 5,
-                  backgroundColor: 'green',
-                  marginRight: 4,
-                }}
-              />
-              <Text>Buka</Text>
+    <View style={{flex: 1, backgroundColor: 'white'}}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <HeaderBar
+          navigation={navigation}
+          screenName="Tabs"
+          title="Nama Outlet Laundry"
+        />
+        <View style={{paddingHorizontal: 20}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginVertical: 20,
+            }}>
+            <Image
+              source={outletLogo}
+              style={{width: 100, height: 100}}
+              resizeMode="contain"
+            />
+            <View style={{flex: 1}}>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <View
+                  style={{
+                    width: 10,
+                    height: 10,
+                    borderRadius: 5,
+                    backgroundColor: 'green',
+                    marginRight: 4,
+                  }}
+                />
+                <Text>Buka</Text>
+              </View>
+              <Text style={styles.h3}>Dennis Laundry</Text>
+              <Text>Jl. Ryacudu No.05, Sukarame, Bandar Lampung</Text>
             </View>
-            <Text style={styles.h3}>Dennis Laundry</Text>
-            <Text>Jl. Ryacudu No.05, Sukarame, Bandar Lampung</Text>
           </View>
-        </View>
 
-        <Image
-          source={{
-            uri: 'https://1.bp.blogspot.com/-Wch9riepMds/X-kjArlyeII/AAAAAAAAI1c/Nz_ISWN0LmA_JHRwQ9cduwt0dCfYiOwGQCLcBGAsYHQ/w640-h218/spanduk%2Bbanner%2Blaundry%2Bcdr.png',
-          }}
-          resizeMode="cover"
-          style={{
-            width: '100%',
-            height: 140,
-            borderRadius: 20,
-            marginBottom: 10,
-          }}
-        />
-        <Text style={styles.h3}>Layanan Kami</Text>
-        <FlatList
-          data={data}
-          renderItem={renderItem}
-          showsVerticalScrollIndicator={false}
-        />
-        <View
-          style={{
-            // flex: 1,
-            // justifyContent: 'flex-end',
-            alignItems: 'center',
-          }}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => console.log('Mashok')}>
-            <View
-              style={{flexDirection: 'row', justifyContent: 'space-between', alignItems:'center'}}>
-              <Text style={styles.textLogin}>1 Layanan</Text>
-              <Text
-                style={{
-                  color: 'white',
-                }}>
-                Lihat Detail
-              </Text>
-            </View>
-          </TouchableOpacity>
+          <Image
+            source={{
+              uri: 'https://1.bp.blogspot.com/-Wch9riepMds/X-kjArlyeII/AAAAAAAAI1c/Nz_ISWN0LmA_JHRwQ9cduwt0dCfYiOwGQCLcBGAsYHQ/w640-h218/spanduk%2Bbanner%2Blaundry%2Bcdr.png',
+            }}
+            resizeMode="cover"
+            style={{
+              width: '100%',
+              height: 140,
+              borderRadius: 20,
+              marginBottom: 10,
+            }}
+          />
+          <Text style={styles.h3}>Layanan Kami</Text>
+          <FlatList
+            data={data}
+            renderItem={renderItem}
+            showsVerticalScrollIndicator={false}
+          />
         </View>
+        <View style={{height:40}} />
+      </ScrollView>
+      <View
+        style={{
+          // flex: 1,
+          // justifyContent: 'flex-end',
+          alignItems: 'center',
+        }}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate('KonfirmasiPesanan')}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
+            <Text style={styles.textLogin}>1 Layanan</Text>
+            <Text
+              style={{
+                color: 'white',
+              }}>
+              Lihat Detail
+            </Text>
+          </View>
+        </TouchableOpacity>
       </View>
-    </ScrollView>
+    </View>
   );
 };
 
@@ -193,9 +200,8 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     // alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 20,
-    marginBottom: 40,
-    paddingHorizontal:20
+    marginBottom: 10,
+    paddingHorizontal: 20,
   },
   textLogin: {
     fontSize: 20,
