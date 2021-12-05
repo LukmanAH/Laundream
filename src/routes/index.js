@@ -30,7 +30,8 @@ import {
   Proses,
   StatusSelesai,
   DetailPesanan,
-  KonfirmasiPesanan
+  KonfirmasiPesanan,
+  DetailTransaksi
 } from '../pages';
 import Tabs from '../bottomTabs';
 
@@ -165,6 +166,10 @@ const Route = () => {
       <Stack.Screen
         name="KonfirmasiPesanan"
         component={KonfirmasiPesanan}
+      />
+      <Stack.Screen
+        name="DetailTransaksi"
+        component={DetailTransaksi}
       />
     </Stack.Navigator>
   );
