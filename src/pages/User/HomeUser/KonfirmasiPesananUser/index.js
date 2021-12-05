@@ -8,9 +8,17 @@ import {
   TextInput,
   TouchableOpacity,
   FlatList,
+  Button,
 } from 'react-native';
 import {Checkbox, RadioButton} from 'react-native-paper';
-import {iconTimbangan, outletLogo} from '../../../../assets/images';
+import Modal from 'react-native-modal';
+import {
+  iconMotor,
+  iconTimbangan,
+  KeranjangIcon,
+  KeranjangIcon1,
+  outletLogo,
+} from '../../../../assets/images';
 import {HeaderBar} from '../../../../components';
 import SIZES, {ColorPrimary} from '../../../../utils/constanta';
 
@@ -38,6 +46,9 @@ const KonfirmasiPesanan = ({navigation}) => {
   const [pembayaran, setPembayaran] = useState('awal');
   const [isPress, setIsPress] = useState(false);
   const [checked, setChecked] = React.useState(false);
+  const [isModalVisible, setIsModalVisible] = React.useState(false);
+
+  const handleModal = () => setIsModalVisible(() => !isModalVisible);
 
   const touchProps = {
     style: isPress ? styles.btnPress : styles.btnNormal,
@@ -66,7 +77,9 @@ const KonfirmasiPesanan = ({navigation}) => {
         screenName="DetailPesanan"
         title="Konfirmasi Pesanan"
       />
-      <ScrollView style={{paddingHorizontal: 20, paddingVertical: 16}}>
+      <ScrollView
+        style={{paddingHorizontal: 20, paddingVertical: 16}}
+        showsVerticalScrollIndicator={false}>
         <View style={{flexDirection: 'row', justifyContent: 'center'}}>
           <Image
             source={outletLogo}
@@ -97,7 +110,7 @@ const KonfirmasiPesanan = ({navigation}) => {
           <Text>Antar Sendiri</Text>
         </View>
 
-        <Text style={{marginTop:10,  ...styles.h3}}>Lokasi Penjemputan</Text>
+        <Text style={{marginTop: 10, ...styles.h3}}>Lokasi Penjemputan</Text>
         <TextInput
           style={{
             flex: 1,
@@ -112,7 +125,7 @@ const KonfirmasiPesanan = ({navigation}) => {
           multiline={true}
         />
 
-        <Text style={{marginTop:10,  ...styles.h3}}>Detail Pesanan</Text>
+        <Text style={{marginTop: 10, ...styles.h3}}>Detail Pesanan</Text>
         <View
           style={{
             flexDirection: 'row',
@@ -122,7 +135,7 @@ const KonfirmasiPesanan = ({navigation}) => {
           }}>
           <View style={{flexDirection: 'row'}}>
             <Image source={iconTimbangan} />
-            <View style={{marginLeft:5}}>
+            <View style={{marginLeft: 5}}>
               <Text>Ekspress</Text>
               <Text>2 Hari</Text>
               <Text>Rp 5000</Text>
@@ -141,14 +154,14 @@ const KonfirmasiPesanan = ({navigation}) => {
           </TouchableOpacity>
         </View>
 
-        <Text style={{marginTop:10, ...styles.h3}}>Pilih Parfum</Text>
+        <Text style={{marginTop: 10, ...styles.h3}}>Pilih Parfum</Text>
         <FlatList
           data={dataParfum}
           renderItem={renderItem}
           horizontal={false}
           numColumns={3}
         />
-        <Text style={{marginTop:10 , ...styles.h3}}>Metode Pembayaran</Text>
+        <Text style={{marginTop: 10, ...styles.h3}}>Metode Pembayaran</Text>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <RadioButton
             value="awal"
@@ -159,19 +172,19 @@ const KonfirmasiPesanan = ({navigation}) => {
           <Text>Di Awal</Text>
           <RadioButton
             value="akhir"
-            status={pembayaran === 'akhir' ? 'checked' : 'unchecked'} 
+            status={pembayaran === 'akhir' ? 'checked' : 'unchecked'}
             onPress={() => setPembayaran('akhir')}
             color={ColorPrimary}
           />
           <Text>Di Akhir</Text>
         </View>
-        <Text style={{flex: 1, marginBottom: 10, color:ColorPrimary}}>
-          Pembayaran dapat dilakukan ketika kurir menjempu asdast ataupun
-          mengantarkan pakaian.
+        <Text style={{flex: 1, marginBottom: 10, color: ColorPrimary}}>
+          Pembayaran dapat dilakukan ketika kurir menjemput ataupun mengantarkan
+          pakaian.
         </Text>
 
         <Text style={styles.h3}>Informasi Tambahan</Text>
-        <TextInput 
+        <TextInput
           style={{
             flex: 1,
             height: 75,
@@ -205,14 +218,82 @@ const KonfirmasiPesanan = ({navigation}) => {
             alignItems: 'center',
             marginBottom: 20,
           }}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => navigation.navigate('Tabs')}>
+          <TouchableOpacity style={styles.button} onPress={handleModal}>
             <Text style={styles.btnText}>Pesan Sekarang</Text>
           </TouchableOpacity>
         </View>
         <View style={{height: 10}} />
       </ScrollView>
+      <Modal
+        isVisible={isModalVisible}
+        backdropOpacity={0.8}
+        animationIn="zoomInDown"
+        animationOut="zoomOutUp"
+        animationInTiming={600}
+        animationOutTiming={600}
+        backdropTransitionInTiming={600}
+        backdropTransitionOutTiming={600}>
+        <View
+          style={{
+            width: SIZES.width * 0.8,
+            backgroundColor: 'white',
+            height: SIZES.height * 0.5,
+            justifyContent: 'center',
+            alignSelf: 'center',
+            borderRadius: 20,
+            paddingHorizontal: 40,
+          }}>
+          {layanan === 'pickUp' ? (
+            <View>
+              <Image
+                source={iconMotor}
+                style={{
+                  width: SIZES.width * 0.3,
+                  height: SIZES.width * 0.3,
+                  alignSelf: 'center',
+                }}
+                resizeMode="contain"
+              />
+              <Text style={{textAlign: 'center', paddingVertical: 16}}>
+                Berhasil Order, Silahkan tunggu karyawan kami menjemput pakaian
+                anda.
+              </Text>
+            </View>
+          ) : (
+            <View>
+              <Image
+                source={KeranjangIcon1}
+                style={{
+                  width: SIZES.width * 0.3,
+                  height: SIZES.width * 0.3,
+                  alignSelf: 'center',
+                }}
+                resizeMode="contain"
+              />
+              <Text style={{textAlign: 'center', paddingVertical: 16}}>
+                Berhasil Order, Silahkan antarkan pakaian anda ke gerai kami
+                untuk di proses lebih lanjut.
+              </Text>
+            </View>
+          )}
+          <TouchableOpacity
+            onPress={() => {
+              handleModal();
+              navigation.navigate('Tabs');
+            }}
+            style={{
+              backgroundColor: ColorPrimary,
+              alignSelf: 'center',
+              paddingHorizontal: 24,
+              paddingVertical: 18,
+              borderRadius: 16,
+            }}>
+            <Text style={{fontSize: 18, fontWeight: '700', color: 'white'}}>
+              Ok
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </View>
   );
 };
