@@ -101,5 +101,6 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     marginTop: 20,
     borderWidth: 1,
+    borderColor:'grey'
   },
 });
