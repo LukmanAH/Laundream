@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -7,10 +7,13 @@ import {
   ScrollView,
   Image,
 } from 'react-native';
-import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
+import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {outletLogo, smatLaundry, userHeader} from '../../../assets/images';
+import { outletLogo, smatLaundry, userHeader } from '../../../assets/images';
 import SIZES from '../../../utils/constanta';
+import Geolocation from '@react-native-community/geolocation';
+import Geocoder from 'react-native-geocoding';
+import GOOGLE_MAPS_API from '../../../utils/maps'
 
 const data = [
   {
@@ -39,9 +42,27 @@ const data = [
   },
 ];
 
-const Home = ({navigation}) => {
-    
-  const renderItem = ({item, index}) => {
+const Home = ({ navigation }) => {
+  const [location, setLocation] = useState('')
+
+  useEffect(() => {
+    Geocoder.init(GOOGLE_MAPS_API);
+    Geolocation.getCurrentPosition(x => {
+      Geocoder.from([x.coords.latitude, x.coords.longitude])
+        .then(response => {
+          console.log(response)
+          const filterred_area = response.results[0].address_components.filter(
+            address => {
+              return address.types.includes('administrative_area_level_2');
+            },
+          );
+          setLocation(filterred_area[0].long_name);
+        })
+        .catch(error => console.warn(error));
+    });
+  }, [])
+
+  const renderItem = ({ item, index }) => {
     return (
       <TouchableOpacity
         style={{
@@ -67,7 +88,7 @@ const Home = ({navigation}) => {
         <Image
           source={item.image}
           resizeMode="contain"
-          style={{width: 100, height: 84, alignSelf: 'center'}}
+          style={{ width: 100, height: 84, alignSelf: 'center' }}
         />
         <View
           style={{
@@ -80,10 +101,10 @@ const Home = ({navigation}) => {
             borderBottomRightRadius: 24,
             padding: 16,
           }}>
-          <Text style={{fontWeight: '700', fontSize: 12, color: 'black'}} numberOfLines={1}>
+          <Text style={{ fontWeight: '700', fontSize: 12, color: 'black' }} numberOfLines={1}>
             {item.nama}
           </Text>
-          <Text style={{fontWeight: '400', fontSize: 9, color: '#6D6D6D'}} numberOfLines={2}>
+          <Text style={{ fontWeight: '400', fontSize: 9, color: '#6D6D6D' }} numberOfLines={2}>
             {item.alamat}
           </Text>
         </View>
@@ -101,7 +122,7 @@ const Home = ({navigation}) => {
           backgroundColor: '#F4F6F6',
           ...styles.shadow,
           justifyContent: 'center',
-          marginBottom:15
+          marginBottom: 15
         }}>
         <Text
           style={{
@@ -120,7 +141,7 @@ const Home = ({navigation}) => {
     <ScrollView style={styles.container}>
       <ImageBackground
         source={userHeader}
-        style={{width: SIZES.width, height: 166}}>
+        style={{ width: SIZES.width, height: 166 }}>
         <View
           style={{
             paddingBottom: 25,
@@ -134,15 +155,15 @@ const Home = ({navigation}) => {
             style={{
               flexDirection: 'row',
             }}>
-            <View style={{flexDirection: 'row'}}>
+            <View style={{ flexDirection: 'row' }}>
               <TouchableOpacity>
                 <Icon name="location" size={40} color="white" />
               </TouchableOpacity>
               <View>
-                <Text style={{fontWeight: '700', fontSize: 18, color: 'white'}}>
+                <Text style={{ fontWeight: '700', fontSize: 18, color: 'white' }}>
                   Lokasi
                 </Text>
-                <Text style={{color: 'white'}}>Bandar Lampung</Text>
+                <Text style={{ color: 'white' }}>{location}</Text>
               </View>
             </View>
           </View>
@@ -152,7 +173,7 @@ const Home = ({navigation}) => {
         </View>
       </ImageBackground>
 
-      <View style={{paddingLeft: 28}}>
+      <View style={{ paddingLeft: 28 }}>
         <Text
           style={{
             fontSize: 22,
@@ -181,10 +202,10 @@ const Home = ({navigation}) => {
           }}>
           Info dan Promo
         </Text>
-          <InfoCard />
-          <InfoCard />
-          <InfoCard />
-        <View style={{height: 100}} />
+        <InfoCard />
+        <InfoCard />
+        <InfoCard />
+        <View style={{ height: 100 }} />
       </View>
     </ScrollView>
   );
