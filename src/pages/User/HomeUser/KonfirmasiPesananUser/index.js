@@ -141,7 +141,7 @@ const KonfirmasiPesanan = ({navigation}) => {
               <Text>Rp 5000</Text>
             </View>
           </View>
-          <TouchableOpacity {...touchProps}>
+          {/* <TouchableOpacity {...touchProps}>
             <Text
               style={{
                 color: 'white',
@@ -151,7 +151,7 @@ const KonfirmasiPesanan = ({navigation}) => {
               }}>
               {isPress === false ? 'Pilih' : 'Hapus'}
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
 
         <Text style={{marginTop: 10, ...styles.h3}}>Pilih Parfum</Text>

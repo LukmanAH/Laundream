@@ -35,7 +35,7 @@ const MenuLayanan = ({title, screenName, navigation, icon}) => {
 
 const KelolaLayanan = ({navigation}) => {
   return (
-    <View>
+    <View style={{flex:1, backgroundColor:'white'}}>
       <HeaderBar
         navigation={navigation}
         screenName="HomePage"

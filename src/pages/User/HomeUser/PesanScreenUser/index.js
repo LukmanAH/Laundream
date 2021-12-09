@@ -53,7 +53,7 @@ const DetailPesanan = ({navigation}) => {
         }}>
         <View style={{flexDirection: 'row'}}>
           <Image source={item.icon} />
-          <View>
+          <View style={{marginLeft:10}}>
             <Text>{item.nama}</Text>
             <Text>{item.waktu}</Text>
             <Text>Rp {item.harga}</Text>
@@ -75,12 +75,12 @@ const DetailPesanan = ({navigation}) => {
   }
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
+      <HeaderBar
+        navigation={navigation}
+        screenName="Tabs"
+        title="Nama Outlet Laundry"
+      />
       <ScrollView showsVerticalScrollIndicator={false}>
-        <HeaderBar
-          navigation={navigation}
-          screenName="Tabs"
-          title="Nama Outlet Laundry"
-        />
         <View style={{paddingHorizontal: 20}}>
           <View
             style={{
@@ -100,7 +100,7 @@ const DetailPesanan = ({navigation}) => {
                     width: 10,
                     height: 10,
                     borderRadius: 5,
-                    backgroundColor: 'green',
+                    backgroundColor: '#42E379',
                     marginRight: 4,
                   }}
                 />
@@ -130,7 +130,7 @@ const DetailPesanan = ({navigation}) => {
             showsVerticalScrollIndicator={false}
           />
         </View>
-        <View style={{height:40}} />
+        <View style={{height: 40}} />
       </ScrollView>
       <View
         style={{
