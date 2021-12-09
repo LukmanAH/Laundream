@@ -1,14 +1,24 @@
 import React, {useState} from 'react';
-import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
 import {RadioButton, TextInput} from 'react-native-paper';
 import DropDown from 'react-native-paper-dropdown';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import {HeaderBar} from '../../../../../components';
 import SIZES, {ColorPrimary} from '../../../../../utils/constanta';
 
 const TambahLayanan = ({navigation}) => {
   const [checked, setChecked] = useState('kg');
   const [showDropDown, setShowDropDown] = useState(false);
+  const [showDropDownLayanan, setShowDropDownLayanan] = useState(false);
   const [waktu, setWaktu] = useState('');
+  const [layanan, setLayanan] = useState('');
+
   const waktuList = [
     {
       label: 'Jam',
@@ -20,6 +30,34 @@ const TambahLayanan = ({navigation}) => {
     },
   ];
 
+  const layananList = [
+    {
+      label: 'Sprei',
+      value: 'Spreiasd',
+      icon: <Icon name="person" size={24} color="red" />,
+    },
+    {
+      label: 'Pakaian',
+      value: 'Pakaian',
+    },
+    {
+      label: 'Daleman',
+      value: 'Daleman',
+    },
+    {
+      label: 'Bed',
+      value: 'Bed',
+    },
+    {
+      label: 'Karpet',
+      value: 'Karpet',
+    },
+    {
+      label: 'Jas',
+      value: 'Jas',
+    },
+  ];
+
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
       <HeaderBar
@@ -27,13 +65,27 @@ const TambahLayanan = ({navigation}) => {
         screenName="LayananRegular"
         title="Tambah Layanan"
       />
-      <View style={{paddingHorizontal: 20, paddingVertical: 10}}>
+      <ScrollView style={{paddingHorizontal: 20, paddingVertical: 10}} showsVerticalScrollIndicator={false}>
         <Text style={styles.titleText}>Nama Layanan</Text>
         <TextInput
           placeholder="Contoh: Sprei "
           mode="outlined"
           outlineColor={ColorPrimary}
           activeOutlineColor={ColorPrimary}
+        />
+
+        <Text style={styles.titleText}>Jenis Item</Text>
+        <DropDown
+          // label={'Waktu'}
+          placeholder="Contoh: Sprei"
+          mode={'outlined'}
+          visible={showDropDownLayanan}
+          showDropDown={() => setShowDropDownLayanan(true)}
+          onDismiss={() => setShowDropDownLayanan(false)}
+          value={layanan}
+          setValue={setLayanan}
+          list={layananList}
+          showTickIcon={true}
         />
 
         {/* RadioButton */}
@@ -80,7 +132,7 @@ const TambahLayanan = ({navigation}) => {
           />
           <DropDown
             // label={'Waktu'}
-            placeholder='Waktu'
+            placeholder="Waktu"
             mode={'outlined'}
             visible={showDropDown}
             showDropDown={() => setShowDropDown(true)}
@@ -90,20 +142,12 @@ const TambahLayanan = ({navigation}) => {
             list={waktuList}
           />
         </View>
-      </View>
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'flex-end',
-          alignItems: 'center',
-          marginBottom: 20,
-        }}>
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate('LayananRegular')}>
           <Text style={styles.btnText}>Simpan</Text>
         </TouchableOpacity>
-      </View>
+      </ScrollView>
     </View>
   );
 };
@@ -120,6 +164,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 20,
+    marginBottom: 40,
   },
   btnText: {
     fontSize: 20,
