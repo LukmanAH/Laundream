@@ -5,6 +5,7 @@ import SIZES, {ColorPrimary} from '../../utils/constanta';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import {Fumi} from 'react-native-textinput-effects';
 import {IlustrasiRegister} from '../../assets/images';
+import { globalStyles } from '../../utils/global';
 
 const RegisterScreen = ({navigation}) => {
   const [email, setEmail] = useState('');
@@ -36,6 +37,8 @@ const RegisterScreen = ({navigation}) => {
         autoCapitalize="none"
         value={email}
         style={styles.textInput}
+        inputStyle={globalStyles.bodyText}
+        labelStyle={globalStyles.captionText}
       />
 
       <Fumi
@@ -51,6 +54,8 @@ const RegisterScreen = ({navigation}) => {
         value={phoneNumber}
         keyboardType="number-pad"
         style={styles.textInput}
+        inputStyle={globalStyles.bodyText}
+        labelStyle={globalStyles.captionText}
       />
       <Fumi
         label={'Password'}
@@ -65,11 +70,13 @@ const RegisterScreen = ({navigation}) => {
         value={password}
         style={styles.textInput}
         secureTextEntry={true}
+        inputStyle={globalStyles.bodyText}
+        labelStyle={globalStyles.captionText}
       />
 
       <View style={styles.bottom}>
         <TouchableOpacity style={styles.button} onPress={() => register()}>
-          <Text style={styles.textLogin}>Daftar</Text>
+          <Text style={{...globalStyles.titleText, color:'white'}}>Daftar</Text>
         </TouchableOpacity>
         <View
           style={{flexDirection: 'row', marginTop: 10, alignItems: 'center'}}>
@@ -77,9 +84,9 @@ const RegisterScreen = ({navigation}) => {
           <TouchableOpacity onPress={() => navigation.navigate('LoginScreen')}>
             <Text
               style={{
-                fontWeight: '500',
+                ...globalStyles.bodyText2,
                 color: ColorPrimary,
-                marginLeft: 5,
+                marginLeft: 5
               }}>
               Masuk
             </Text>
@@ -99,9 +106,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   headerText: {
-    fontSize: 20,
-    fontWeight: '600',
     marginTop: 10,
+    ...globalStyles.titleText
   },
   textInput: {
     width: SIZES.width - 50,

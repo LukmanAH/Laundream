@@ -16,6 +16,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {KeranjangIcon, outletLogo} from '../../../../assets/images';
 import {HeaderBar} from '../../../../components';
 import SIZES, {ColorPrimary} from '../../../../utils/constanta';
+import { globalStyles } from '../../../../utils/global';
 
 const DetailTransaksi = ({navigation}) => {
   const renderContent = () => (
@@ -114,7 +115,7 @@ const DetailTransaksi = ({navigation}) => {
           title="Detail Transaksi"
         />
         <ScrollView style={{padding: 20}}>
-          <Text style={{fontSize: 18, fontWeight: '700', color: 'black'}}>
+          <Text style={{...globalStyles.H3, color: 'black'}}>
             TRX/20212101/00112
           </Text>
 
@@ -124,8 +125,8 @@ const DetailTransaksi = ({navigation}) => {
               justifyContent: 'space-between',
               marginTop: 10,
             }}>
-            <Text style={{color: 'black'}}>Tanggal Pesan</Text>
-            <Text>17 Nov 2021 15:00</Text>
+            <Text style={globalStyles.bodyText}>Tanggal Pesan</Text>
+            <Text style={globalStyles.bodyText}>17 Nov 2021 15:00</Text>
           </View>
           <View
             style={{
@@ -133,19 +134,19 @@ const DetailTransaksi = ({navigation}) => {
               justifyContent: 'space-between',
               marginTop: 10,
             }}>
-            <Text style={{fontSize: 18, fontWeight: '700', color: 'black'}}>
+            <Text style={globalStyles.H3}>
               Alamat
             </Text>
-            <Text>Total Jarak : 12 KM</Text>
+            <Text style={globalStyles.bodyText}>Total Jarak : <Text style={globalStyles.bodyText2}>12 KM</Text></Text>
           </View>
 
           <View
             style={{flexDirection: 'row', alignItems: 'center', marginTop: 10}}>
             <Icon name="map-outline" size={30} color="grey" />
-            <Text>Maps</Text>
+            <Text style={globalStyles.bodyText}>Maps</Text>
           </View>
           <View style={{borderWidth: 1, height: 160, borderRadius: 20}}></View>
-          <Text>
+          <Text style={globalStyles.captionText}>
             Jl. Airan Raya No.99, Way Huwi, Kec. Jati Agung, Kabupaten Lampung
             Selatan, Lampung, Indonesia.
           </Text>
@@ -158,15 +159,11 @@ const DetailTransaksi = ({navigation}) => {
               alignItems: 'center',
             }}>
             <Text
-              style={{
-                fontSize: 18,
-                fontWeight: '700',
-                color: 'black',
-              }}>
+              style={globalStyles.bodyText2}>
               Layanan Antar
             </Text>
             <Text
-              style={{color: ColorPrimary, fontWeight: '700', fontSize: 15}}>
+              style={{color: ColorPrimary, fontFamily:'Montserrat-SemiBold', fontSize: 15}}>
               Pickup -Delivery
             </Text>
           </View>
@@ -179,17 +176,13 @@ const DetailTransaksi = ({navigation}) => {
               alignItems: 'center',
             }}>
             <Text
-              style={{
-                fontSize: 18,
-                fontWeight: '700',
-                color: 'black',
-              }}>
+              style={globalStyles.bodyText2}>
               Status Pembayaran
             </Text>
             <TouchableOpacity
               style={{flexDirection: 'row'}}
               onPress={() => sheetRef.current.snapTo(0)}>
-              <Text style={{color: '#22C058', fontWeight: '700', fontSize: 15}}>
+              <Text style={{color: '#22C058', fontFamily:'Montserrat-SemiBold', fontSize: 15}}>
                 Lunas Akhir
               </Text>
               <Icon name="chevron-forward-outline" size={20} color="#22C058" />
@@ -198,9 +191,7 @@ const DetailTransaksi = ({navigation}) => {
 
           <Text
             style={{
-              fontSize: 18,
-              fontWeight: '700',
-              color: 'black',
+              ...globalStyles.bodyText2,
               marginTop: 20,
             }}>
             Estimasi Selesai
@@ -210,17 +201,12 @@ const DetailTransaksi = ({navigation}) => {
               flexDirection: 'row',
               justifyContent: 'space-between',
             }}>
-            <Text>03 Oktober 2021</Text>
-            <Text>15:00:00 WIB</Text>
+            <Text style={globalStyles.captionText}>03 Oktober 2021</Text>
+            <Text style={globalStyles.captionText}>15:00:00 WIB</Text>
           </View>
 
           <Text
-            style={[
-              styles.textBold,
-              {
-                marginTop: 15,
-              },
-            ]}>
+            style={{...globalStyles.bodyText2, marginVertical:10}}>
             Detail Pesanan
           </Text>
           <View
@@ -236,8 +222,8 @@ const DetailTransaksi = ({navigation}) => {
               resizeMode="contain"
             />
             <View>
-              <Text style={styles.textBold}>Seprai</Text>
-              <Text>x 1.0 Satuan</Text>
+              <Text style={globalStyles.bodyText2}>Seprai</Text>
+              <Text style={globalStyles.captionText}>x 1.0 Satuan</Text>
             </View>
           </View>
           <View
@@ -247,7 +233,7 @@ const DetailTransaksi = ({navigation}) => {
               marginTop: 10,
               alignItems: 'center',
             }}>
-            <Text style={{fontSize: 17, fontWeight: '700', color: 'black'}}>
+            <Text style={globalStyles.bodyText2}>
               Status Transaksi
             </Text>
             <View
@@ -257,7 +243,7 @@ const DetailTransaksi = ({navigation}) => {
                 paddingVertical: 7,
                 borderRadius: 20,
               }}>
-              <Text style={{color: 'white', fontWeight: '700', fontSize: 15}}>
+              <Text style={{color: 'white', fontFamily:'Montserrat-SemiBold', fontSize: 14}}>
                 Penjemputan
               </Text>
             </View>

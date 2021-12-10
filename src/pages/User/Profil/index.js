@@ -3,6 +3,7 @@ import {View, Text, ImageBackground} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {bgHeader} from '../../../assets/images';
 import SIZES from '../../../utils/constanta';
+import { globalStyles } from '../../../utils/global';
 
 const Profil = () => {
   return (
@@ -12,7 +13,7 @@ const Profil = () => {
         style={{width: SIZES.width, height: 120, paddingHorizontal: 20}}>
         <Text
           style={{
-            fontWeight: '700',
+            fontFamily: 'Montserrat-Bold',
             fontSize: 32,
             color: 'white',
             marginTop: 20,
@@ -25,9 +26,7 @@ const Profil = () => {
           <Icon name="person" size={30} color="#C4C4C4" />
           <Text
             style={{
-              fontSize: 20,
-              color: 'black',
-              fontWeight: '700',
+              ...globalStyles.H3,
               marginLeft: 10,
             }}>
             Tono
@@ -37,9 +36,7 @@ const Profil = () => {
           <Icon name="call" size={30} color="#C4C4C4" />
           <Text
             style={{
-              fontSize: 20,
-              color: 'black',
-              fontWeight: '700',
+              ...globalStyles.H3,
               marginLeft: 10,
             }}>
             0812 3456 7890
@@ -49,9 +46,7 @@ const Profil = () => {
           <Icon name="mail" size={30} color="#C4C4C4" />
           <Text
             style={{
-              fontSize: 20,
-              color: 'black',
-              fontWeight: '700',
+              ...globalStyles.H3,
               marginLeft: 10,
             }}>
             tono11@gmail.com

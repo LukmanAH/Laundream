@@ -5,6 +5,7 @@ import SIZES, { ColorPrimary } from '../../utils/constanta';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import { Fumi } from 'react-native-textinput-effects';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { globalStyles } from '../../utils/global';
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('owner@owner.com');
@@ -66,6 +67,8 @@ const LoginScreen = ({ navigation }) => {
         autoCapitalize="none"
         value={email}
         style={styles.textInput}
+        inputStyle={globalStyles.bodyText}
+        labelStyle={globalStyles.captionText}
       />
 
       <Fumi
@@ -81,19 +84,21 @@ const LoginScreen = ({ navigation }) => {
         value={password}
         style={styles.textInput}
         secureTextEntry={true}
+        inputStyle={globalStyles.bodyText}
+        labelStyle={globalStyles.captionText}
       />
 
       <View style={styles.bottom}>
         {/* ganti ke user screen bentar */}
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Tabs")}>
-          <Text style={styles.textLogin}>Masuk</Text>
+          <Text style={{...globalStyles.titleText, color:'white', }}>Masuk</Text>
         </TouchableOpacity>
         <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center' }}>
-          <Text>Belum Punya Akun?</Text>
+          <Text style={globalStyles.captionText}>Belum Punya Akun?</Text>
           <TouchableOpacity onPress={() => navigation.navigate("RegisterScreen")}>
             <Text
               style={{
-                fontWeight: "500",
+                ...globalStyles.bodyText2,
                 color: ColorPrimary,
                 marginLeft: 5
               }}
@@ -114,9 +119,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   headerText: {
-    fontSize: 20,
-    fontWeight: '600',
     marginTop: 10,
+    ...globalStyles.titleText,
   },
   textInput: {
     width: SIZES.width - 50,
@@ -132,10 +136,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 20,
-  },
-  textLogin: {
-    fontSize: 20,
-    fontWeight: '700',
   },
   bottom: {
     flex: 1,

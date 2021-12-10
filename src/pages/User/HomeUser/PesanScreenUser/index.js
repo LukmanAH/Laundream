@@ -11,6 +11,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import {iconTimbangan, outletLogo} from '../../../../assets/images';
 import {HeaderBar} from '../../../../components';
 import SIZES, {ColorDanger, ColorPrimary} from '../../../../utils/constanta';
+import { globalStyles } from '../../../../utils/global';
 
 const data = [
   {
@@ -52,20 +53,20 @@ const DetailPesanan = ({navigation}) => {
           marginTop: 10,
         }}>
         <View style={{flexDirection: 'row'}}>
-          <Image source={item.icon} />
+          <Image style={{width:65, height:65}} source={item.icon} />
           <View style={{marginLeft:10}}>
-            <Text>{item.nama}</Text>
-            <Text>{item.waktu}</Text>
-            <Text>Rp {item.harga}</Text>
+            <Text style={globalStyles.bodyText}>{item.nama}</Text>
+            <Text  style={globalStyles.bodyText}>{item.waktu}</Text>
+            <Text style={globalStyles.bodyText}>Rp {item.harga}</Text>
           </View>
         </View>
         <TouchableOpacity {...touchProps}>
           <Text
             style={{
+              ...globalStyles.bodyText2,
               color: 'white',
-              fontWeight: '600',
-              fontSize: 15,
               textAlign: 'center',
+              fontSize:12
             }}>
             {isPress === false ? 'Pilih' : 'Hapus'}
           </Text>
@@ -104,10 +105,10 @@ const DetailPesanan = ({navigation}) => {
                     marginRight: 4,
                   }}
                 />
-                <Text>Buka</Text>
+                <Text style={globalStyles.captionText}>Buka</Text>
               </View>
-              <Text style={styles.h3}>Dennis Laundry</Text>
-              <Text>Jl. Ryacudu No.05, Sukarame, Bandar Lampung</Text>
+              <Text style={globalStyles.H3}>Dennis Laundry</Text>
+              <Text style={globalStyles.captionText}  numberOfLines={2}>Jl. Ryacudu No.05, Sukarame, Bandar Lampung </Text>
             </View>
           </View>
 
@@ -123,7 +124,7 @@ const DetailPesanan = ({navigation}) => {
               marginBottom: 10,
             }}
           />
-          <Text style={styles.h3}>Layanan Kami</Text>
+          <Text style={globalStyles.H3}>Layanan Kami</Text>
           <FlatList
             data={data}
             renderItem={renderItem}
@@ -147,9 +148,10 @@ const DetailPesanan = ({navigation}) => {
               justifyContent: 'space-between',
               alignItems: 'center',
             }}>
-            <Text style={styles.textLogin}>1 Layanan</Text>
+            <Text style={{...globalStyles.H3, color:'white'}}>1 Layanan</Text>
             <Text
               style={{
+                ...globalStyles.captionText,
                 color: 'white',
               }}>
               Lihat Detail

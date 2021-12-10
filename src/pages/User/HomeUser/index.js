@@ -14,6 +14,7 @@ import SIZES from '../../../utils/constanta';
 import Geolocation from '@react-native-community/geolocation';
 import Geocoder from 'react-native-geocoding';
 import GOOGLE_MAPS_API from '../../../utils/maps'
+import { globalStyles } from '../../../utils/global';
 
 const data = [
   {
@@ -101,10 +102,10 @@ const Home = ({ navigation }) => {
             borderBottomRightRadius: 24,
             padding: 16,
           }}>
-          <Text style={{ fontWeight: '700', fontSize: 12, color: 'black' }} numberOfLines={1}>
+          <Text style={{...globalStyles.bodyText2, fontSize:14}} numberOfLines={1}>
             {item.nama}
           </Text>
-          <Text style={{ fontWeight: '400', fontSize: 9, color: '#6D6D6D' }} numberOfLines={2}>
+          <Text style={{ ...globalStyles.captionText , color: '#6D6D6D', fontSize:10 }} numberOfLines={2}>
             {item.alamat}
           </Text>
         </View>
@@ -127,10 +128,7 @@ const Home = ({ navigation }) => {
         <Text
           style={{
             alignSelf: 'center',
-            fontSize: 24,
-            fontWeight: '700',
-            color: 'black',
-            fontStyle: 'italic',
+            ...globalStyles.titleText
           }}>
           Coming Soon
         </Text>
@@ -160,10 +158,10 @@ const Home = ({ navigation }) => {
                 <Icon name="location" size={40} color="white" />
               </TouchableOpacity>
               <View>
-                <Text style={{ fontWeight: '700', fontSize: 18, color: 'white' }}>
+                <Text style={{ ...globalStyles.bodyText2, color: 'white', }}>
                   Lokasi
                 </Text>
-                <Text style={{ color: 'white' }}>{location}</Text>
+                <Text style={{...globalStyles.bodyText ,color: 'white' }}>{location}</Text>
               </View>
             </View>
           </View>
@@ -176,9 +174,7 @@ const Home = ({ navigation }) => {
       <View style={{ paddingLeft: 28 }}>
         <Text
           style={{
-            fontSize: 22,
-            fontWeight: '600',
-            color: 'black',
+            ...globalStyles.titleText,
             marginBottom: 12,
             marginTop: 10,
           }}>
@@ -194,15 +190,12 @@ const Home = ({ navigation }) => {
 
         <Text
           style={{
-            fontSize: 22,
-            fontWeight: '600',
-            color: 'black',
+            ...globalStyles.titleText,
             marginBottom: 12,
             marginTop: 10,
           }}>
           Info dan Promo
         </Text>
-        <InfoCard />
         <InfoCard />
         <InfoCard />
         <View style={{ height: 100 }} />

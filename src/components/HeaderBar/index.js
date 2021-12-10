@@ -8,6 +8,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { bgHeader } from '../../assets/images';
 import SIZES, {ColorPrimary} from '../../utils/constanta';
+import { globalStyles } from '../../utils/global';
 
 export default Header = ({navigation, screenName, title}) => {
     return (
@@ -41,10 +42,10 @@ export default Header = ({navigation, screenName, title}) => {
             </TouchableOpacity>
             <Text
               style={{
-                fontSize: 20,
-                fontWeight: 'bold',
+                ...globalStyles.titleText,
                 marginLeft: 10,
                 color: '#fff',
+                fontSize:20
               }} numberOfLines={1}>
               {title}
             </Text>

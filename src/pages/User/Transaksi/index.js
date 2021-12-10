@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import {bgHeader, iconTimbangan} from '../../../assets/images';
 import SIZES, {ColorPrimary} from '../../../utils/constanta';
+import {globalStyles} from '../../../utils/global';
 
 const listTab = [
   {
@@ -106,7 +107,12 @@ const Transaksi = ({navigation}) => {
     return (
       <View style={{flex: 1}}>
         {status !== 'Selesai' ? (
-          <TouchableOpacity key={index} style={styles.wrapItem} onPress={() => {navigation.navigate('DetailTransaksi')}}>
+          <TouchableOpacity
+            key={index}
+            style={styles.wrapItem}
+            onPress={() => {
+              navigation.navigate('DetailTransaksi');
+            }}>
             <View
               style={{
                 flexDirection: 'row',
@@ -127,13 +133,26 @@ const Transaksi = ({navigation}) => {
                     resizeMode="contain"
                   />
                 </View>
-                <Text style={{marginLeft:5, fontSize:16, fontWeight:'700', color:'black', width:'40%'}} numberOfLines={2}>{item.nama}</Text>
+                <View style={{marginLeft: 5}}>
+                  <Text style={globalStyles.bodyText2} numberOfLines={1}>
+                    {item.invoice}
+                  </Text>
+                  <Text
+                    style={{...globalStyles.captionText, color: '#22C058'}}
+                    numberOfLines={1}>
+                    {item.status}
+                  </Text>
+                </View>
               </View>
-              <Text style={{fontSize:14, fontWeight:'600', color:'#22C058', width:'40%', textAlign:'right', paddingRight:16}} numberOfLines={1}>{item.status}</Text>
             </View>
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity key={index} style={styles.wrapItem2} onPress={() => {navigation.navigate('DetailTransaksi')}}>
+          <TouchableOpacity
+            key={index}
+            style={styles.wrapItem2}
+            onPress={() => {
+              navigation.navigate('DetailTransaksi');
+            }}>
             <View style={{flexDirection: 'row'}}>
               <Image
                 source={item.icon}
@@ -141,11 +160,13 @@ const Transaksi = ({navigation}) => {
                 resizeMode="contain"
               />
               <View style={{marginLeft: 8}}>
-                <Text style={{fontWeight: '700', fontSize: 18, color: 'black'}} numberOfLines={1} >
+                <Text
+                  style={globalStyles.bodyText2}
+                  numberOfLines={1}>
                   {item.invoice}
                 </Text>
-                <Text>Tanggal Pesan : {item.tglPesan}</Text>
-                <Text>Estimasi Selesai : {item.estimasi}</Text>
+                <Text style={globalStyles.captionText}>Tanggal Pesan : {item.tglPesan}</Text>
+                <Text style={globalStyles.captionText}>Estimasi Selesai : {item.estimasi}</Text>
               </View>
             </View>
           </TouchableOpacity>
@@ -161,9 +182,9 @@ const Transaksi = ({navigation}) => {
         style={{width: SIZES.width, height: 120, paddingHorizontal: 20}}>
         <Text
           style={{
-            fontWeight: '700',
-            fontSize: 32,
-            color: 'white',
+            ...globalStyles.titleText,
+            color:'white',
+            fontSize:32,
             marginTop: 20,
           }}>
           Transaksi
@@ -228,9 +249,9 @@ const styles = StyleSheet.create({
   },
   textTab: {
     marginLeft: 2,
-    fontWeight: '700',
     color: '#000',
     textAlign: 'center',
+    fontFamily:'Montserrat-SemiBold'
   },
   wrapItem: {
     flexDirection: 'row',

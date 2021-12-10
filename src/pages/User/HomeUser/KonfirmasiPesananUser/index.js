@@ -21,6 +21,7 @@ import {
 } from '../../../../assets/images';
 import {HeaderBar} from '../../../../components';
 import SIZES, {ColorPrimary} from '../../../../utils/constanta';
+import { globalStyles } from '../../../../utils/global';
 
 const dataParfum = [
   {
@@ -65,7 +66,7 @@ const KonfirmasiPesanan = ({navigation}) => {
         onPress={() => setParfum(item.nama)}
         color={ColorPrimary}
       />
-      <Text style={{width: SIZES.width * 0.2}} numberOfLines={1}>
+      <Text style={{width: SIZES.width * 0.2, ...globalStyles.captionText}} numberOfLines={1}>
         {item.nama}
       </Text>
     </View>
@@ -87,12 +88,12 @@ const KonfirmasiPesanan = ({navigation}) => {
             resizeMode="contain"
           />
           <View style={{flex: 1}}>
-            <Text style={styles.h3}>Dennis Laundry</Text>
-            <Text>Jl. Ryacudu No.05, Sukarame, Bandar Lampung</Text>
+            <Text style={globalStyles.H3}>Dennis Laundry</Text>
+            <Text style={globalStyles.captionText}>Jl. Ryacudu No.05, Sukarame, Bandar Lampung</Text>
           </View>
         </View>
 
-        <Text style={styles.h3}>Layanan Pengantaran</Text>
+        <Text style={globalStyles.H3}>Layanan Pengantaran</Text>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <RadioButton
             value="pickUp"
@@ -100,17 +101,17 @@ const KonfirmasiPesanan = ({navigation}) => {
             onPress={() => setLayanan('pickUp')}
             color={ColorPrimary}
           />
-          <Text>Pickup - Delivery </Text>
+          <Text style={globalStyles.captionText}>Pickup - Delivery </Text>
           <RadioButton
             value="antar"
             status={layanan === 'antar' ? 'checked' : 'unchecked'}
             onPress={() => setLayanan('antar')}
             color={ColorPrimary}
           />
-          <Text>Antar Sendiri</Text>
+          <Text style={globalStyles.captionText}>Antar Sendiri</Text>
         </View>
 
-        <Text style={{marginTop: 10, ...styles.h3}}>Lokasi Penjemputan</Text>
+        <Text style={{marginTop: 10, ...globalStyles.H3}}>Lokasi Penjemputan</Text>
         <TextInput
           style={{
             flex: 1,
@@ -121,11 +122,12 @@ const KonfirmasiPesanan = ({navigation}) => {
             paddingHorizontal: 10,
             marginVertical: 10,
             borderColor: '#C4C4C4',
+            ...globalStyles.captionText
           }}
           multiline={true}
         />
 
-        <Text style={{marginTop: 10, ...styles.h3}}>Detail Pesanan</Text>
+        <Text style={{marginTop: 10, ...globalStyles.H3}}>Detail Pesanan</Text>
         <View
           style={{
             flexDirection: 'row',
@@ -134,11 +136,11 @@ const KonfirmasiPesanan = ({navigation}) => {
             marginTop: 10,
           }}>
           <View style={{flexDirection: 'row'}}>
-            <Image source={iconTimbangan} />
+            <Image style={{width:65, height:65}} source={iconTimbangan} />
             <View style={{marginLeft: 5}}>
-              <Text>Ekspress</Text>
-              <Text>2 Hari</Text>
-              <Text>Rp 5000</Text>
+              <Text style={globalStyles.bodyText}>Ekspress</Text>
+              <Text style={globalStyles.bodyText}>2 Hari</Text>
+              <Text style={globalStyles.bodyText}>Rp 5000</Text>
             </View>
           </View>
           {/* <TouchableOpacity {...touchProps}>
@@ -154,14 +156,14 @@ const KonfirmasiPesanan = ({navigation}) => {
           </TouchableOpacity> */}
         </View>
 
-        <Text style={{marginTop: 10, ...styles.h3}}>Pilih Parfum</Text>
+        <Text style={{marginTop: 10, ...globalStyles.H3}}>Pilih Parfum</Text>
         <FlatList
           data={dataParfum}
           renderItem={renderItem}
           horizontal={false}
           numColumns={3}
         />
-        <Text style={{marginTop: 10, ...styles.h3}}>Metode Pembayaran</Text>
+        <Text style={{marginTop: 10, ...globalStyles.H3}}>Metode Pembayaran</Text>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <RadioButton
             value="awal"
@@ -169,21 +171,21 @@ const KonfirmasiPesanan = ({navigation}) => {
             onPress={() => setPembayaran('awal')}
             color={ColorPrimary}
           />
-          <Text>Di Awal</Text>
+          <Text style={globalStyles.captionText}>Di Awal</Text>
           <RadioButton
             value="akhir"
             status={pembayaran === 'akhir' ? 'checked' : 'unchecked'}
             onPress={() => setPembayaran('akhir')}
             color={ColorPrimary}
           />
-          <Text>Di Akhir</Text>
+          <Text style={globalStyles.captionText}>Di Akhir</Text>
         </View>
-        <Text style={{flex: 1, marginBottom: 10, color: ColorPrimary}}>
+        <Text style={{...globalStyles.captionText ,flex: 1, marginBottom: 10, color: ColorPrimary}}>
           Pembayaran dapat dilakukan ketika kurir menjemput ataupun mengantarkan
           pakaian.
         </Text>
 
-        <Text style={styles.h3}>Informasi Tambahan</Text>
+        <Text style={globalStyles.H3}>Informasi Tambahan</Text>
         <TextInput
           style={{
             flex: 1,
@@ -194,6 +196,7 @@ const KonfirmasiPesanan = ({navigation}) => {
             paddingHorizontal: 10,
             marginVertical: 10,
             borderColor: '#C4C4C4',
+            ...globalStyles.captionText
           }}
           multiline={true}
         />
@@ -205,7 +208,7 @@ const KonfirmasiPesanan = ({navigation}) => {
             }}
             color={ColorPrimary}
           />
-          <Text>
+          <Text style={globalStyles.captionText}>
             Dengan ini, kamu setuju ketentuan perhitungan berat, ongkir dan
             total harga akan dihitung oleh pihak laundry disaat pakaian dijemput
             / diantarkan.
@@ -219,7 +222,7 @@ const KonfirmasiPesanan = ({navigation}) => {
             marginBottom: 20,
           }}>
           <TouchableOpacity style={styles.button} onPress={handleModal}>
-            <Text style={styles.btnText}>Pesan Sekarang</Text>
+            <Text style={{...globalStyles.H3, color:'white'}}>Pesan Sekarang</Text>
           </TouchableOpacity>
         </View>
         <View style={{height: 10}} />
