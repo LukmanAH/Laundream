@@ -80,7 +80,7 @@ const RegisterScreen = ({navigation}) => {
         </TouchableOpacity>
         <View
           style={{flexDirection: 'row', marginTop: 10, alignItems: 'center'}}>
-          <Text>Sudah Punya Akun?</Text>
+          <Text style={globalStyles.captionText}>Sudah Punya Akun?</Text>
           <TouchableOpacity onPress={() => navigation.navigate('LoginScreen')}>
             <Text
               style={{

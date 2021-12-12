@@ -13,6 +13,7 @@ import {
   iconScooter,
 } from '../../../../assets/images';
 import { HeaderBar } from '../../../../components';
+import { globalStyles } from '../../../../utils/global';
 
 const MenuOutlet = ({title, screenName, navigation, icon}) => {
   return (
@@ -32,10 +33,8 @@ const MenuOutlet = ({title, screenName, navigation, icon}) => {
       onPress={() => navigation.navigate(screenName)}>
       <Text
         style={{
-          fontWeight: 'bold',
-          fontSize: 36,
+          ...globalStyles.titleText,
           width: '70%',
-          color: '#000',
         }}>
         {title}
       </Text>

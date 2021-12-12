@@ -11,10 +11,18 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {KeranjangIcon, outletLogo} from '../../../../assets/images';
-import {HeaderBar} from '../../../../components';
-import SIZES, { ColorPrimary } from '../../../../utils/constanta';
+import {HeaderBar, Maps} from '../../../../components';
+import SIZES, {ColorPrimary} from '../../../../utils/constanta';
+import {globalStyles} from '../../../../utils/global';
 
 const Konfirmasi = ({navigation}) => {
+  const [location, setLocation] = useState({
+    latitude: -5.358909,
+    longitude: 105.298424,
+    latitudeDelta: 0.05,
+    longitudeDelta: 0.05,
+  });
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
       <HeaderBar
@@ -23,15 +31,13 @@ const Konfirmasi = ({navigation}) => {
         title="Detail Pesanan"
       />
       <ScrollView style={{padding: 20}}>
-        <Text>TRX/20212101/002</Text>
+        <Text style={globalStyles.bodyText}>TRX/20212101/002</Text>
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <View style={{flexDirection: 'row'}}>
             <Image source={outletLogo} style={{width: 60, height: 60}} />
             <View>
-              <Text style={{fontSize: 18, fontWeight: '700', color: 'black'}}>
-                Lukman
-              </Text>
-              <Text>081234567890</Text>
+              <Text style={globalStyles.bodyText2}>Lukman</Text>
+              <Text style={globalStyles.captionText}>081234567890</Text>
             </View>
           </View>
           <Icon name="logo-whatsapp" size={30} color="#189D0E" />
@@ -42,19 +48,18 @@ const Konfirmasi = ({navigation}) => {
             justifyContent: 'space-between',
             marginTop: 10,
           }}>
-          <Text style={{fontSize: 18, fontWeight: '700', color: 'black'}}>
-            Alamat
-          </Text>
-          <Text>Total Jarak : 12 KM</Text>
+          <Text style={{...globalStyles.bodyText2, fontSize: 18}}>Alamat</Text>
+          <Text style={globalStyles.bodyText}>Total Jarak : 12 KM</Text>
         </View>
 
         <View
           style={{flexDirection: 'row', alignItems: 'center', marginTop: 10}}>
           <Icon name="map-outline" size={30} color="grey" />
-          <Text>Maps</Text>
+          <Text style={{...globalStyles.bodyText, marginLeft: 5}}>Maps</Text>
         </View>
-        <View style={{borderWidth: 1, height: 160, borderRadius: 20}}></View>
-        <Text>
+
+        <Maps location={location} />
+        <Text style={globalStyles.captionText} numberOfLines={2}>
           Jl. Airan Raya No.99, Way Huwi, Kec. Jati Agung, Kabupaten Lampung
           Selatan, Lampung, Indonesia.
         </Text>
@@ -65,10 +70,12 @@ const Konfirmasi = ({navigation}) => {
             justifyContent: 'space-between',
             marginTop: 10,
           }}>
-          <Text style={{fontSize: 18, fontWeight: '700', color: 'black'}}>
+          <Text style={styles.textBold}>
             Layanan Antar
           </Text>
-          <Text style={{color:ColorPrimary, fontWeight:'700', fontSize:15}}>Pickup -Delivery</Text>
+          <Text style={{...globalStyles.bodyText2, color: ColorPrimary, }}>
+            Pickup -Delivery
+          </Text>
         </View>
 
         <View
@@ -77,17 +84,17 @@ const Konfirmasi = ({navigation}) => {
             justifyContent: 'space-between',
             marginTop: 20,
           }}>
-          <Text style={{fontSize: 18, fontWeight: '700', color: 'black'}}>
+          <Text style={styles.textBold}>
             Status Pembayaran
           </Text>
-          <Text style={{color:'#22C058', fontWeight:'700', fontSize:15}}>Lunas Akhir</Text>
+          <Text style={{...globalStyles.bodyText2, color: '#22C058',}}>
+            Lunas Akhir
+          </Text>
         </View>
 
         <Text
           style={{
-            fontSize: 18,
-            fontWeight: '700',
-            color: 'black',
+            ...styles.textBold,
             marginTop: 20,
           }}>
           Estimasi Selesai
@@ -97,8 +104,8 @@ const Konfirmasi = ({navigation}) => {
             flexDirection: 'row',
             justifyContent: 'space-between',
           }}>
-          <Text>03 Oktober 2021</Text>
-          <Text>15:00:00 WIB</Text>
+          <Text style={globalStyles.bodyText}>03 Oktober 2021</Text>
+          <Text style={globalStyles.bodyText}>15:00:00 WIB</Text>
         </View>
 
         <Text
@@ -124,11 +131,13 @@ const Konfirmasi = ({navigation}) => {
           />
           <View>
             <Text style={styles.textBold}>Seprai</Text>
-            <Text>x 1.0 Satuan</Text>
+            <Text style={globalStyles.captionText}>x 1.0 Satuan</Text>
           </View>
         </View>
 
-        <Text style={[styles.textBold, {marginTop:15}]}>Informasi Tambahan</Text>
+        <Text style={[styles.textBold, {marginTop: 15}]}>
+          Informasi Tambahan
+        </Text>
         <TextInput
           multiline={true}
           numberOfLines={4}
@@ -139,6 +148,7 @@ const Konfirmasi = ({navigation}) => {
             textAlignVertical: 'top',
             paddingHorizontal: 15,
             paddingVertical: 20,
+            ...globalStyles.bodyText
           }}
           placeholder="Tidak Ada"
         />
@@ -156,9 +166,8 @@ export default Konfirmasi;
 
 const styles = StyleSheet.create({
   textBold: {
+    ...globalStyles.bodyText2,
     fontSize: 18,
-    fontWeight: '700',
-    color: 'black',
   },
   button: {
     backgroundColor: ColorPrimary,
@@ -168,11 +177,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 20,
-    marginBottom:40
+    marginBottom: 40,
   },
   textLogin: {
-    fontSize: 20,
-    fontWeight: '700',
+    ...globalStyles.H3,
     color: 'white',
   },
 });

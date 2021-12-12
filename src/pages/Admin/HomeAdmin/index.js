@@ -22,6 +22,7 @@ import {
 } from '../../../assets/images';
 import SIZES, {ColorPrimary, ROLE_EMPLOYEE} from '../../../utils/constanta';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { globalStyles } from '../../../utils/global';
 
 const HomePage = ({navigation}) => {
   const [user, setUser] = useState('');
@@ -47,22 +48,22 @@ const HomePage = ({navigation}) => {
         <View style={styles.header}>
           <Image source={outletLogo} />
           <View style={{flexDirection: 'column', marginLeft: 10}}>
-            <Text style={{fontSize: 16}}>Hai,</Text>
-            <Text style={{fontWeight: '700', fontSize: 20}}>{user}</Text>
+            <Text style={globalStyles.bodyText}>Hai,</Text>
+            <Text style={globalStyles.H3} numberOfLines={1}>Dennis Laundry</Text>
           </View>
         </View>
 
         <View style={{justifyContent: 'center', alignItems: 'center'}}>
           <View style={[styles.hero, styles.shadow]}>
-            <View style={{flexDirection: 'column'}}>
+            <View style={{flexDirection: 'column', width:'76%'}}>
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <Image source={iconMoney} />
-                <Text style={{fontSize: 24, fontWeight: '600', marginLeft: 5, color:'black'}}>
+                <Text style={{...globalStyles.H3, marginLeft: 5}}>
                   Keuangan
                 </Text>
               </View>
-              <Text style={{fontWeight: '500', fontSize: 16, color:'black'}}>Pendapatan</Text>
-              <Text style={{fontWeight: '700', fontSize: 36, color:'black'}}>Rp2.000.000</Text>
+              <Text style={globalStyles.bodyText}>Pendapatan</Text>
+              <Text style={{...globalStyles.titleText, fontSize: 30}} numberOfLines={1}>Rp2.000.000</Text>
             </View>
             <Image source={iconRT} />
           </View>
@@ -79,16 +80,16 @@ const HomePage = ({navigation}) => {
               <TouchableOpacity
                 style={[styles.menuOption, styles.shadow]}
                 onPress={() => navigation.navigate('StatusPesanan')}>
-                <Image source={iconKonfirmasi} />
-                <Text style={styles.labelMenu}>Konfirmasi</Text>
+                <Image source={iconKonfirmasi} style={{width:55, height:55}} resizeMode='contain' />
+                <Text style={globalStyles.captionText} numberOfLines={1}>Konfirmasi</Text>
               </TouchableOpacity>
               <TouchableOpacity style={[styles.menuOption, styles.shadow]}>
-                <Image source={markIcon} />
-                <Text style={styles.labelMenu}>Penjemputan</Text>
+                <Image style={{width:55, height:55}} resizeMode='contain'  source={markIcon} />
+                <Text style={globalStyles.captionText} numberOfLines={1}>Penjemputan</Text>
               </TouchableOpacity>
               <TouchableOpacity style={[styles.menuOption, styles.shadow]}>
-                <Image source={KeranjangIcon1} />
-                <Text style={styles.labelMenu}>Antrian</Text>
+                <Image style={{width:55, height:55}} resizeMode='contain'  source={KeranjangIcon1} />
+                <Text style={globalStyles.captionText} numberOfLines={1}>Antrian</Text>
               </TouchableOpacity>
             </View>
             <View
@@ -100,16 +101,16 @@ const HomePage = ({navigation}) => {
                 paddingHorizontal: 20,
               }}>
               <TouchableOpacity style={[styles.menuOption, styles.shadow]}>
-                <Image source={iconMesinCuci} />
-                <Text style={styles.labelMenu}>Proses</Text>
+                <Image style={{width:55, height:55}} resizeMode='contain'  source={iconMesinCuci} />
+                <Text style={globalStyles.captionText} numberOfLines={1}>Proses</Text>
               </TouchableOpacity>
               <TouchableOpacity style={[styles.menuOption, styles.shadow]}>
-                <Image source={KeranjangIcon} />
-                <Text style={styles.labelMenu}>Siap Ambil</Text>
+                <Image style={{width:55, height:55}} resizeMode='contain'  source={KeranjangIcon} />
+                <Text style={globalStyles.captionText} numberOfLines={1}>Siap Ambil</Text>
               </TouchableOpacity>
               <TouchableOpacity style={[styles.menuOption, styles.shadow]}>
-                <Image source={iconMotor} />
-                <Text style={styles.labelMenu}>Siap Antar</Text>
+                <Image style={{width:55, height:55}} resizeMode='contain'  source={iconMotor} />
+                <Text style={globalStyles.captionText} numberOfLines={1}>Siap Antar</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -194,7 +195,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 17,
     borderRadius: 20,
-    width: SIZES.width * 0.28,
+    width: SIZES.width * 0.29,
     borderColor: '#c6c6c6',
     // width: 160,
     backgroundColor: '#FFFfFf',
@@ -209,6 +210,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     borderTopEndRadius: 20,
     borderTopStartRadius: 20,
+    marginTop:5
   },
   menuNavigation: {
     backgroundColor: '#f6f6f6',
@@ -217,8 +219,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   labelNavigation: {
-    fontSize: 16,
-    fontWeight: '700',
+    ...globalStyles.bodyText2,
     color: 'white',
   },
   shadow: {

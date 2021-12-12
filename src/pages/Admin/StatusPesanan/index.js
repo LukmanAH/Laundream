@@ -20,6 +20,7 @@ import {
 } from '../../../assets/images';
 import {HeaderBar} from '../../../components';
 import SIZES, {ColorPrimary} from '../../../utils/constanta';
+import { globalStyles } from '../../../utils/global';
 
 const listTab = [
   {
@@ -147,12 +148,12 @@ const StatusPesanan = ({navigation}) => {
               resizeMode="contain"
             />
             <View style={{marginLeft: 8}}>
-              <Text>{item.invoice}</Text>
-              <Text style={{fontWeight: '700', fontSize: 18, color: 'black'}}>
+              <Text style={globalStyles.bodyText} numberOfLines={1}>{item.invoice}</Text>
+              <Text style={{...globalStyles.bodyText2, fontSize:18 }} numberOfLines={1}>
                 {item.pelanggan}
               </Text>
-              <Text>Tanggal Pesan : {item.tglPesan}</Text>
-              <Text>Estimasi Selesai : {item.estimasi}</Text>
+              <Text style={globalStyles.captionText} numberOfLines={1}>Tanggal Pesan : {item.tglPesan}</Text>
+              <Text style={globalStyles.captionText} numberOfLines={1}>Estimasi Selesai : {item.estimasi}</Text>
             </View>
           </View>
           <Icon
@@ -234,8 +235,8 @@ const styles = StyleSheet.create({
   },
   textTab: {
     marginLeft: 2,
-    fontWeight: '700',
-    color: '#000',
+    ...globalStyles.bodyText2,
+    fontSize:14
   },
   wrapItem: {
     flexDirection: 'row',

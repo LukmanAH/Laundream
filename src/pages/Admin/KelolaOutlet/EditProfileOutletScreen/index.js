@@ -6,13 +6,16 @@ import {
   ScrollView,
   TouchableOpacity,
   Text,
+  TextInput
 } from 'react-native';
-import {TextInput} from 'react-native-paper';
 import DropDown from 'react-native-paper-dropdown';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {HeaderBar, Maps} from '../../../../components';
 import SIZES, {ColorPrimary} from '../../../../utils/constanta';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { globalStyles } from '../../../../utils/global';
+import { Fumi } from 'react-native-textinput-effects';
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome5';
 
 const EditProfileOutlet = ({navigation}) => {
   const [showDropDown, setShowDropDown] = useState(false);
@@ -81,7 +84,7 @@ const EditProfileOutlet = ({navigation}) => {
           marginTop: 20,
         }}
         showsVerticalScrollIndicator={false}>
-        <View style={{flexDirection: 'row', alignItems: 'center', marginBottom:10}}>
+        <View style={{flexDirection: 'row', alignItems: 'center', marginBottom:10, justifyContent:'space-between'}}>
           <TouchableOpacity
             onPress={() => {
               openLibraryImage('logo');
@@ -97,30 +100,42 @@ const EditProfileOutlet = ({navigation}) => {
               }}
             />
           </TouchableOpacity>
-          <TextInput
-            style={{
-              flex: 3,
-              marginLeft: 16,
-            }}
-            label="Outlet kamu"
-          />
+          <Fumi
+          label={'Outlet Kamu'}
+          iconClass={FontAwesomeIcon}
+          iconName={'store'}
+          iconColor={ColorPrimary}
+          iconSize={20}
+          iconWidth={40}
+          inputPadding={20}
+          autoCapitalize="none"
+          style={{width:'75%', borderWidth:1, borderRadius:20, borderColor:'grey'}}
+          inputStyle={globalStyles.bodyText}
+          labelStyle={globalStyles.captionText}
+        />
         </View>
 
         <View
           style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
-          <Icon name="map-outline" size={30} color="grey" />
-          <Text>Maps</Text>
+          <FontAwesomeIcon name='map-marker-alt' size={30} color="grey"/>
+          <Text style={{...globalStyles.bodyText, marginLeft:5}}>Maps</Text>
         </View>
         <Maps location={location} />
-
-        <TextInput
-          style={{
-            marginVertical: 20,
-          }}
+        <Fumi
           label="Nomor Ponsel"
           keyboardType="number-pad"
+          iconClass={FontAwesomeIcon}
+          iconName={'phone'}
+          iconColor={ColorPrimary}
+          iconSize={20}
+          iconWidth={40}
+          inputPadding={20}
+          autoCapitalize="none"
+          style={{borderWidth:1, borderRadius:20, borderColor:'grey', marginTop:20}}
+          inputStyle={globalStyles.bodyText}
+          labelStyle={globalStyles.captionText}
         />
-        <DropDown
+        {/* <DropDown
           label={'Kota'}
           mode={'outlined'}
           visible={showDropDown}
@@ -129,21 +144,27 @@ const EditProfileOutlet = ({navigation}) => {
           value={kota}
           setValue={setKota}
           list={kotaList}
-        />
+        /> */}
+        <Text style={{...globalStyles.bodyText2, marginTop:20, marginBottom:10}}>Alamat Lengkap</Text>
         <TextInput
           style={{
-            marginVertical: 20,
+            borderWidth: 1,
+            borderColor: '#C4C4C4',
+            borderRadius: 20,
+            textAlignVertical: 'top',
+            paddingHorizontal: 15,
+            paddingVertical: 20,
+            ...globalStyles.bodyText,
+            height:100
           }}
-          label="Alamat Lengkap"
+          placeholder="Alamat Lengkap"
           multiline={true}
           numberOfLines={4}
         />
 
         <Text
           style={{
-            fontSize: 16,
-            fontWeight: '700',
-            color: 'black',
+            ...globalStyles.bodyText,
             marginVertical: 5,
           }}>
           Banner
@@ -179,10 +200,9 @@ const EditProfileOutlet = ({navigation}) => {
             }}>
             <Text
               style={{
+                ...globalStyles.H3,
                 textAlign: 'center',
                 color: 'white',
-                fontSize: 20,
-                fontWeight: '700',
               }}>
               Ganti
             </Text>
@@ -222,8 +242,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   btnText: {
-    fontSize: 20,
-    fontWeight: '700',
+    ...globalStyles.H3,
     color: 'white',
   },
 });
