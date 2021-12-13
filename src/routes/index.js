@@ -31,7 +31,8 @@ import {
   StatusSelesai,
   DetailPesanan,
   KonfirmasiPesanan,
-  DetailTransaksi
+  DetailTransaksi,
+  EditProfile
 } from '../pages';
 import Tabs from '../bottomTabs';
 
@@ -170,6 +171,10 @@ const Route = () => {
       <Stack.Screen
         name="DetailTransaksi"
         component={DetailTransaksi}
+      />
+      <Stack.Screen
+        name="EditProfile"
+        component={EditProfile}
       />
     </Stack.Navigator>
   );
