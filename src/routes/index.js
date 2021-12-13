@@ -35,6 +35,7 @@ import {
   EditProfile
 } from '../pages';
 import Tabs from '../bottomTabs';
+import DrawerMenu from './drawer';
 
 const Stack = createStackNavigator();
 
@@ -55,7 +56,8 @@ const Route = () => {
         options={{gesturesEnabled: false}}
       />
       <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
-      <Stack.Screen name="HomePage" component={HomePage} />
+      {/* <Stack.Screen name="HomePage" component={HomePage} /> */}
+      <Stack.Screen name="MainApp" component={DrawerMenu} />
       <Stack.Screen
         name="KelolaOutlet"
         component={KelolaOutlet}

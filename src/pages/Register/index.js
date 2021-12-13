@@ -13,7 +13,7 @@ const RegisterScreen = ({navigation}) => {
   const [phoneNumber, setPhoneNumber] = useState('');
 
   function register() {
-    navigation.replace('HomePage');
+    navigation.replace('MainApp');
   }
 
   return (
