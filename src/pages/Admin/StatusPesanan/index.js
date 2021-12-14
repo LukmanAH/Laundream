@@ -108,8 +108,9 @@ const data = [
   },
 ];
 
-const StatusPesanan = ({navigation}) => {
-  const [status, setStatus] = useState('Konfirmasi');
+const StatusPesanan = ({navigation, route}) => {
+  const { statusName } = (route.params === undefined) ? 'Konfirmasi' : route.params;
+  const [status, setStatus] = useState(statusName);
   const [dataList, setDataList] = useState(
     data.filter(e => e.status === 'Konfirmasi'),
   );

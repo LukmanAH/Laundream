@@ -14,10 +14,18 @@ import BottomSheet from 'reanimated-bottom-sheet';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 import {KeranjangIcon, outletLogo} from '../../../../assets/images';
-import {HeaderBar} from '../../../../components';
+import {HeaderBar, Maps} from '../../../../components';
 import SIZES, {ColorPrimary} from '../../../../utils/constanta';
+import { globalStyles } from '../../../../utils/global';
 
 const Pengantaran = ({navigation}) => {
+  const [location, setLocation] = useState({
+    latitude: -5.358909,
+    longitude: 105.298424,
+    latitudeDelta: 0.05,
+    longitudeDelta: 0.05,
+  });
+
   const renderContent = () => (
     <View
       style={{
@@ -27,23 +35,22 @@ const Pengantaran = ({navigation}) => {
         height: 310,
         // marginTop:-10
       }}>
-      <Text style={{alignSelf: 'center'}}>Total Tagihan</Text>
+      <Text style={{alignSelf: 'center', ...globalStyles.bodyText}}>
+        Total Tagihan
+      </Text>
       <Text
         style={{
           alignSelf: 'center',
+          ...globalStyles.bodyText2,
           fontSize: 36,
-          fontWeight: '700',
-          color: 'black',
         }}>
         23000
       </Text>
       <View>
-        <Text style={{fontSize: 16, fontWeight: '600', color: 'black'}}>
-          Detail Tagihan
-        </Text>
+        <Text style={globalStyles.bodyText2}>Detail Tagihan</Text>
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <Text>Subtotal</Text>
-          <Text>23000</Text>
+          <Text style={globalStyles.captionText}>Subtotal</Text>
+          <Text style={globalStyles.captionText}>23000</Text>
         </View>
         <View
           style={{
@@ -51,8 +58,8 @@ const Pengantaran = ({navigation}) => {
             justifyContent: 'space-between',
             marginLeft: 8,
           }}>
-          <Text>Bed Cover Single</Text>
-          <Text>20000</Text>
+          <Text style={globalStyles.captionText}>Bed Cover Single</Text>
+          <Text style={globalStyles.captionText}>20000</Text>
         </View>
         <View
           style={{
@@ -60,8 +67,8 @@ const Pengantaran = ({navigation}) => {
             justifyContent: 'space-between',
             marginLeft: 8,
           }}>
-          <Text>Ongkir</Text>
-          <Text>3000</Text>
+          <Text style={globalStyles.captionText}>Ongkir</Text>
+          <Text style={globalStyles.captionText}>3000</Text>
         </View>
       </View>
       <View
@@ -72,7 +79,9 @@ const Pengantaran = ({navigation}) => {
           marginVertical: 5,
         }}
       />
-      <Text style={{alignSelf: 'center', color: 'black'}}>Pembayaran</Text>
+      <Text style={{alignSelf: 'center', ...globalStyles.bodyText}}>
+        Pembayaran
+      </Text>
       <TouchableOpacity
         style={[styles.button, {backgroundColor: '#22C058'}]}
         onPress={() => sheetRef.current.snapTo(1)}>
@@ -80,6 +89,7 @@ const Pengantaran = ({navigation}) => {
       </TouchableOpacity>
     </View>
   );
+
 
   const renderHeader = () => (
     <View style={styles.header}>
@@ -114,15 +124,13 @@ const Pengantaran = ({navigation}) => {
           title="Detail Pesanan"
         />
         <ScrollView style={{padding: 20}}>
-          <Text>TRX/20212101/002</Text>
+        <Text style={globalStyles.bodyText}>TRX/20212101/002</Text>
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <View style={{flexDirection: 'row'}}>
               <Image source={outletLogo} style={{width: 60, height: 60}} />
               <View>
-                <Text style={{fontSize: 18, fontWeight: '700', color: 'black'}}>
-                  Lukman
-                </Text>
-                <Text>081234567890</Text>
+                <Text style={globalStyles.bodyText2}>Lukman</Text>
+                <Text style={globalStyles.captionText}>081234567890</Text>
               </View>
             </View>
             <Icon name="logo-whatsapp" size={30} color="#189D0E" />
@@ -133,19 +141,19 @@ const Pengantaran = ({navigation}) => {
               justifyContent: 'space-between',
               marginTop: 10,
             }}>
-            <Text style={{fontSize: 18, fontWeight: '700', color: 'black'}}>
+            <Text style={{...globalStyles.bodyText2, fontSize: 18}}>
               Alamat
             </Text>
-            <Text>Total Jarak : 12 KM</Text>
+            <Text style={globalStyles.bodyText}>Total Jarak : 12 KM</Text>
           </View>
 
           <View
             style={{flexDirection: 'row', alignItems: 'center', marginTop: 10}}>
             <Icon name="map-outline" size={30} color="grey" />
-            <Text>Maps</Text>
+            <Text style={{...globalStyles.bodyText, marginLeft: 5}}>Maps</Text>
           </View>
-          <View style={{borderWidth: 1, height: 160, borderRadius: 20}}></View>
-          <Text>
+          <Maps location={location} />
+          <Text style={globalStyles.captionText} numberOfLines={2}>
             Jl. Airan Raya No.99, Way Huwi, Kec. Jati Agung, Kabupaten Lampung
             Selatan, Lampung, Indonesia.
           </Text>
@@ -156,11 +164,8 @@ const Pengantaran = ({navigation}) => {
               justifyContent: 'space-between',
               marginTop: 10,
             }}>
-            <Text style={{fontSize: 18, fontWeight: '700', color: 'black'}}>
-              Layanan Antar
-            </Text>
-            <Text
-              style={{color: ColorPrimary, fontWeight: '700', fontSize: 15}}>
+            <Text style={styles.textBold}>Layanan Antar</Text>
+            <Text style={{...globalStyles.bodyText2, color: ColorPrimary}}>
               Pickup -Delivery
             </Text>
           </View>
@@ -171,13 +176,11 @@ const Pengantaran = ({navigation}) => {
               justifyContent: 'space-between',
               marginTop: 20,
             }}>
-            <Text style={{fontSize: 18, fontWeight: '700', color: 'black'}}>
-              Status Pembayaran
-            </Text>
+            <Text style={styles.textBold}>Status Pembayaran</Text>
             <TouchableOpacity
               style={{flexDirection: 'row'}}
               onPress={() => sheetRef.current.snapTo(0)}>
-              <Text style={{color: '#22C058', fontWeight: '700', fontSize: 15}}>
+              <Text style={{...globalStyles.bodyText2, color: '#22C058'}}>
                 Lunas Akhir
               </Text>
               <Icon name="chevron-forward-outline" size={20} color="#22C058" />
@@ -186,9 +189,7 @@ const Pengantaran = ({navigation}) => {
 
           <Text
             style={{
-              fontSize: 18,
-              fontWeight: '700',
-              color: 'black',
+              ...styles.textBold,
               marginTop: 20,
             }}>
             Estimasi Selesai
@@ -198,8 +199,8 @@ const Pengantaran = ({navigation}) => {
               flexDirection: 'row',
               justifyContent: 'space-between',
             }}>
-            <Text>03 Oktober 2021</Text>
-            <Text>15:00:00 WIB</Text>
+            <Text style={globalStyles.bodyText}>03 Oktober 2021</Text>
+            <Text style={globalStyles.bodyText}>15:00:00 WIB</Text>
           </View>
 
           <Text
@@ -225,7 +226,7 @@ const Pengantaran = ({navigation}) => {
             />
             <View>
               <Text style={styles.textBold}>Seprai</Text>
-              <Text>x 1.0 Satuan</Text>
+              <Text style={globalStyles.captionText}>x 1.0 Satuan</Text>
             </View>
           </View>
 
@@ -242,13 +243,16 @@ const Pengantaran = ({navigation}) => {
               textAlignVertical: 'top',
               paddingHorizontal: 15,
               paddingVertical: 20,
+              ...globalStyles.bodyText,
             }}
             placeholder="Tidak Ada"
           />
           <TouchableOpacity
             style={styles.button}
             onPress={() => console.log('Mashok')}>
-            <Text style={styles.textLogin}>Pesanan Diantar</Text>
+            <Text style={{...globalStyles.H3, color: 'white'}}>
+              Pesanan Diantar
+            </Text>
           </TouchableOpacity>
           <View style={{height: 120}} />
         </ScrollView>
@@ -261,9 +265,8 @@ export default Pengantaran;
 
 const styles = StyleSheet.create({
   textBold: {
+    ...globalStyles.bodyText2,
     fontSize: 18,
-    fontWeight: '700',
-    color: 'black',
   },
   button: {
     backgroundColor: ColorPrimary,
@@ -276,8 +279,7 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   textLogin: {
-    fontSize: 20,
-    fontWeight: '700',
+    ...globalStyles.H3,
     color: 'white',
   },
   header: {

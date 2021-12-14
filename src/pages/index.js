@@ -32,6 +32,8 @@ import Transaksi from './User/Transaksi';
 import DetailPesanan from './User/HomeUser/PesanScreenUser';
 import KonfirmasiPesanan from './User/HomeUser/KonfirmasiPesananUser';
 import DetailTransaksi from './User/Transaksi/DetailTransaksiUser';
+import EditProfile from './User/Profil/EditProfil';
+import EditAdmin from './Admin/HomeAdmin/EditAdmin';
 
 export {
   SplashScreen,
@@ -67,5 +69,7 @@ export {
   Profil,
   DetailPesanan,
   KonfirmasiPesanan,
-  DetailTransaksi
+  DetailTransaksi,
+  EditProfile,
+  EditAdmin
 };

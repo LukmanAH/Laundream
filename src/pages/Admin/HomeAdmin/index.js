@@ -22,7 +22,17 @@ import {
 } from '../../../assets/images';
 import SIZES, {ColorPrimary, ROLE_EMPLOYEE} from '../../../utils/constanta';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { globalStyles } from '../../../utils/global';
+import {globalStyles} from '../../../utils/global';
+import {Badge} from 'react-native-paper';
+
+const badge = {
+  konfirmasi: 1,
+  penjemputan: 0,
+  antrian: 0,
+  proses: 4,
+  siapAmbil: 3,
+  siapAntar: 1,
+};
 
 const HomePage = ({navigation}) => {
   const [user, setUser] = useState('');
@@ -46,16 +56,20 @@ const HomePage = ({navigation}) => {
       <StatusBar animated={true} barStyle="default" hidden={false} />
       <ScrollView>
         <View style={styles.header}>
-          <Image source={outletLogo} />
+          <TouchableOpacity onPress={() => navigation.openDrawer()}>
+            <Image source={outletLogo} />
+          </TouchableOpacity>
           <View style={{flexDirection: 'column', marginLeft: 10}}>
             <Text style={globalStyles.bodyText}>Hai,</Text>
-            <Text style={globalStyles.H3} numberOfLines={1}>Dennis Laundry</Text>
+            <Text style={globalStyles.H3} numberOfLines={1}>
+              Dennis Laundry
+            </Text>
           </View>
         </View>
 
         <View style={{justifyContent: 'center', alignItems: 'center'}}>
           <View style={[styles.hero, styles.shadow]}>
-            <View style={{flexDirection: 'column', width:'76%'}}>
+            <View style={{flexDirection: 'column', width: '76%'}}>
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <Image source={iconMoney} />
                 <Text style={{...globalStyles.H3, marginLeft: 5}}>
@@ -63,7 +77,11 @@ const HomePage = ({navigation}) => {
                 </Text>
               </View>
               <Text style={globalStyles.bodyText}>Pendapatan</Text>
-              <Text style={{...globalStyles.titleText, fontSize: 30}} numberOfLines={1}>Rp2.000.000</Text>
+              <Text
+                style={{...globalStyles.titleText, fontSize: 30}}
+                numberOfLines={1}>
+                Rp2.000.000
+              </Text>
             </View>
             <Image source={iconRT} />
           </View>
@@ -79,17 +97,85 @@ const HomePage = ({navigation}) => {
               }}>
               <TouchableOpacity
                 style={[styles.menuOption, styles.shadow]}
-                onPress={() => navigation.navigate('StatusPesanan')}>
-                <Image source={iconKonfirmasi} style={{width:55, height:55}} resizeMode='contain' />
-                <Text style={globalStyles.captionText} numberOfLines={1}>Konfirmasi</Text>
+                onPress={() =>
+                  navigation.navigate('StatusPesanan', {
+                    statusName: 'Konfirmasi',
+                  })
+                }>
+                  <Badge
+                  style={{
+                    position: 'absolute',
+                    backgroundColor: 'red',
+                    ...globalStyles.bodyText2,
+                    fontSize:14,
+                    color: 'white',
+                  }}
+                  size={24}
+                  visible={badge.konfirmasi > 0}>
+                  {badge.konfirmasi}
+                </Badge>
+                <Image
+                  source={iconKonfirmasi}
+                  style={{width: 55, height: 55}}
+                  resizeMode="contain"
+                />
+                <Text style={globalStyles.captionText} numberOfLines={1}>
+                  Konfirmasi
+                </Text>
               </TouchableOpacity>
-              <TouchableOpacity style={[styles.menuOption, styles.shadow]}>
-                <Image style={{width:55, height:55}} resizeMode='contain'  source={markIcon} />
-                <Text style={globalStyles.captionText} numberOfLines={1}>Penjemputan</Text>
+              <TouchableOpacity
+                style={[styles.menuOption, styles.shadow]}
+                onPress={() =>
+                  navigation.navigate('StatusPesanan', {
+                    statusName: 'Penjemputan',
+                  })
+                }>
+                <Badge
+                  style={{
+                    position: 'absolute',
+                    backgroundColor: 'red',
+                    ...globalStyles.bodyText2,
+                    fontSize:14,
+                    color: 'white',
+                  }}
+                  size={24}
+                  visible={badge.penjemputan > 0}>
+                  {badge.penjemputan}
+                </Badge>
+                <Image
+                  style={{width: 55, height: 55}}
+                  resizeMode="contain"
+                  source={markIcon}
+                />
+                <Text style={globalStyles.captionText} numberOfLines={1}>
+                  Penjemputan
+                </Text>
               </TouchableOpacity>
-              <TouchableOpacity style={[styles.menuOption, styles.shadow]}>
-                <Image style={{width:55, height:55}} resizeMode='contain'  source={KeranjangIcon1} />
-                <Text style={globalStyles.captionText} numberOfLines={1}>Antrian</Text>
+              <TouchableOpacity
+                style={[styles.menuOption, styles.shadow]}
+                onPress={() =>
+                  navigation.navigate('StatusPesanan', {statusName: 'Antrian'})
+                }>
+                  <Badge
+                  style={{
+                    position: 'absolute',
+                    backgroundColor: 'red',
+                    ...globalStyles.bodyText2,
+                    fontSize:14,
+                    color: 'white',
+                  }}
+                  size={24}
+                  visible={badge.antrian > 0}>
+                  {badge.antrian}
+                </Badge>
+                <Image
+                  style={{width: 55, height: 55}}
+                  resizeMode="contain"
+                  source={KeranjangIcon1}
+                />
+                <Text style={globalStyles.captionText} numberOfLines={1}>
+                  Antrian
+                </Text>
               </TouchableOpacity>
             </View>
             <View
@@ -100,17 +186,87 @@ const HomePage = ({navigation}) => {
                 width: SIZES.width,
                 paddingHorizontal: 20,
               }}>
-              <TouchableOpacity style={[styles.menuOption, styles.shadow]}>
-                <Image style={{width:55, height:55}} resizeMode='contain'  source={iconMesinCuci} />
-                <Text style={globalStyles.captionText} numberOfLines={1}>Proses</Text>
+              <TouchableOpacity
+                style={[styles.menuOption, styles.shadow]}
+                onPress={() =>
+                  navigation.navigate('StatusPesanan', {statusName: 'Proses'})
+                }>
+                  <Badge
+                  style={{
+                    position: 'absolute',
+                    backgroundColor: 'red',
+                    ...globalStyles.bodyText2,
+                    fontSize:14,
+                    color: 'white',
+                  }}
+                  size={24}
+                  visible={badge.proses > 0}>
+                  {badge.proses}
+                </Badge>
+                <Image
+                  style={{width: 55, height: 55}}
+                  resizeMode="contain"
+                  source={iconMesinCuci}
+                />
+                <Text style={globalStyles.captionText} numberOfLines={1}>
+                  Proses
+                </Text>
               </TouchableOpacity>
-              <TouchableOpacity style={[styles.menuOption, styles.shadow]}>
-                <Image style={{width:55, height:55}} resizeMode='contain'  source={KeranjangIcon} />
-                <Text style={globalStyles.captionText} numberOfLines={1}>Siap Ambil</Text>
+              <TouchableOpacity
+                style={[styles.menuOption, styles.shadow]}
+                onPress={() =>
+                  navigation.navigate('StatusPesanan', {
+                    statusName: 'Siap Ambil',
+                  })
+                }>
+                <Badge
+                  style={{
+                    position: 'absolute',
+                    backgroundColor: 'red',
+                    ...globalStyles.bodyText2,
+                    fontSize:14,
+                    color: 'white',
+                  }}
+                  size={24}
+                  visible={badge.siapAmbil > 0}>
+                  {badge.siapAmbil}
+                </Badge>
+                <Image
+                  style={{width: 55, height: 55}}
+                  resizeMode="contain"
+                  source={KeranjangIcon}
+                />
+                <Text style={globalStyles.captionText} numberOfLines={1}>
+                  Siap Ambil
+                </Text>
               </TouchableOpacity>
-              <TouchableOpacity style={[styles.menuOption, styles.shadow]}>
-                <Image style={{width:55, height:55}} resizeMode='contain'  source={iconMotor} />
-                <Text style={globalStyles.captionText} numberOfLines={1}>Siap Antar</Text>
+              <TouchableOpacity
+                style={[styles.menuOption, styles.shadow]}
+                onPress={() =>
+                  navigation.navigate('StatusPesanan', {
+                    statusName: 'Siap Antar',
+                  })
+                }>
+                <Image
+                  style={{width: 55, height: 55}}
+                  resizeMode="contain"
+                  source={iconMotor}
+                />
+                <Badge
+                  style={{
+                    position: 'absolute',
+                    backgroundColor: 'red',
+                    ...globalStyles.bodyText2,
+                    fontSize:14,
+                    color: 'white',
+                  }}
+                  size={24}
+                  visible={badge.siapAntar > 0}>
+                  {badge.siapAntar}
+                </Badge>
+                <Text style={globalStyles.captionText} numberOfLines={1}>
+                  Siap Antar
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -210,7 +366,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     borderTopEndRadius: 20,
     borderTopStartRadius: 20,
-    marginTop:5
+    marginTop: 5,
   },
   menuNavigation: {
     backgroundColor: '#f6f6f6',

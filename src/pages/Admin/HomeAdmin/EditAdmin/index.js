@@ -1,23 +1,24 @@
-import React, {useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import React, { useState } from 'react';
+import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import {Fumi} from 'react-native-textinput-effects';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import {HeaderBar} from '../../../../components';
 import SIZES, {ColorPrimary} from '../../../../utils/constanta';
-import { globalStyles } from '../../../../utils/global';
+import {globalStyles} from '../../../../utils/global';
 
-const EditProfile = ({navigation}) => {
+const EditAdmin = ({navigation}) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [numPhone, setnumPhone] = useState('');
+
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
       <HeaderBar
         navigation={navigation}
-        screenName="Profil"
+        screenName="HomePage"
         title="Edit Profile"
       />
+
       <View style={{paddingHorizontal: 20, paddingVertical: 1}}>
         <Fumi
           label={'Nama'}
@@ -79,7 +80,7 @@ const EditProfile = ({navigation}) => {
         }}>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate('Profil')}>
+          onPress={() => navigation.navigate('HomePage')}>
           <Text style={styles.btnText}>Simpan</Text>
         </TouchableOpacity>
       </View>
@@ -87,7 +88,7 @@ const EditProfile = ({navigation}) => {
   );
 };
 
-export default EditProfile;
+export default EditAdmin;
 
 const styles = StyleSheet.create({
   button: {
@@ -100,7 +101,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   btnText: {
-      ...globalStyles.H3,
+    ...globalStyles.H3,
     color: 'white',
   },
   textInput: {
