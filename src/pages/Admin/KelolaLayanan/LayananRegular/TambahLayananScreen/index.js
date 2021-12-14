@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -6,18 +6,28 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import {RadioButton, TextInput} from 'react-native-paper';
+import { RadioButton, TextInput } from 'react-native-paper';
 import DropDown from 'react-native-paper-dropdown';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {HeaderBar} from '../../../../../components';
-import SIZES, {ColorPrimary} from '../../../../../utils/constanta';
+import { HeaderBar } from '../../../../../components';
+import SIZES, { ColorPrimary } from '../../../../../utils/constanta';
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import { Fumi } from 'react-native-textinput-effects';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { LogBox } from "react-native";
+import { globalStyles } from '../../../../../utils/global';
 
-const TambahLayanan = ({navigation}) => {
+LogBox.ignoreLogs(["EventEmitter.removeListener"]);
+
+const TambahLayanan = ({ navigation }) => {
   const [checked, setChecked] = useState('kg');
   const [showDropDown, setShowDropDown] = useState(false);
   const [showDropDownLayanan, setShowDropDownLayanan] = useState(false);
   const [waktu, setWaktu] = useState('');
   const [layanan, setLayanan] = useState('');
+  const [name, setName] = useState('')
+  const [price, setPrice] = useState('')
+  const [estimationComplete, setEstimationComplete] = useState('')
 
   const waktuList = [
     {
@@ -58,26 +68,61 @@ const TambahLayanan = ({navigation}) => {
     },
   ];
 
+  const addCatalogPressed = async () => {
+    if (name) {
+      const laundry = await AsyncStorage.getItem('laundry')
+      const laundryParse = JSON.parse(laundry);
+
+      const token = await AsyncStorage.getItem('token');
+
+      await fetch(`http://192.168.42.174:8000/api/v1/owner/laundries/${laundryParse.id}/catalogs`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          name: name,
+        })
+      })
+        .then(response => response.json())
+        .then(responseJson => {
+          if (responseJson.errors == null) {
+            navigation.replace('Parfum')
+          }
+        });
+    } else {
+      alert('Masukkan semua field');
+    }
+  }
+
   return (
-    <View style={{flex: 1, backgroundColor: 'white'}}>
+    <View style={{ flex: 1, backgroundColor: 'white' }}>
       <HeaderBar
         navigation={navigation}
         screenName="LayananRegular"
         title="Tambah Layanan"
       />
-      <ScrollView style={{paddingHorizontal: 20, paddingVertical: 10}} showsVerticalScrollIndicator={false}>
-        <Text style={styles.titleText}>Nama Layanan</Text>
-        <TextInput
-          placeholder="Contoh: Sprei "
-          mode="outlined"
-          outlineColor={ColorPrimary}
-          activeOutlineColor={ColorPrimary}
+      <ScrollView style={{ paddingHorizontal: 20, paddingVertical: 10 }} showsVerticalScrollIndicator={false}>
+        <Fumi
+          label={'Nama Layanan'}
+          iconClass={FontAwesomeIcon}
+          iconName={'certificate'}
+          iconColor={ColorPrimary}
+          iconSize={20}
+          iconWidth={40}
+          inputPadding={20}
+          onChangeText={text => setName(text)}
+          autoCapitalize="none"
+          value={name}
+          style={styles.textInput}
         />
 
         <Text style={styles.titleText}>Jenis Item</Text>
         <DropDown
           // label={'Waktu'}
-          placeholder="Contoh: Sprei"
+          placeholder="Jenis Item"
           mode={'outlined'}
           visible={showDropDownLayanan}
           showDropDown={() => setShowDropDownLayanan(true)}
@@ -90,45 +135,60 @@ const TambahLayanan = ({navigation}) => {
 
         {/* RadioButton */}
         <Text style={styles.titleText}>Satuan Hitung </Text>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <RadioButton
             value="kg"
+            uncheckedColor="black"
             status={checked === 'kg' ? 'checked' : 'unchecked'}
             onPress={() => setChecked('kg')}
           />
-          <Text>Kg </Text>
+          <Text style={{ ...globalStyles.captionText }}>Kg </Text>
           <RadioButton
             value="meter"
+            uncheckedColor="black"
             status={checked === 'meter' ? 'checked' : 'unchecked'}
             onPress={() => setChecked('meter')}
           />
-          <Text>Meter</Text>
+          <Text style={{ ...globalStyles.captionText }}>Meter</Text>
           <RadioButton
             value="satuan"
+            uncheckedColor="black"
             status={checked === 'satuan' ? 'checked' : 'unchecked'}
             onPress={() => setChecked('satuan')}
           />
-          <Text>Satuan</Text>
+          <Text style={{ ...globalStyles.captionText }}>Satuan</Text>
         </View>
 
-        <Text style={styles.titleText}>Harga Per Kg/Meter/Satuan</Text>
-        <TextInput
-          placeholder="Contoh: 2000 "
-          mode="outlined"
-          outlineColor={ColorPrimary}
-          activeOutlineColor={ColorPrimary}
+        <Fumi
+          label={'Harga'}
+          iconClass={FontAwesomeIcon}
+          iconName={'certificate'}
+          iconColor={ColorPrimary}
+          iconSize={20}
+          iconWidth={40}
+          inputPadding={20}
+          onChangeText={text => setPrice(text)}
+          autoCapitalize="none"
+          value={price}
           keyboardType="number-pad"
+          style={styles.textInput}
         />
 
         <Text style={styles.titleText}>Estimasi Selesai</Text>
-        <View style={{flexDirection: 'row'}}>
-          <TextInput
-            placeholder="Contoh: 3 "
-            mode="outlined"
-            outlineColor={ColorPrimary}
-            activeOutlineColor={ColorPrimary}
-            style={{flex: 2}}
+        <View style={{ flexDirection: 'row' }}>
+          <Fumi
+            label={'Estimasi Selesai'}
+            iconClass={FontAwesomeIcon}
+            iconName={'certificate'}
+            iconColor={ColorPrimary}
+            iconSize={20}
+            iconWidth={40}
+            inputPadding={20}
+            onChangeText={text => setEstimationComplete(text)}
+            autoCapitalize="none"
+            value={estimationComplete}
             keyboardType="number-pad"
+            style={{ ...styles.textInput, flex: 2, marginTop: 0, }}
           />
           <DropDown
             // label={'Waktu'}
@@ -140,11 +200,13 @@ const TambahLayanan = ({navigation}) => {
             value={waktu}
             setValue={setWaktu}
             list={waktuList}
+            activeColor="white"
+            dropDownStyle={{ color: 'red', backgroundColor: 'black' }}
           />
         </View>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate('LayananRegular')}>
+          onPress={() => console.log('test')}>
           <Text style={styles.btnText}>Simpan</Text>
         </TouchableOpacity>
       </ScrollView>
@@ -155,7 +217,7 @@ const TambahLayanan = ({navigation}) => {
 export default TambahLayanan;
 
 const styles = StyleSheet.create({
-  titleText: {fontSize: 16, fontWeight: '700', color: 'black', marginTop: 10},
+  titleText: { fontSize: 16, fontWeight: '700', color: 'black', marginTop: 10 },
   button: {
     backgroundColor: ColorPrimary,
     width: SIZES.width - 50,
@@ -170,5 +232,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '700',
     color: 'white',
+  },
+  textInput: {
+    width: SIZES.width - 50,
+    borderRadius: 16,
+    marginTop: 20,
+    borderWidth: 1,
+    borderColor: 'grey',
   },
 });

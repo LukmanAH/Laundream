@@ -19,7 +19,7 @@ const TambahTarifOngkirScreen = ({ navigation }) => {
 
       const token = await AsyncStorage.getItem('token');
 
-      await fetch(`http://192.168.42.63:8000/api/v1/owner/laundries/${laundryParse.id}/shipping`, {
+      await fetch(`http://192.168.42.174:8000/api/v1/owner/laundries/${laundryParse.id}/shipping`, {
         method: 'POST',
         headers: {
           Accept: 'application/json',

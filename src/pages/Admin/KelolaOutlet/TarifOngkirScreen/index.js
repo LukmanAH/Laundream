@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Text, TouchableOpacity, View, StyleSheet, Alert, ToastAndroid } from 'react-native';
 import { FAB } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { HeaderBar } from '../../../../components';
+import { HeaderBar, Loading } from '../../../../components';
 import { ColorPrimary } from '../../../../utils/constanta';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -25,7 +25,7 @@ const TarifOngkir = ({ data }) => {
         {
           text: 'Ya',
           onPress: async () => {
-            await fetch(`http://192.168.42.63:8000/api/v1/owner/laundries/${laundryParse.id}/shipping/${data.id}`, {
+            await fetch(`http://192.168.42.174:8000/api/v1/owner/laundries/${laundryParse.id}/shipping/${data.id}`, {
               method: 'DELETE',
               headers: {
                 Accept: 'application/json',
@@ -84,6 +84,7 @@ const TarifOngkir = ({ data }) => {
 
 const TarifOngkirScreen = ({ navigation }) => {
   const [tarif, setTarif] = useState([])
+  const [loading, setLoading] = useState(false)
 
   const fetchTarifOngkirApi = async () => {
     const laundry = await AsyncStorage.getItem('laundry')
@@ -91,7 +92,7 @@ const TarifOngkirScreen = ({ navigation }) => {
 
     const token = await AsyncStorage.getItem('token');
 
-    await fetch(`http://192.168.42.63:8000/api/v1/owner/laundries/${laundryParse.id}/shipping`, {
+    await fetch(`http://192.168.42.174:8000/api/v1/owner/laundries/${laundryParse.id}/shipping`, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
@@ -102,33 +103,36 @@ const TarifOngkirScreen = ({ navigation }) => {
       .then(response => response.json())
       .then(responseJson => {
         setTarif(responseJson)
+        setLoading(false)
       });
   }
 
   useEffect(() => {
+    setLoading(true)
     fetchTarifOngkirApi();
-  }, [tarif])
+  }, [])
 
   return (
-    <View style={{ flex: 1, backgroundColor: 'white' }}>
-      <HeaderBar
-        navigation={navigation}
-        screenName="KelolaOutlet"
-        title="Tarif Ongkir"
-      />
-      <View style={{ paddingHorizontal: 20 }}>
-        {tarif.length > 0 && tarif.map((data, index) => {
-          return <TarifOngkir data={data} key={index} />
-        })}
-      </View>
+    loading ? <Loading />
+      : <View style={{ flex: 1, backgroundColor: 'white' }}>
+        <HeaderBar
+          navigation={navigation}
+          screenName="KelolaOutlet"
+          title="Tarif Ongkir"
+        />
+        <View style={{ paddingHorizontal: 20 }}>
+          {tarif.length > 0 && tarif.map((data, index) => {
+            return <TarifOngkir data={data} key={index} />
+          })}
+        </View>
 
-      <FAB
-        style={styles.fab}
-        medium
-        icon="plus"
-        onPress={() => navigation.navigate('TambahTarifOngkir')}
-      />
-    </View>
+        <FAB
+          style={styles.fab}
+          medium
+          icon="plus"
+          onPress={() => navigation.navigate('TambahTarifOngkir')}
+        />
+      </View>
   );
 };
 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Text, View, StyleSheet, Button } from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
-import SIZES, { ColorPrimary } from '../../utils/constanta';
+import SIZES, { ColorPrimary, ROLE_CUSTOMER } from '../../utils/constanta';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import { Fumi } from 'react-native-textinput-effects';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -15,7 +15,7 @@ const LoginScreen = ({ navigation }) => {
     const emailRegex = /\S+@\S+\.\S+/;
     if (email && password) {
       if (emailRegex.test(email)) {
-        await fetch('http://192.168.42.63:8000/api/v1/login', {
+        await fetch('http://192.168.42.174:8000/api/v1/login', {
           method: 'POST',
           headers: {
             Accept: 'application/json',
@@ -38,7 +38,12 @@ const LoginScreen = ({ navigation }) => {
 
               setEmail('');
               setPassword('');
-              navigation.replace('HomePage');
+
+              if (responseJson.user.role == ROLE_CUSTOMER) {
+                navigation.replace('Tabs');
+              } else {
+                navigation.replace('MainApp');
+              }
             } else {
               alert(responseJson.error);
             }
@@ -90,8 +95,8 @@ const LoginScreen = ({ navigation }) => {
 
       <View style={styles.bottom}>
         {/* ganti ke user screen bentar */}
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Tabs")}>
-          <Text style={{...globalStyles.titleText, color:'white', }}>Masuk</Text>
+        <TouchableOpacity style={styles.button} onPress={loginPressed}>
+          <Text style={{ ...globalStyles.titleText, color: 'white', }}>Masuk</Text>
         </TouchableOpacity>
         <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center' }}>
           <Text style={globalStyles.captionText}>Belum Punya Akun?</Text>

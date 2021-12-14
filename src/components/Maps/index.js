@@ -18,10 +18,10 @@ import Geolocation from '@react-native-community/geolocation';
 export default class Maps extends React.Component {
     state = {
         region: {
-            longitude: Number(this.props.location.longitude),
-            latitude: Number(this.props.location.latitude),
-            latitudeDelta: Number(this.props.location.latitudeDelta),
-            longitudeDelta: Number(this.props.location.longitudeDelta),
+            longitude: parseFloat(this.props.location.longitude),
+            latitude: parseFloat(this.props.location.latitude),
+            latitudeDelta: parseFloat(this.props.location.latitudeDelta),
+            longitudeDelta: parseFloat(this.props.location.longitudeDelta),
         },
         loc: {
             longitude: this.props.location.longitude,
@@ -34,8 +34,8 @@ export default class Maps extends React.Component {
         Geolocation.getCurrentPosition(x => {
             this.setState({
                 region: {
-                    latitude: Number((x.coords.latitude + this.props.location.latitude) / 2),
-                    longitude: Number((x.coords.longitude + this.props.location.longitude) / 2),
+                    latitude: parseFloat((x.coords.latitude + this.props.location.latitude) / 2),
+                    longitude: parseFloat((x.coords.longitude + this.props.location.longitude) / 2),
                     latitudeDelta:
                         Math.abs(x.coords.latitude - this.props.location.latitude) * 2,
                     longitudeDelta:
@@ -43,7 +43,26 @@ export default class Maps extends React.Component {
                 },
             });
         });
+
+        if (this.props.type == 'create') {
+            this.setState({
+                region: {
+                    latitude: this.props.location.latitude,
+                    longitude: this.props.location.longitude,
+                    latitudeDelta: 0.05,
+                    longitudeDelta: 0.05,
+                },
+            });
+        }
     }
+
+    onRegionChange = newRegion => {
+        if (this.props.type == 'create') {
+            this.setState({
+                region: newRegion,
+            });
+        }
+    };
 
     mapReady = () => {
         this.setState({ heightMap: SIZES.height });
@@ -51,12 +70,10 @@ export default class Maps extends React.Component {
 
     render() {
         const data = this.state;
-        // const location = this.props.location;
 
         return data.region.longitude != 'Pilih Lokasi' ? (
             <View style={styles.map}>
                 <MapView
-                    //   ref={this.refs}
                     style={{ height: 200 }}
                     onMapReady={this.mapReady}
                     provider={PROVIDER_GOOGLE}
@@ -64,29 +81,38 @@ export default class Maps extends React.Component {
                     showsMyLocationButton={true}
                     showsUserLocation
                     userLocationUpdateInterval={10000}
-                    showsCompass={true}>
+                    showsCompass={true}
+                    onRegionChangeComplete={this.onRegionChange}>
 
                 </MapView>
 
-                {this.props.tipe == 'small' ? (
-                    <View style={styles.showFooter}>
-                        <TouchableOpacity
-                            style={styles.boxButton}
-                            onPress={() => this.props.screenCreate('map')}>
+                {this.props.type == 'create' ? (
+                    <>
+                        <View style={styles.markerFixed}>
                             <MaterialCommunityIcons
-                                name="map-search-outline"
-                                style={styles.icon}
+                                name="map-marker"
+                                style={{
+                                    fontSize: 50,
+                                    color: ColorDanger,
+                                }}
                             />
-                        </TouchableOpacity>
-                    </View>
-                ) : this.props.tipe == 'show' ? (
-                    <View style={styles.showFooter}>
-                        <TouchableOpacity
-                            style={styles.boxButton}
-                            onPress={() => this.props.screenCreate('main')}>
-                            <MaterialCommunityIcons name="arrow-left" style={styles.icon} />
-                        </TouchableOpacity>
-                    </View>
+                        </View>
+                        <SafeAreaView style={styles.footer}>
+                            <TouchableOpacity
+                                onPress={() => this.props.getCoordinate(this.state.region)}
+                                style={styles.boxButton}>
+                                <Text
+                                    style={{
+                                        color: ColorWhite,
+                                        textAlign: 'center',
+                                        fontWeight: 'bold',
+                                        fontSize: 12,
+                                    }}>
+                                    Pilih Lokasi
+                                </Text>
+                            </TouchableOpacity>
+                        </SafeAreaView>
+                    </>
                 ) : null}
             </View>
         ) : null;
@@ -100,28 +126,29 @@ const styles = StyleSheet.create({
     markerFixed: {
         left: '50%',
         marginLeft: -24,
-        marginTop: 24,
+        marginTop: 12,
         position: 'absolute',
-        top: '50%',
+        top: '40%',
     },
     marker: {
         height: 48,
         width: 48,
     },
     footer: {
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        bottom: 30,
+        backgroundColor: 'rgba(0, 0, 0, 0.0)',
+        bottom: 5,
         position: 'absolute',
         width: '100%',
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'space-around',
+        justifyContent: 'flex-end',
         alignItems: 'center',
+        right: 5
     },
     boxButton: {
         backgroundColor: ColorPrimary,
-        height: 75,
-        width: 70,
+        height: 60,
+        width: 55,
         borderRadius: 10,
         display: 'flex',
         justifyContent: 'center',

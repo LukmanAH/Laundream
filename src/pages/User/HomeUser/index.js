@@ -15,6 +15,7 @@ import Geolocation from '@react-native-community/geolocation';
 import Geocoder from 'react-native-geocoding';
 import GOOGLE_MAPS_API from '../../../utils/maps'
 import { globalStyles } from '../../../utils/global';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const data = [
   {
@@ -45,13 +46,39 @@ const data = [
 
 const Home = ({ navigation }) => {
   const [location, setLocation] = useState('')
+  const [coordinate, setCoordinate] = useState({
+    lat: '',
+    lng: ''
+  });
+  const [laundries, setLaundries] = useState([])
+  const [loading, setLoading] = useState(false)
+
+  const getNearestLaundry = async () => {
+    setLoading(true)
+    const token = await AsyncStorage.getItem('token');
+
+    await fetch(`http://192.168.42.174:8000/api/v1/customer/laundries/`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+    })
+      .then(response => response.json())
+      .then(responseJson => {
+        console.log(responseJson)
+        // setLaundries(responseJson)
+      });
+  }
 
   useEffect(() => {
     Geocoder.init(GOOGLE_MAPS_API);
     Geolocation.getCurrentPosition(x => {
+      setCoordinate({ lat: x.coords.latitude, lng: x.coords.longitude })
+
       Geocoder.from([x.coords.latitude, x.coords.longitude])
         .then(response => {
-          console.log(response)
           const filterred_area = response.results[0].address_components.filter(
             address => {
               return address.types.includes('administrative_area_level_2');
@@ -61,6 +88,8 @@ const Home = ({ navigation }) => {
         })
         .catch(error => console.warn(error));
     });
+
+    getNearestLaundry()
   }, [])
 
   const renderItem = ({ item, index }) => {
@@ -102,10 +131,10 @@ const Home = ({ navigation }) => {
             borderBottomRightRadius: 24,
             padding: 16,
           }}>
-          <Text style={{...globalStyles.bodyText2, fontSize:14}} numberOfLines={1}>
+          <Text style={{ ...globalStyles.bodyText2, fontSize: 14 }} numberOfLines={1}>
             {item.nama}
           </Text>
-          <Text style={{ ...globalStyles.captionText , color: '#6D6D6D', fontSize:10 }} numberOfLines={2}>
+          <Text style={{ ...globalStyles.captionText, color: '#6D6D6D', fontSize: 10 }} numberOfLines={2}>
             {item.alamat}
           </Text>
         </View>
@@ -161,7 +190,7 @@ const Home = ({ navigation }) => {
                 <Text style={{ ...globalStyles.bodyText2, color: 'white', }}>
                   Lokasi
                 </Text>
-                <Text style={{...globalStyles.bodyText ,color: 'white' }}>{location}</Text>
+                <Text style={{ ...globalStyles.bodyText, color: 'white' }}>{location}</Text>
               </View>
             </View>
           </View>
