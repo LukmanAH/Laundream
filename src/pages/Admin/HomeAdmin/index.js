@@ -23,6 +23,16 @@ import {
 import SIZES, {ColorPrimary, ROLE_EMPLOYEE} from '../../../utils/constanta';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {globalStyles} from '../../../utils/global';
+import {Badge} from 'react-native-paper';
+
+const badge = {
+  konfirmasi: 1,
+  penjemputan: 0,
+  antrian: 0,
+  proses: 4,
+  siapAmbil: 3,
+  siapAntar: 1,
+};
 
 const HomePage = ({navigation}) => {
   const [user, setUser] = useState('');
@@ -92,6 +102,18 @@ const HomePage = ({navigation}) => {
                     statusName: 'Konfirmasi',
                   })
                 }>
+                  <Badge
+                  style={{
+                    position: 'absolute',
+                    backgroundColor: 'red',
+                    ...globalStyles.bodyText2,
+                    fontSize:14,
+                    color: 'white',
+                  }}
+                  size={24}
+                  visible={badge.konfirmasi > 0}>
+                  {badge.konfirmasi}
+                </Badge>
                 <Image
                   source={iconKonfirmasi}
                   style={{width: 55, height: 55}}
@@ -108,6 +130,18 @@ const HomePage = ({navigation}) => {
                     statusName: 'Penjemputan',
                   })
                 }>
+                <Badge
+                  style={{
+                    position: 'absolute',
+                    backgroundColor: 'red',
+                    ...globalStyles.bodyText2,
+                    fontSize:14,
+                    color: 'white',
+                  }}
+                  size={24}
+                  visible={badge.penjemputan > 0}>
+                  {badge.penjemputan}
+                </Badge>
                 <Image
                   style={{width: 55, height: 55}}
                   resizeMode="contain"
@@ -117,8 +151,23 @@ const HomePage = ({navigation}) => {
                   Penjemputan
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity style={[styles.menuOption, styles.shadow]}
-               onPress={() => navigation.navigate('StatusPesanan', {statusName: 'Antrian'})}>
+              <TouchableOpacity
+                style={[styles.menuOption, styles.shadow]}
+                onPress={() =>
+                  navigation.navigate('StatusPesanan', {statusName: 'Antrian'})
+                }>
+                  <Badge
+                  style={{
+                    position: 'absolute',
+                    backgroundColor: 'red',
+                    ...globalStyles.bodyText2,
+                    fontSize:14,
+                    color: 'white',
+                  }}
+                  size={24}
+                  visible={badge.antrian > 0}>
+                  {badge.antrian}
+                </Badge>
                 <Image
                   style={{width: 55, height: 55}}
                   resizeMode="contain"
@@ -137,8 +186,23 @@ const HomePage = ({navigation}) => {
                 width: SIZES.width,
                 paddingHorizontal: 20,
               }}>
-              <TouchableOpacity style={[styles.menuOption, styles.shadow]}
-               onPress={() => navigation.navigate('StatusPesanan', {statusName: 'Proses'})}>
+              <TouchableOpacity
+                style={[styles.menuOption, styles.shadow]}
+                onPress={() =>
+                  navigation.navigate('StatusPesanan', {statusName: 'Proses'})
+                }>
+                  <Badge
+                  style={{
+                    position: 'absolute',
+                    backgroundColor: 'red',
+                    ...globalStyles.bodyText2,
+                    fontSize:14,
+                    color: 'white',
+                  }}
+                  size={24}
+                  visible={badge.proses > 0}>
+                  {badge.proses}
+                </Badge>
                 <Image
                   style={{width: 55, height: 55}}
                   resizeMode="contain"
@@ -148,8 +212,25 @@ const HomePage = ({navigation}) => {
                   Proses
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity style={[styles.menuOption, styles.shadow]}
-               onPress={() => navigation.navigate('StatusPesanan', {statusName: 'Siap Ambil'})}>
+              <TouchableOpacity
+                style={[styles.menuOption, styles.shadow]}
+                onPress={() =>
+                  navigation.navigate('StatusPesanan', {
+                    statusName: 'Siap Ambil',
+                  })
+                }>
+                <Badge
+                  style={{
+                    position: 'absolute',
+                    backgroundColor: 'red',
+                    ...globalStyles.bodyText2,
+                    fontSize:14,
+                    color: 'white',
+                  }}
+                  size={24}
+                  visible={badge.siapAmbil > 0}>
+                  {badge.siapAmbil}
+                </Badge>
                 <Image
                   style={{width: 55, height: 55}}
                   resizeMode="contain"
@@ -159,13 +240,30 @@ const HomePage = ({navigation}) => {
                   Siap Ambil
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity style={[styles.menuOption, styles.shadow]}
-               onPress={() => navigation.navigate('StatusPesanan', {statusName: 'Siap Antar'})}>
+              <TouchableOpacity
+                style={[styles.menuOption, styles.shadow]}
+                onPress={() =>
+                  navigation.navigate('StatusPesanan', {
+                    statusName: 'Siap Antar',
+                  })
+                }>
                 <Image
                   style={{width: 55, height: 55}}
                   resizeMode="contain"
                   source={iconMotor}
                 />
+                <Badge
+                  style={{
+                    position: 'absolute',
+                    backgroundColor: 'red',
+                    ...globalStyles.bodyText2,
+                    fontSize:14,
+                    color: 'white',
+                  }}
+                  size={24}
+                  visible={badge.siapAntar > 0}>
+                  {badge.siapAntar}
+                </Badge>
                 <Text style={globalStyles.captionText} numberOfLines={1}>
                   Siap Antar
                 </Text>
