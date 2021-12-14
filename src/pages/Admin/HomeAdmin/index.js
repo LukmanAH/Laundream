@@ -87,7 +87,11 @@ const HomePage = ({navigation}) => {
               }}>
               <TouchableOpacity
                 style={[styles.menuOption, styles.shadow]}
-                onPress={() => navigation.navigate('StatusPesanan')}>
+                onPress={() =>
+                  navigation.navigate('StatusPesanan', {
+                    statusName: 'Konfirmasi',
+                  })
+                }>
                 <Image
                   source={iconKonfirmasi}
                   style={{width: 55, height: 55}}
@@ -97,7 +101,13 @@ const HomePage = ({navigation}) => {
                   Konfirmasi
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity style={[styles.menuOption, styles.shadow]}>
+              <TouchableOpacity
+                style={[styles.menuOption, styles.shadow]}
+                onPress={() =>
+                  navigation.navigate('StatusPesanan', {
+                    statusName: 'Penjemputan',
+                  })
+                }>
                 <Image
                   style={{width: 55, height: 55}}
                   resizeMode="contain"
@@ -107,7 +117,8 @@ const HomePage = ({navigation}) => {
                   Penjemputan
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity style={[styles.menuOption, styles.shadow]}>
+              <TouchableOpacity style={[styles.menuOption, styles.shadow]}
+               onPress={() => navigation.navigate('StatusPesanan', {statusName: 'Antrian'})}>
                 <Image
                   style={{width: 55, height: 55}}
                   resizeMode="contain"
@@ -126,7 +137,8 @@ const HomePage = ({navigation}) => {
                 width: SIZES.width,
                 paddingHorizontal: 20,
               }}>
-              <TouchableOpacity style={[styles.menuOption, styles.shadow]}>
+              <TouchableOpacity style={[styles.menuOption, styles.shadow]}
+               onPress={() => navigation.navigate('StatusPesanan', {statusName: 'Proses'})}>
                 <Image
                   style={{width: 55, height: 55}}
                   resizeMode="contain"
@@ -136,7 +148,8 @@ const HomePage = ({navigation}) => {
                   Proses
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity style={[styles.menuOption, styles.shadow]}>
+              <TouchableOpacity style={[styles.menuOption, styles.shadow]}
+               onPress={() => navigation.navigate('StatusPesanan', {statusName: 'Siap Ambil'})}>
                 <Image
                   style={{width: 55, height: 55}}
                   resizeMode="contain"
@@ -146,7 +159,8 @@ const HomePage = ({navigation}) => {
                   Siap Ambil
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity style={[styles.menuOption, styles.shadow]}>
+              <TouchableOpacity style={[styles.menuOption, styles.shadow]}
+               onPress={() => navigation.navigate('StatusPesanan', {statusName: 'Siap Antar'})}>
                 <Image
                   style={{width: 55, height: 55}}
                   resizeMode="contain"
