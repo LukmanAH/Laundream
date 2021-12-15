@@ -16,6 +16,9 @@ import iconScooter from './noto_motor-scooter.png'
 import iconTimbangan from './iconTimbangan.png'
 import userHeader from './userHeader.png'
 import smatLaundry from './smatLaundry.png'
+import shirt from './shirt.png'
+import lainnya from './shirt.png'
+import jas from './jas.png'
 
 export {
   Logo,
@@ -35,5 +38,8 @@ export {
   iconScooter,
   iconTimbangan,
   userHeader,
-  smatLaundry
+  smatLaundry,
+  shirt,
+  jas,
+  lainnya
 };

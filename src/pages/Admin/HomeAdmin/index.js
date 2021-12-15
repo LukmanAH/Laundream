@@ -7,9 +7,11 @@ import {
   SafeAreaView,
   StatusBar,
   ScrollView,
+  ImageBackground,
 } from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {
+  bgHeader,
   iconKonfirmasi,
   iconMesinCuci,
   iconMoney,
@@ -55,17 +57,17 @@ const HomePage = ({navigation}) => {
     <SafeAreaView style={styles.container}>
       <StatusBar animated={true} barStyle="default" hidden={false} />
       <ScrollView>
-        <View style={styles.header}>
+        <ImageBackground source={bgHeader} style={styles.header}>
           <TouchableOpacity onPress={() => navigation.openDrawer()}>
             <Image source={outletLogo} />
           </TouchableOpacity>
           <View style={{flexDirection: 'column', marginLeft: 10}}>
-            <Text style={globalStyles.bodyText}>Hai,</Text>
-            <Text style={globalStyles.H3} numberOfLines={1}>
+            <Text style={{...globalStyles.bodyText, color:'white'}}>Hai,</Text>
+            <Text style={{...globalStyles.H3, color:'white'}} numberOfLines={1}>
               Dennis Laundry
             </Text>
           </View>
-        </View>
+        </ImageBackground>
 
         <View style={{justifyContent: 'center', alignItems: 'center'}}>
           <View style={[styles.hero, styles.shadow]}>
@@ -332,11 +334,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 30,
     paddingLeft: 40,
-    backgroundColor: ColorPrimary,
+    height:120,
     alignItems: 'center',
     width: SIZES.width,
-    borderBottomEndRadius: 10,
-    borderBottomStartRadius: 10,
   },
   hero: {
     flexDirection: 'row',

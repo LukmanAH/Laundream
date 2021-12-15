@@ -1,110 +1,119 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   StyleSheet,
   Text,
   View,
   TouchableOpacity,
   ScrollView,
+  Image,
 } from 'react-native';
-import { RadioButton, TextInput } from 'react-native-paper';
-import DropDown from 'react-native-paper-dropdown';
-import Icon from 'react-native-vector-icons/FontAwesome5';
-import { HeaderBar } from '../../../../../components';
-import SIZES, { ColorPrimary } from '../../../../../utils/constanta';
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
-import { Fumi } from 'react-native-textinput-effects';
+import {RadioButton} from 'react-native-paper';
+import DropDownPicker from 'react-native-dropdown-picker';
+import {HeaderBar} from '../../../../../components';
+import SIZES, {ColorPrimary, API} from '../../../../../utils/constanta';
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome5';
+import {Fumi} from 'react-native-textinput-effects';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { LogBox } from "react-native";
-import { globalStyles } from '../../../../../utils/global';
+import {LogBox} from 'react-native';
+import {globalStyles} from '../../../../../utils/global';
+import {color} from 'react-native-reanimated';
+import { iconTimbangan, jas, KeranjangIcon, shirt } from '../../../../../assets/images';
 
-LogBox.ignoreLogs(["EventEmitter.removeListener"]);
+LogBox.ignoreLogs(['EventEmitter.removeListener']);
 
-const TambahLayanan = ({ navigation }) => {
+const TambahLayanan = ({navigation}) => {
   const [checked, setChecked] = useState('kg');
-  const [showDropDown, setShowDropDown] = useState(false);
-  const [showDropDownLayanan, setShowDropDownLayanan] = useState(false);
-  const [waktu, setWaktu] = useState('');
-  const [layanan, setLayanan] = useState('');
-  const [name, setName] = useState('')
-  const [price, setPrice] = useState('')
-  const [estimationComplete, setEstimationComplete] = useState('')
+  const [name, setName] = useState('');
+  const [price, setPrice] = useState('');
+  const [estimationComplete, setEstimationComplete] = useState('');
 
-  const waktuList = [
-    {
-      label: 'Jam',
-      value: 'Jam',
-    },
-    {
-      label: 'Hari',
-      value: 'Hari',
-    },
-  ];
+  
+  const [openWaktu, setOpenWaktu] = useState(false);
+  const [valueWaktu, setValueWaktu] = useState(null);
+  const [waktu, setWaktu] = useState([
+    {label: 'Jam', value: 'Jam'},
+    {label: 'Hari', value: 'Hari'},
+  ]);
 
-  const layananList = [
+  const [openLayanan, setOpenLayanan] = useState(false);
+  const [valueLayanan, setValueLayanan] = useState(null);
+  const [layananList, setLayanan] = useState([
     {
       label: 'Sprei',
-      value: 'Spreiasd',
-      icon: <Icon name="person" size={24} color="red" />,
+      value: 'Sprei',
+      icon: () => <Image source={KeranjangIcon} style={{width:24, height:24}} />
     },
     {
       label: 'Pakaian',
       value: 'Pakaian',
+      icon: () => <Image source={shirt} style={{width:24, height:24}} />
     },
     {
       label: 'Daleman',
       value: 'Daleman',
+      icon: () => <Image source={iconTimbangan} style={{width:24, height:24}} />
     },
     {
       label: 'Bed',
       value: 'Bed',
+      icon: () => <FontAwesomeIcon name="bed" size={24} color={ColorPrimary} />,
     },
     {
       label: 'Karpet',
       value: 'Karpet',
+      icon: () => <Image source={iconTimbangan} style={{width:24, height:24}} />
     },
     {
       label: 'Jas',
       value: 'Jas',
+      icon: () => <Image source={jas} style={{width:24, height:24}} />
     },
-  ];
+    {
+      label: 'Lainnya',
+      value: 'Lainnya',
+      icon: () => <Image source={iconTimbangan} style={{width:24, height:24}} />
+    },
+  ]);
 
   const addCatalogPressed = async () => {
     if (name) {
-      const laundry = await AsyncStorage.getItem('laundry')
+      const laundry = await AsyncStorage.getItem('laundry');
       const laundryParse = JSON.parse(laundry);
 
       const token = await AsyncStorage.getItem('token');
 
-      await fetch(`http://192.168.42.174:8000/api/v1/owner/laundries/${laundryParse.id}/catalogs`, {
+      await fetch(`${API}/api/v1/owner/laundries/${laundryParse.id}/catalogs`, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           name: name,
-        })
+        }),
       })
         .then(response => response.json())
         .then(responseJson => {
           if (responseJson.errors == null) {
-            navigation.replace('Parfum')
+            navigation.replace('Parfum');
           }
         });
     } else {
       alert('Masukkan semua field');
     }
-  }
+  };
 
   return (
-    <View style={{ flex: 1, backgroundColor: 'white' }}>
+    <View style={{flex: 1, backgroundColor: 'white'}}>
       <HeaderBar
         navigation={navigation}
         screenName="LayananRegular"
         title="Tambah Layanan"
       />
-      <ScrollView style={{ paddingHorizontal: 20, paddingVertical: 10 }} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={{paddingHorizontal: 20, paddingVertical: 10}}
+        showsVerticalScrollIndicator={false}>
         <Fumi
           label={'Nama Layanan'}
           iconClass={FontAwesomeIcon}
@@ -117,46 +126,55 @@ const TambahLayanan = ({ navigation }) => {
           autoCapitalize="none"
           value={name}
           style={styles.textInput}
+          inputStyle={globalStyles.bodyText}
+          labelStyle={globalStyles.captionText}
         />
 
         <Text style={styles.titleText}>Jenis Item</Text>
-        <DropDown
-          // label={'Waktu'}
-          placeholder="Jenis Item"
-          mode={'outlined'}
-          visible={showDropDownLayanan}
-          showDropDown={() => setShowDropDownLayanan(true)}
-          onDismiss={() => setShowDropDownLayanan(false)}
-          value={layanan}
-          setValue={setLayanan}
-          list={layananList}
-          showTickIcon={true}
-        />
+        
+        <DropDownPicker
+            open={openLayanan}
+            value={valueLayanan}
+            items={layananList}
+            setOpen={setOpenLayanan}
+            setValue={setValueLayanan}
+            setItems={setLayanan}
+            style={{backgroundColor:'white', height:65, borderRadius:15, borderColor:'grey'}}
+            labelStyle={globalStyles.bodyText}
+            textStyle={globalStyles.bodyText}
+            placeholder='Pilih Jenis'
+            dropDownContainerStyle={{borderColor:'grey'}}
+            maxHeight={180}
+            scrollViewProps={{
+              persistentScrollbar: true
+             }}
+             listMode={'SCROLLVIEW'}
+          />
 
         {/* RadioButton */}
         <Text style={styles.titleText}>Satuan Hitung </Text>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <RadioButton
             value="kg"
             uncheckedColor="black"
             status={checked === 'kg' ? 'checked' : 'unchecked'}
             onPress={() => setChecked('kg')}
           />
-          <Text style={{ ...globalStyles.captionText }}>Kg </Text>
+          <Text style={{...globalStyles.captionText}}>Kg </Text>
           <RadioButton
             value="meter"
             uncheckedColor="black"
             status={checked === 'meter' ? 'checked' : 'unchecked'}
             onPress={() => setChecked('meter')}
           />
-          <Text style={{ ...globalStyles.captionText }}>Meter</Text>
+          <Text style={{...globalStyles.captionText}}>Meter</Text>
           <RadioButton
             value="satuan"
             uncheckedColor="black"
             status={checked === 'satuan' ? 'checked' : 'unchecked'}
             onPress={() => setChecked('satuan')}
           />
-          <Text style={{ ...globalStyles.captionText }}>Satuan</Text>
+          <Text style={{...globalStyles.captionText}}>Satuan</Text>
         </View>
 
         <Fumi
@@ -172,10 +190,12 @@ const TambahLayanan = ({ navigation }) => {
           value={price}
           keyboardType="number-pad"
           style={styles.textInput}
+          inputStyle={globalStyles.bodyText}
+          labelStyle={globalStyles.captionText}
         />
 
         <Text style={styles.titleText}>Estimasi Selesai</Text>
-        <View style={{ flexDirection: 'row' }}>
+        <View style={{flexDirection: 'row', flex:1, alignItems:'center'}}>
           <Fumi
             label={'Estimasi Selesai'}
             iconClass={FontAwesomeIcon}
@@ -188,20 +208,26 @@ const TambahLayanan = ({ navigation }) => {
             autoCapitalize="none"
             value={estimationComplete}
             keyboardType="number-pad"
-            style={{ ...styles.textInput, flex: 2, marginTop: 0, }}
+            style={{...styles.textInput, flex: 2, marginTop: 0}}
+            inputStyle={globalStyles.bodyText}
+            labelStyle={globalStyles.captionText}
           />
-          <DropDown
-            // label={'Waktu'}
-            placeholder="Waktu"
-            mode={'outlined'}
-            visible={showDropDown}
-            showDropDown={() => setShowDropDown(true)}
-            onDismiss={() => setShowDropDown(false)}
-            value={waktu}
-            setValue={setWaktu}
-            list={waktuList}
-            activeColor="white"
-            dropDownStyle={{ color: 'red', backgroundColor: 'black' }}
+
+          <DropDownPicker
+            open={openWaktu}
+            value={valueWaktu}
+            items={waktu}
+            setOpen={setOpenWaktu}
+            setValue={setValueWaktu}
+            setItems={setWaktu}
+            containerStyle={{flex:1}}
+            dropDownContainerStyle={{borderColor:'grey'}}
+            style={{backgroundColor:'white', height:65, borderRadius:15, borderColor:'grey'}}
+            labelStyle={globalStyles.bodyText}
+            textStyle={globalStyles.bodyText}
+            placeholder='Waktu'
+            zIndex={1}
+            listMode={'SCROLLVIEW'}
           />
         </View>
         <TouchableOpacity
@@ -217,7 +243,7 @@ const TambahLayanan = ({ navigation }) => {
 export default TambahLayanan;
 
 const styles = StyleSheet.create({
-  titleText: { fontSize: 16, fontWeight: '700', color: 'black', marginTop: 10 },
+  titleText: {...globalStyles.bodyText2, marginVertical: 10},
   button: {
     backgroundColor: ColorPrimary,
     width: SIZES.width - 50,
@@ -234,7 +260,6 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   textInput: {
-    width: SIZES.width - 50,
     borderRadius: 16,
     marginTop: 20,
     borderWidth: 1,

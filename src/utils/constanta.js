@@ -1,6 +1,6 @@
 import { Dimensions } from "react-native";
 const { width, height } = Dimensions.get("window");
-
+export const API = 'http://192.168.1.6:8000';
 export const SIZES = {
     // app dimensions
     width,
