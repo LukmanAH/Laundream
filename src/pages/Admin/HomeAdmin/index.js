@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import {
+  bgHeader,
   iconKonfirmasi,
   iconMesinCuci,
   iconMoney,
@@ -401,11 +402,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 30,
     paddingLeft: 40,
-    backgroundColor: ColorPrimary,
+    height: 120,
     alignItems: 'center',
     width: SIZES.width,
-    borderBottomEndRadius: 10,
-    borderBottomStartRadius: 10,
   },
   hero: {
     flexDirection: 'row',

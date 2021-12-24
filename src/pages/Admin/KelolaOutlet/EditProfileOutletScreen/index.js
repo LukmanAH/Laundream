@@ -11,7 +11,7 @@ import {
 import DropDown from 'react-native-paper-dropdown';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { HeaderBar, Maps, Loading } from '../../../../components';
-import SIZES, { ColorPrimary } from '../../../../utils/constanta';
+import SIZES, { API, ColorPrimary } from '../../../../utils/constanta';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { globalStyles } from '../../../../utils/global';
 import { Fumi } from 'react-native-textinput-effects';
@@ -81,7 +81,7 @@ const EditProfileOutlet = ({ navigation }) => {
     data.append('lat', parseFloat(coordinate.latitude).toFixed(7))
     data.append('lng', parseFloat(coordinate.longitude).toFixed(7))
 
-    await fetch(`http://192.168.42.174:8000/api/v1/owner/laundries/${laundryParse.id}/update`, {
+    await fetch(`${API}/api/v1/owner/laundries/${laundryParse.id}/update`, {
       method: 'PUT',
       enctype: 'multipart/form-data',
       headers: {

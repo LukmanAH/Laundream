@@ -6,31 +6,32 @@ import {
   TouchableOpacity,
   ScrollView,
   ToastAndroid,
+  Image,
 } from 'react-native';
-import { RadioButton, TextInput } from 'react-native-paper';
-import DropDown from 'react-native-paper-dropdown';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import { RadioButton } from 'react-native-paper';
+import DropDownPicker from 'react-native-dropdown-picker';
 import { HeaderBar } from '../../../../../components';
-import SIZES, { ColorPrimary } from '../../../../../utils/constanta';
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import SIZES, { ColorPrimary, API } from '../../../../../utils/constanta';
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome5';
 import { Fumi } from 'react-native-textinput-effects';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { LogBox } from "react-native";
+import { LogBox } from 'react-native';
 import { globalStyles } from '../../../../../utils/global';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-LogBox.ignoreLogs(["EventEmitter.removeListener"]);
+LogBox.ignoreLogs(['EventEmitter.removeListener']);
 
 const TambahLayanan = ({ navigation }) => {
   const [unit, setUnit] = useState('kg');
-  const [showDropDown, setShowDropDown] = useState(false);
   const [showDropDownLayanan, setShowDropDownLayanan] = useState(false);
-  const [estimationType, setEstimationType] = useState('');
   const [layanan, setLayanan] = useState('');
   const [name, setName] = useState('')
   const [price, setPrice] = useState('')
   const [estimationComplete, setEstimationComplete] = useState('')
 
-  const estimationTypeList = [
+  const [openWaktu, setOpenWaktu] = useState(false);
+  const [valueWaktu, setValueWaktu] = useState(null);
+  const [waktu, setWaktu] = useState([
     {
       label: 'Jam',
       value: 'jam',
@@ -39,48 +40,92 @@ const TambahLayanan = ({ navigation }) => {
       label: 'Hari',
       value: 'hari',
     },
-  ];
+  ]);
 
-  const layananList = [
+  const [openLayanan, setOpenLayanan] = useState(false);
+  const [valueLayanan, setValueLayanan] = useState(null);
+  const [layananList, setLayanan] = useState([
     {
       label: 'Keranjang',
       value: 'bucket-outline',
+      icon: () => <MaterialCommunityIcons
+        name='bucket-outline'
+        style={{
+          fontSize: 24,
+          color: 'black',
+        }}
+      />
     },
     {
       label: 'Sprei',
       value: 'bed-empty',
+      icon: () => <MaterialCommunityIcons
+        name='bed-empty'
+        style={{
+          fontSize: 24,
+          color: 'black',
+        }}
+      />
     },
     {
       label: 'Baju',
       value: 'tshirt-crew',
+      icon: () => <MaterialCommunityIcons
+        name='tshirt-crew'
+        style={{
+          fontSize: 24,
+          color: 'black',
+        }}
+      />
     },
     {
       label: 'Pakaian Dalam',
       value: 'lingerie',
+      icon: () => <MaterialCommunityIcons
+        name='lingerie'
+        style={{
+          fontSize: 24,
+          color: 'black',
+        }}
+      />
     },
     {
       label: 'Karpet',
       value: 'rug',
+      icon: () => <MaterialCommunityIcons
+        name='rug'
+        style={{
+          fontSize: 24,
+          color: 'black',
+        }}
+      />
     },
     {
       label: 'Jas',
       value: 'account-tie',
+      icon: () => <MaterialCommunityIcons
+        name='account-tie'
+        style={{
+          fontSize: 24,
+          color: 'black',
+        }}
+      />
     },
-  ];
+  ]);
 
   const addCatalogPressed = async () => {
-    if (name && price && estimationComplete && layanan && estimationType) {
+    if (name && price && estimationComplete && layanan && valueWaktu) {
       const laundry = await AsyncStorage.getItem('laundry')
       const laundryParse = JSON.parse(laundry);
 
       const token = await AsyncStorage.getItem('token');
 
-      await fetch(`http://192.168.42.174:8000/api/v1/owner/laundries/${laundryParse.id}/catalogs`, {
+      await fetch(`${API}/api/v1/owner/laundries/${laundryParse.id}/catalogs`, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           name: name,
@@ -88,7 +133,7 @@ const TambahLayanan = ({ navigation }) => {
           unit: unit,
           price: price,
           estimation_complete: estimationComplete,
-          estimation_type: estimationType
+          estimation_type: valueWaktu
         })
       })
         .then(response => response.json())
@@ -101,7 +146,7 @@ const TambahLayanan = ({ navigation }) => {
     } else {
       alert('Masukkan semua field');
     }
-  }
+  };
 
   return (
     <View style={{ flex: 1, backgroundColor: 'white' }}>
@@ -124,6 +169,8 @@ const TambahLayanan = ({ navigation }) => {
           autoCapitalize="none"
           value={name}
           style={styles.textInput}
+          inputStyle={globalStyles.bodyText}
+          labelStyle={globalStyles.captionText}
         />
 
         <Text style={styles.titleText}>Icon Item</Text>
@@ -138,6 +185,26 @@ const TambahLayanan = ({ navigation }) => {
           list={layananList}
           backgroundColor="white"
 
+        />
+        <Text style={styles.titleText}>Jenis Item</Text>
+
+        <DropDownPicker
+          open={openLayanan}
+          value={valueLayanan}
+          items={layananList}
+          setOpen={setOpenLayanan}
+          setValue={setValueLayanan}
+          setItems={setLayanan}
+          style={{ backgroundColor: 'white', height: 65, borderRadius: 15, borderColor: 'grey' }}
+          labelStyle={globalStyles.bodyText}
+          textStyle={globalStyles.bodyText}
+          placeholder='Pilih Jenis'
+          dropDownContainerStyle={{ borderColor: 'grey' }}
+          maxHeight={180}
+          scrollViewProps={{
+            persistentScrollbar: true
+          }}
+          listMode={'SCROLLVIEW'}
         />
 
         {/* RadioButton */}
@@ -179,10 +246,12 @@ const TambahLayanan = ({ navigation }) => {
           value={price}
           keyboardType="number-pad"
           style={styles.textInput}
+          inputStyle={globalStyles.bodyText}
+          labelStyle={globalStyles.captionText}
         />
 
         <Text style={styles.titleText}>Estimasi Selesai</Text>
-        <View style={{ flexDirection: 'row' }}>
+        <View style={{ flexDirection: 'row', flex: 1, alignItems: 'center' }}>
           <Fumi
             label={'Estimasi Selesai'}
             iconClass={FontAwesomeIcon}
@@ -195,36 +264,42 @@ const TambahLayanan = ({ navigation }) => {
             autoCapitalize="none"
             value={estimationComplete}
             keyboardType="number-pad"
-            style={{ ...styles.textInput, flex: 2, marginTop: 0, }}
+            style={{ ...styles.textInput, flex: 2, marginTop: 0 }}
+            inputStyle={globalStyles.bodyText}
+            labelStyle={globalStyles.captionText}
           />
-          <DropDown
-            // label={'Waktu'}
-            placeholder="Waktu"
-            mode={'outlined'}
-            visible={showDropDown}
-            showDropDown={() => setShowDropDown(true)}
-            onDismiss={() => setShowDropDown(false)}
-            value={estimationType}
-            setValue={setEstimationType}
-            list={estimationTypeList}
-            activeColor="white"
-            dropDownStyle={{ color: 'red', backgroundColor: 'black' }}
+
+          <DropDownPicker
+            open={openWaktu}
+            value={valueWaktu}
+            items={waktu}
+            setOpen={setOpenWaktu}
+            setValue={setValueWaktu}
+            setItems={setWaktu}
+            containerStyle={{ flex: 1 }}
+            dropDownContainerStyle={{ borderColor: 'grey' }}
+            style={{ backgroundColor: 'white', height: 65, borderRadius: 15, borderColor: 'grey' }}
+            labelStyle={globalStyles.bodyText}
+            textStyle={globalStyles.bodyText}
+            placeholder='Waktu'
+            zIndex={1}
+            listMode={'SCROLLVIEW'}
           />
-        </View>
+        </View >
         <TouchableOpacity
           style={styles.button}
           onPress={addCatalogPressed}>
           <Text style={styles.btnText}>Simpan</Text>
         </TouchableOpacity>
-      </ScrollView>
-    </View>
+      </ScrollView >
+    </View >
   );
 };
 
 export default TambahLayanan;
 
 const styles = StyleSheet.create({
-  titleText: { fontSize: 16, fontWeight: '700', color: 'black', marginTop: 10 },
+  titleText: { ...globalStyles.bodyText2, marginVertical: 10 },
   button: {
     backgroundColor: ColorPrimary,
     width: SIZES.width - 50,
@@ -241,7 +316,6 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   textInput: {
-    width: SIZES.width - 50,
     borderRadius: 16,
     marginTop: 20,
     borderWidth: 1,

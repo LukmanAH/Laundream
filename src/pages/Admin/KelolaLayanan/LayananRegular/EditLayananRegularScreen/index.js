@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ToastAndroid } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { RadioButton, TextInput } from 'react-native-paper';
 import DropDown from 'react-native-paper-dropdown';
 import { HeaderBar } from '../../../../../components';
 import SIZES, { ColorPrimary } from '../../../../../utils/constanta';
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import { iconTimbangan, jas, KeranjangIcon, shirt } from '../../../../../assets/images';
 import { Fumi } from 'react-native-textinput-effects';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { LogBox } from "react-native";
+import DropDownPicker from 'react-native-dropdown-picker';
 import { globalStyles } from '../../../../../utils/global';
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome5';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 LogBox.ignoreLogs(["EventEmitter.removeListener"]);
 
@@ -16,15 +17,14 @@ LogBox.ignoreLogs(["EventEmitter.removeListener"]);
 const EditLayanan = ({ navigation, route }) => {
   const { data } = route.params
   const [unit, setUnit] = useState(data.unit);
-  const [showDropDown, setShowDropDown] = useState(false);
-  const [showDropDownLayanan, setShowDropDownLayanan] = useState(false);
   const [estimationType, setEstimationType] = useState(data.estimation_type);
-  const [layanan, setLayanan] = useState(data.icon);
   const [name, setName] = useState(data.name)
   const [price, setPrice] = useState(data.price.toString())
   const [estimationComplete, setEstimationComplete] = useState(data.estimation_complete.toString())
 
-  const estimationTypeList = [
+  const [openWaktu, setOpenWaktu] = useState(false);
+  const [valueWaktu, setValueWaktu] = useState(data.estimation_type);
+  const [waktu, setWaktu] = useState([
     {
       label: 'Jam',
       value: 'jam',
@@ -33,37 +33,81 @@ const EditLayanan = ({ navigation, route }) => {
       label: 'Hari',
       value: 'hari',
     },
-  ];
+  ]);
 
-  const layananList = [
+  const [openLayanan, setOpenLayanan] = useState(false);
+  const [valueLayanan, setValueLayanan] = useState(data.icon);
+  const [layananList, setLayanan] = useState([
     {
       label: 'Keranjang',
       value: 'bucket-outline',
+      icon: () => <MaterialCommunityIcons
+        name='bucket-outline'
+        style={{
+          fontSize: 24,
+          color: 'black',
+        }}
+      />
     },
     {
       label: 'Sprei',
       value: 'bed-empty',
+      icon: () => <MaterialCommunityIcons
+        name='bed-empty'
+        style={{
+          fontSize: 24,
+          color: 'black',
+        }}
+      />
     },
     {
       label: 'Baju',
       value: 'tshirt-crew',
+      icon: () => <MaterialCommunityIcons
+        name='tshirt-crew'
+        style={{
+          fontSize: 24,
+          color: 'black',
+        }}
+      />
     },
     {
       label: 'Pakaian Dalam',
       value: 'lingerie',
+      icon: () => <MaterialCommunityIcons
+        name='lingerie'
+        style={{
+          fontSize: 24,
+          color: 'black',
+        }}
+      />
     },
     {
       label: 'Karpet',
       value: 'rug',
+      icon: () => <MaterialCommunityIcons
+        name='rug'
+        style={{
+          fontSize: 24,
+          color: 'black',
+        }}
+      />
     },
     {
       label: 'Jas',
       value: 'account-tie',
+      icon: () => <MaterialCommunityIcons
+        name='account-tie'
+        style={{
+          fontSize: 24,
+          color: 'black',
+        }}
+      />
     },
-  ];
+  ]);
 
   const editCatalogPressed = async () => {
-    if (name && price && estimationComplete && layanan && estimationType) {
+    if (name && price && estimationComplete && layanan && valueWaktu) {
       const laundry = await AsyncStorage.getItem('laundry')
       const laundryParse = JSON.parse(laundry);
 
@@ -82,7 +126,7 @@ const EditLayanan = ({ navigation, route }) => {
           unit: unit,
           price: price,
           estimation_complete: estimationComplete,
-          estimation_type: estimationType
+          estimation_type: valueWaktu
         })
       })
         .then(response => response.json())
@@ -118,20 +162,29 @@ const EditLayanan = ({ navigation, route }) => {
           autoCapitalize="none"
           value={name}
           style={styles.textInput}
+          inputStyle={globalStyles.bodyText}
+          labelStyle={globalStyles.captionText}
         />
 
-        <Text style={styles.titleText}>Icon Item</Text>
-        <DropDown
-          placeholder="Icon Layanan"
-          mode={'outlined'}
-          visible={showDropDownLayanan}
-          showDropDown={() => setShowDropDownLayanan(true)}
-          onDismiss={() => setShowDropDownLayanan(false)}
-          value={layanan}
-          setValue={setLayanan}
-          list={layananList}
-          backgroundColor="white"
+        <Text style={styles.titleText}>Jenis Item</Text>
 
+        <DropDownPicker
+          open={openLayanan}
+          value={valueLayanan}
+          items={layananList}
+          setOpen={setOpenLayanan}
+          setValue={setValueLayanan}
+          setItems={setLayanan}
+          style={{ backgroundColor: 'white', height: 65, borderRadius: 15, borderColor: 'grey' }}
+          labelStyle={globalStyles.bodyText}
+          textStyle={globalStyles.bodyText}
+          placeholder='Pilih Jenis'
+          dropDownContainerStyle={{ borderColor: 'grey' }}
+          maxHeight={180}
+          scrollViewProps={{
+            persistentScrollbar: true
+          }}
+          listMode={'SCROLLVIEW'}
         />
 
         {/* RadioButton */}
@@ -189,33 +242,31 @@ const EditLayanan = ({ navigation, route }) => {
             autoCapitalize="none"
             value={estimationComplete}
             keyboardType="number-pad"
-            style={{ ...styles.textInput, flex: 2, marginTop: 0, }}
+            style={{ ...styles.textInput, flex: 2, marginTop: 0 }}
+            inputStyle={globalStyles.bodyText}
+            labelStyle={globalStyles.captionText}
           />
-          <DropDown
-            // label={'Waktu'}
-            placeholder="Waktu"
-            mode={'outlined'}
-            visible={showDropDown}
-            showDropDown={() => setShowDropDown(true)}
-            onDismiss={() => setShowDropDown(false)}
-            value={estimationType}
-            setValue={setEstimationType}
-            list={estimationTypeList}
-            activeColor="white"
-            dropDownStyle={{ color: 'red', backgroundColor: 'black' }}
+
+          <DropDownPicker
+            open={openWaktu}
+            value={valueWaktu}
+            items={waktu}
+            setOpen={setOpenWaktu}
+            setValue={setValueWaktu}
+            setItems={setWaktu}
+            containerStyle={{ flex: 1 }}
+            dropDownContainerStyle={{ borderColor: 'grey' }}
+            style={{ backgroundColor: 'white', height: 65, borderRadius: 15, borderColor: 'grey' }}
+            labelStyle={globalStyles.bodyText}
+            textStyle={globalStyles.bodyText}
+            placeholder='Waktu'
+            zIndex={1}
+            listMode={'SCROLLVIEW'}
           />
         </View>
-      </View>
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'flex-end',
-          alignItems: 'center',
-          marginBottom: 20,
-        }}>
         <TouchableOpacity
           style={styles.button}
-          onPress={editCatalogPressed}>
+          onPress={() => console.log('test')}>
           <Text style={styles.btnText}>Simpan</Text>
         </TouchableOpacity>
       </View>
@@ -226,7 +277,7 @@ const EditLayanan = ({ navigation, route }) => {
 export default EditLayanan;
 
 const styles = StyleSheet.create({
-  titleText: { fontSize: 16, fontWeight: '700', color: 'black', marginTop: 10 },
+  titleText: { ...globalStyles.bodyText2, marginVertical: 10 },
   button: {
     backgroundColor: ColorPrimary,
     width: SIZES.width - 50,
@@ -235,6 +286,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 20,
+    marginBottom: 40,
   },
   btnText: {
     fontSize: 20,
@@ -242,9 +294,8 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   textInput: {
-    width: SIZES.width - 50,
     borderRadius: 16,
-    marginTop: 5,
+    marginTop: 20,
     borderWidth: 1,
     borderColor: 'grey',
   },

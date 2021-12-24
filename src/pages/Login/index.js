@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Text, View, StyleSheet, Button } from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
-import SIZES, { ColorPrimary, ROLE_CUSTOMER } from '../../utils/constanta';
+import SIZES, { ColorPrimary, ROLE_CUSTOMER, API } from '../../utils/constanta';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import { Fumi } from 'react-native-textinput-effects';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -15,7 +15,7 @@ const LoginScreen = ({ navigation }) => {
     const emailRegex = /\S+@\S+\.\S+/;
     if (email && password) {
       if (emailRegex.test(email)) {
-        await fetch('http://192.168.42.174:8000/api/v1/login', {
+        await fetch(`${API}/api/v1/login`, {
           method: 'POST',
           headers: {
             Accept: 'application/json',
