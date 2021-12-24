@@ -4,53 +4,59 @@ import {
   Text,
   View,
 } from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { bgHeader } from '../../assets/images';
-import SIZES, {ColorPrimary} from '../../utils/constanta';
+import SIZES, { ColorPrimary } from '../../utils/constanta';
 import { globalStyles } from '../../utils/global';
 
-export default Header = ({navigation, screenName, title}) => {
-    return (
-      <ImageBackground
-        source={bgHeader}
-        style={{width: SIZES.width, height: 120,}}>
+export default HeaderBar = ({ navigation, screenName, title, data, address, coordinate }) => {
+  return (
+    <ImageBackground
+      source={bgHeader}
+      style={{ width: SIZES.width, height: 120, }}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          paddingBottom: 25,
+          paddingLeft: 20,
+        }}>
         <View
           style={{
-            flex: 1,
-            justifyContent: 'center',
-            paddingBottom: 25,
-            paddingLeft: 20,
+            flexDirection: 'row',
+            alignItems: 'center',
+            paddingRight: 25
           }}>
-          <View
+          <TouchableOpacity
             style={{
-              flexDirection: 'row',
+              width: 32,
+              height: 32,
+              backgroundColor: 'white',
+              justifyContent: 'center',
               alignItems: 'center',
-              paddingRight:25
+              borderRadius: 8,
+            }}
+            onPress={() => {
+              if (screenName == "DetailPesanan") {
+                navigation.navigate(screenName, { data: data, address: address, coordinate: coordinate })
+              } else {
+                navigation.navigate(screenName)
+              }
             }}>
-            <TouchableOpacity
-              style={{
-                width: 32,
-                height: 32,
-                backgroundColor: 'white',
-                justifyContent: 'center',
-                alignItems: 'center',
-                borderRadius: 8,
-              }}
-              onPress={() => navigation.navigate(screenName)}>
-              <Icon name="arrow-back-outline" size={24} color={ColorPrimary} />
-            </TouchableOpacity>
-            <Text
-              style={{
-                ...globalStyles.titleText,
-                marginLeft: 10,
-                color: '#fff',
-                fontSize:20
-              }} numberOfLines={1}>
-              {title}
-            </Text>
-          </View>
+            <Icon name="arrow-back-outline" size={24} color={ColorPrimary} />
+          </TouchableOpacity>
+          <Text
+            style={{
+              ...globalStyles.titleText,
+              marginLeft: 10,
+              color: '#fff',
+              fontSize: 20
+            }} numberOfLines={1}>
+            {title}
+          </Text>
         </View>
-      </ImageBackground>
-    );
-  };
+      </View>
+    </ImageBackground>
+  );
+};

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   SafeAreaView,
@@ -8,23 +8,52 @@ import {
   Image,
   ScrollView,
   TextInput,
+  ToastAndroid,
 } from 'react-native';
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
 
 import Icon from 'react-native-vector-icons/Ionicons';
-import {KeranjangIcon, outletLogo} from '../../../../assets/images';
-import {HeaderBar, Maps} from '../../../../components';
-import SIZES, {ColorPrimary} from '../../../../utils/constanta';
-import {globalStyles} from '../../../../utils/global';
+import { KeranjangIcon, outletLogo } from '../../../../assets/images';
+import { HeaderBar, Maps } from '../../../../components';
+import SIZES, { ColorPrimary } from '../../../../utils/constanta';
+import { globalStyles } from '../../../../utils/global';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const Konfirmasi = ({navigation}) => {
+const Konfirmasi = ({ navigation, route }) => {
+  const { data } = route.params
   const [location, setLocation] = useState({
-    latitude: -5.358909,
-    longitude: 105.298424,
+    latitude: parseFloat(data.lat),
+    longitude: parseFloat(data.lng),
     latitudeDelta: 0.05,
     longitudeDelta: 0.05,
   });
+  const [info, setInfo] = useState('')
+
+  const processPressed = async () => {
+    const token = await AsyncStorage.getItem('token');
+
+    await fetch(`http://192.168.42.174:8000/api/v1/owner/laundries/${data.laundry.id}/transaction/${data.id}`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        additional_information_laundry: info,
+        status: data.delivery_type == '1' ? '5' : '6'
+      })
+    })
+      .then(response => response.json())
+      .then(responseJson => {
+        if (responseJson.errors == null) {
+          navigation.replace('MainApp')
+          ToastAndroid.show('Sukses mengubah status', ToastAndroid.SHORT)
+        }
+      });
+  }
 
   const renderContent = () => (
     <View
@@ -35,7 +64,7 @@ const Konfirmasi = ({navigation}) => {
         height: 310,
         // marginTop:-10
       }}>
-      <Text style={{alignSelf: 'center', ...globalStyles.bodyText}}>
+      <Text style={{ alignSelf: 'center', ...globalStyles.bodyText }}>
         Total Tagihan
       </Text>
       <Text
@@ -44,13 +73,13 @@ const Konfirmasi = ({navigation}) => {
           ...globalStyles.bodyText2,
           fontSize: 36,
         }}>
-        23000
+        {data.amount}
       </Text>
       <View>
         <Text style={globalStyles.bodyText2}>Detail Tagihan</Text>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <Text style={globalStyles.captionText}>Subtotal</Text>
-          <Text style={globalStyles.captionText}>23000</Text>
+          <Text style={globalStyles.captionText}>{data.amount}</Text>
         </View>
         <View
           style={{
@@ -58,10 +87,10 @@ const Konfirmasi = ({navigation}) => {
             justifyContent: 'space-between',
             marginLeft: 8,
           }}>
-          <Text style={globalStyles.captionText}>Bed Cover Single</Text>
-          <Text style={globalStyles.captionText}>20000</Text>
+          <Text style={globalStyles.captionText}>{data.catalog.name}</Text>
+          <Text style={globalStyles.captionText}>{data.catalog.price}</Text>
         </View>
-        <View
+        {/* <View
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
@@ -69,7 +98,7 @@ const Konfirmasi = ({navigation}) => {
           }}>
           <Text style={globalStyles.captionText}>Ongkir</Text>
           <Text style={globalStyles.captionText}>3000</Text>
-        </View>
+        </View> */}
       </View>
       <View
         style={{
@@ -79,13 +108,13 @@ const Konfirmasi = ({navigation}) => {
           marginVertical: 5,
         }}
       />
-      <Text style={{alignSelf: 'center', ...globalStyles.bodyText}}>
+      <Text style={{ alignSelf: 'center', ...globalStyles.bodyText }}>
         Pembayaran
       </Text>
       <TouchableOpacity
-        style={[styles.button, {backgroundColor: '#22C058'}]}
+        style={[styles.button, { backgroundColor: '#22C058' }]}
         onPress={() => sheetRef.current.snapTo(1)}>
-        <Text style={styles.textLogin}>Lunas Akhir</Text>
+        <Text style={styles.textLogin}>{data.delivery_type == '1' ? 'Lunas Awal' : 'Lunas Akhir'}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -102,7 +131,7 @@ const Konfirmasi = ({navigation}) => {
   const fall = new Animated.Value(1);
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
       <BottomSheet
         ref={sheetRef}
         snapPoints={[330, 0, 0]}
@@ -116,20 +145,20 @@ const Konfirmasi = ({navigation}) => {
         borderColor="black"
       />
       <Animated.View
-        style={{opacity: Animated.add(0.3, Animated.multiply(fall, 1.0))}}>
+        style={{ opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)) }}>
         <HeaderBar
           navigation={navigation}
-          screenName="StatusPesanan"
+          screenName="MainApp"
           title="Detail Pesanan"
         />
-        <ScrollView style={{padding: 20}}>
-          <Text style={globalStyles.bodyText}>TRX/20212101/002</Text>
-          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            <View style={{flexDirection: 'row'}}>
-              <Image source={outletLogo} style={{width: 60, height: 60}} />
-              <View>
-                <Text style={globalStyles.bodyText2}>Lukman</Text>
-                <Text style={globalStyles.captionText}>081234567890</Text>
+        <ScrollView style={{ padding: 20 }}>
+          <Text style={globalStyles.bodyText}>{data.serial}</Text>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <View style={{ flexDirection: 'row' }}>
+              <Image source={outletLogo} style={{ width: 60, height: 60 }} />
+              <View style={{ marginTop: 10 }}>
+                <Text style={globalStyles.bodyText2}>{data.user.name}</Text>
+                <Text style={globalStyles.captionText}>{data.user.no_hp}</Text>
               </View>
             </View>
             <Icon name="logo-whatsapp" size={30} color="#189D0E" />
@@ -140,21 +169,18 @@ const Konfirmasi = ({navigation}) => {
               justifyContent: 'space-between',
               marginTop: 10,
             }}>
-            <Text style={{...globalStyles.bodyText2, fontSize: 18}}>
-              Alamat
-            </Text>
-            <Text style={globalStyles.bodyText}>Total Jarak : 12 KM</Text>
+            <Text style={{ ...globalStyles.bodyText2, fontSize: 18 }}>Alamat</Text>
+            {/* <Text style={globalStyles.bodyText}>Total Jarak : 12 KM</Text> */}
           </View>
 
           <View
-            style={{flexDirection: 'row', alignItems: 'center', marginTop: 10}}>
+            style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
             <Icon name="map-outline" size={30} color="grey" />
-            <Text style={{...globalStyles.bodyText, marginLeft: 5}}>Maps</Text>
+            <Text style={{ ...globalStyles.bodyText, marginLeft: 5 }}>Maps</Text>
           </View>
           <Maps location={location} />
           <Text style={globalStyles.captionText} numberOfLines={2}>
-            Jl. Airan Raya No.99, Way Huwi, Kec. Jati Agung, Kabupaten Lampung
-            Selatan, Lampung, Indonesia.
+            {data.address}
           </Text>
 
           <View
@@ -164,8 +190,8 @@ const Konfirmasi = ({navigation}) => {
               marginTop: 10,
             }}>
             <Text style={styles.textBold}>Layanan Antar</Text>
-            <Text style={{...globalStyles.bodyText2, color: ColorPrimary}}>
-              Pickup -Delivery
+            <Text style={{ ...globalStyles.bodyText2, color: ColorPrimary }}>
+              {data.service_type == '2' ? 'Pickup-Delivery' : 'Antar Sendiri'}
             </Text>
           </View>
 
@@ -177,16 +203,16 @@ const Konfirmasi = ({navigation}) => {
             }}>
             <Text style={styles.textBold}>Status Pembayaran</Text>
             <TouchableOpacity
-              style={{flexDirection: 'row'}}
+              style={{ flexDirection: 'row' }}
               onPress={() => sheetRef.current.snapTo(0)}>
-              <Text style={{...globalStyles.bodyText2, color: '#22C058'}}>
-                Lunas Akhir
+              <Text style={{ ...globalStyles.bodyText2, color: '#22C058' }}>
+                {data.delivery_type == '1' ? 'Lunas Awal' : 'Lunas Akhir'}
               </Text>
               <Icon name="chevron-forward-outline" size={20} color="#22C058" />
             </TouchableOpacity>
           </View>
 
-          <Text
+          {/* <Text
             style={{
               ...styles.textBold,
               marginTop: 20,
@@ -200,7 +226,7 @@ const Konfirmasi = ({navigation}) => {
             }}>
             <Text style={globalStyles.bodyText}>03 Oktober 2021</Text>
             <Text style={globalStyles.bodyText}>15:00:00 WIB</Text>
-          </View>
+          </View> */}
 
           <Text
             style={[
@@ -218,18 +244,20 @@ const Konfirmasi = ({navigation}) => {
               borderRadius: 20,
               alignItems: 'center',
             }}>
-            <Image
-              source={KeranjangIcon}
-              style={{width: 70, height: 70, marginRight: 10}}
-              resizeMode="contain"
+            <MaterialCommunityIcons
+              name={data.catalog.icon}
+              style={{
+                fontSize: 60,
+                color: 'black',
+              }}
             />
             <View>
-              <Text style={styles.textBold}>Seprai</Text>
-              <Text style={globalStyles.captionText}>x 1.0 Satuan</Text>
+              <Text style={styles.textBold}>{data.catalog.name}</Text>
+              <Text style={globalStyles.captionText}>x 1.0 {data.catalog.unit}</Text>
             </View>
           </View>
 
-          <Text style={[styles.textBold, {marginTop: 15}]}>
+          <Text style={[styles.textBold, { marginTop: 15 }]}>
             Informasi Tambahan
           </Text>
           <TextInput
@@ -245,15 +273,17 @@ const Konfirmasi = ({navigation}) => {
               ...globalStyles.bodyText,
             }}
             placeholder="Tidak Ada"
+            value={info}
+            onChangeText={(e) => setInfo(e)}
           />
           <TouchableOpacity
             style={styles.button}
-            onPress={() => console.log('Mashok')}>
-            <Text style={{...globalStyles.H3, color: 'white'}}>
+            onPress={processPressed}>
+            <Text style={{ ...globalStyles.H3, color: 'white' }}>
               Selesai Pesanan
             </Text>
           </TouchableOpacity>
-          <View style={{height: 120}} />
+          <View style={{ height: 120 }} />
         </ScrollView>
       </Animated.View>
     </SafeAreaView>
@@ -284,7 +314,7 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: 'white',
     shadowColor: 'black',
-    shadowOffset: {width: 0, height: -3},
+    shadowOffset: { width: 0, height: -3 },
     shadowRadius: 2,
     shadowOpacity: 0.4,
     paddingTop: 20,

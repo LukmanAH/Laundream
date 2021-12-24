@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -8,110 +8,61 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import {bgHeader, iconTimbangan} from '../../../assets/images';
-import SIZES, {ColorPrimary} from '../../../utils/constanta';
-import {globalStyles} from '../../../utils/global';
+import { bgHeader, iconTimbangan } from '../../../assets/images';
+import SIZES, { ColorPrimary } from '../../../utils/constanta';
+import { globalStyles } from '../../../utils/global';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Loading } from '../../../components';
 
-const listTab = [
-  {
-    status: 'Proses',
-  },
-  {
-    status: 'Selesai',
-  },
-];
+const Transaksi = ({ navigation }) => {
+  const [status, setStatus] = useState('1');
+  const [dataList, setDataList] = useState([]);
+  const [loading, setLoading] = useState(false)
 
-const data = [
-  {
-    status: 'Penjemputan',
-    icon: iconTimbangan,
-    nama: 'Daily Kiloan',
-    invoice: 'TRX/20212101/002',
-    pelanggan: 'Lukman',
-    tglPesan: '15 Oktober 2021',
-    estimasi: '15 Oktober 2021',
-  },
-  {
-    status: 'Selesai',
-    icon: iconTimbangan,
-    nama: 'Daily Kiloan',
-    invoice: 'TRX/20212101/002',
-    pelanggan: 'Apip',
-    tglPesan: '15 Oktober 2021',
-    estimasi: '15 Oktober 2021',
-  },
-  {
-    status: 'Menunggu Di Antar',
-    icon: iconTimbangan,
-    nama: 'Daily Kiloan',
-    invoice: 'TRX/20212101/002',
-    pelanggan: 'Lukmen',
-    tglPesan: '15 Oktober 2021',
-    estimasi: '15 Oktober 2021',
-  },
-  {
-    status: 'Penjemputan',
-    icon: iconTimbangan,
-    nama: 'Daily Kiloan',
-    invoice: 'TRX/20212101/002',
-    pelanggan: 'Lukmin',
-    tglPesan: '15 Oktober 2021',
-    estimasi: '15 Oktober 2021',
-  },
-  {
-    status: 'Proses',
-    icon: iconTimbangan,
-    nama: 'Daily Kiloan sdafjklsdfjlkjljalsdkfjk',
-    invoice: 'TRX/20212101/002',
-    pelanggan: 'Lukmun',
-    tglPesan: '15 Oktober 2021',
-    estimasi: '15 Oktober 2021',
-  },
-  {
-    status: 'Selesai',
-    icon: iconTimbangan,
-    nama: 'Daily Kiloan',
-    invoice: 'TRX/20212101/002',
-    pelanggan: 'Lukmon',
-    tglPesan: '15 Oktober 2021',
-    estimasi: '15 Oktober 2021',
-  },
-  {
-    status: 'Selesai',
-    icon: iconTimbangan,
-    nama: 'Daily Kiloan',
-    invoice: 'TRX/20212101/002 asdfsdfsafsdfsasdasdas',
-    pelanggan: 'Lukmain',
-    tglPesan: '15 Oktober 2021',
-    estimasi: '15 Oktober 2021',
-  },
-];
-
-const Transaksi = ({navigation}) => {
-  const [status, setStatus] = useState('Proses');
-  const [dataList, setDataList] = useState(
-    data.filter(e => e.status !== 'Selesai'),
-  );
   const setStatusFilter = status => {
-    if (status === 'Proses') {
-      setDataList([...data.filter(e => e.status !== 'Selesai')]);
-    } else {
-      setDataList([...data.filter(e => e.status === 'Selesai')]);
-    }
+    // if (status === '1') {
+    //   setDataList([...dataList.filter(e => e.status != '7')]);
+    // } else {
+    //   setDataList([...dataList.filter(e => e.status == '7')]);
+    // }
 
-    // setDataList([...data.filter(e => e.status === status)]);
     setStatus(status);
   };
 
-  const renderItem = ({item, index}) => {
+  const fetchTransactionApi = async () => {
+    const token = await AsyncStorage.getItem('token');
+
+    await fetch(`http://192.168.42.174:8000/api/v1/customer/laundries/transaction`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+    })
+      .then(response => response.json())
+      .then(responseJson => {
+        setDataList(responseJson)
+        setLoading(false)
+      });
+  }
+
+  useEffect(() => {
+    setLoading(true)
+    fetchTransactionApi()
+  }, [])
+
+
+  const renderItem = ({ item, index }) => {
     return (
-      <View style={{flex: 1}}>
-        {status !== 'Selesai' ? (
+      <View style={{ flex: 1 }}>
+        {status != '7' ? (
           <TouchableOpacity
             key={index}
             style={styles.wrapItem}
             onPress={() => {
-              navigation.navigate('DetailTransaksi');
+              navigation.navigate('DetailTransaksi', { data: item });
             }}>
             <View
               style={{
@@ -120,27 +71,40 @@ const Transaksi = ({navigation}) => {
                 flex: 1,
                 alignItems: 'center',
               }}>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <View
                   style={{
                     padding: 18,
                     backgroundColor: '#F6F6F6',
                     borderRadius: 20,
                   }}>
-                  <Image
-                    source={item.icon}
-                    style={{width: 36, height: 36}}
-                    resizeMode="contain"
+                  <MaterialCommunityIcons
+                    name={item.catalog.icon}
+                    style={{
+                      fontSize: 70,
+                      color: 'black',
+                    }}
                   />
                 </View>
-                <View style={{marginLeft: 5}}>
-                  <Text style={globalStyles.bodyText2} numberOfLines={1}>
-                    {item.invoice}
+                <View style={{ marginLeft: 5 }}>
+                  <Text
+                    style={globalStyles.bodyText2}
+                    numberOfLines={1}>
+                    {item.serial}
+                  </Text>
+                  <Text style={{ ...globalStyles.captionText, fontSize: 16 }} numberOfLines={1}>
+                    {item.amount}
                   </Text>
                   <Text
-                    style={{...globalStyles.captionText, color: '#22C058'}}
+                    style={{ ...globalStyles.captionText, color: '#22C058' }}
                     numberOfLines={1}>
-                    {item.status}
+                    {item.status == '1' ?
+                      'Konfirmasi' : item.status == '2' ?
+                        'Siap Jemput' : item.status == '3' ?
+                          'Antrian' : item.status == '4' ?
+                            'Proses' : item.status == '5' ?
+                              'Siap Ambil' : item.status == '6' ?
+                                'Siap Antar' : 'Selesai'}
                   </Text>
                 </View>
               </View>
@@ -153,20 +117,22 @@ const Transaksi = ({navigation}) => {
             onPress={() => {
               navigation.navigate('DetailTransaksi');
             }}>
-            <View style={{flexDirection: 'row'}}>
-              <Image
-                source={item.icon}
-                style={{width: 70, height: 70}}
-                resizeMode="contain"
+            <View style={{ flexDirection: 'row' }}>
+              <MaterialCommunityIcons
+                name={item.catalog.icon}
+                style={{
+                  fontSize: 70,
+                  color: 'black',
+                }}
               />
-              <View style={{marginLeft: 8}}>
+              <View style={{ marginLeft: 8 }}>
                 <Text
                   style={globalStyles.bodyText2}
                   numberOfLines={1}>
-                  {item.invoice}
+                  {item.serial}
                 </Text>
-                <Text style={globalStyles.captionText}>Tanggal Pesan : {item.tglPesan}</Text>
-                <Text style={globalStyles.captionText}>Estimasi Selesai : {item.estimasi}</Text>
+                <Text style={globalStyles.captionText}>Tanggal Pesan : {item.created_at}</Text>
+                <Text style={globalStyles.captionText}>Tanggal Selesai : {item.updated_at}</Text>
               </View>
             </View>
           </TouchableOpacity>
@@ -176,58 +142,59 @@ const Transaksi = ({navigation}) => {
   };
 
   return (
-    <View style={{flex: 1, backgroundColor: 'white'}}>
-      <ImageBackground
-        source={bgHeader}
-        style={{width: SIZES.width, height: 120, paddingHorizontal: 20}}>
-        <Text
-          style={{
-            ...globalStyles.titleText,
-            color:'white',
-            fontSize:32,
-            marginTop: 20,
-          }}>
-          Transaksi
-        </Text>
-      </ImageBackground>
-      <View style={{paddingHorizontal: 20, marginVertical: 18}}>
-        <View
-          style={{
-            justifyContent: 'space-between',
-            flexDirection: 'row',
-          }}>
-          <TouchableOpacity
-            style={[styles.tabBtn, status === 'Proses' && styles.btnActive]}
-            onPress={() => setStatusFilter('Proses')}>
-            <Text
-              style={[
-                styles.textTab,
-                status === 'Proses' && styles.textActive,
-              ]}>
-              Proses
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.tabBtn, status === 'Selesai' && styles.btnActive]}
-            onPress={() => setStatusFilter('Selesai')}>
-            <Text
-              style={[
-                styles.textTab,
-                status === 'Selesai' && styles.textActive,
-              ]}>
-              Selesai
-            </Text>
-          </TouchableOpacity>
-        </View>
+    loading ? <Loading />
+      : <View style={{ flex: 1, backgroundColor: 'white' }}>
+        <ImageBackground
+          source={bgHeader}
+          style={{ width: SIZES.width, height: 120, paddingHorizontal: 20 }}>
+          <Text
+            style={{
+              ...globalStyles.titleText,
+              color: 'white',
+              fontSize: 32,
+              marginTop: 20,
+            }}>
+            Transaksi
+          </Text>
+        </ImageBackground>
+        <View style={{ paddingHorizontal: 20, marginVertical: 18 }}>
+          <View
+            style={{
+              justifyContent: 'space-between',
+              flexDirection: 'row',
+            }}>
+            <TouchableOpacity
+              style={[styles.tabBtn, status == '1' && styles.btnActive]}
+              onPress={() => setStatusFilter('1')}>
+              <Text
+                style={[
+                  styles.textTab,
+                  status == '1' && styles.textActive,
+                ]}>
+                Proses
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.tabBtn, status == '7' && styles.btnActive]}
+              onPress={() => { setStatusFilter('7'); console.log(dataList) }}>
+              <Text
+                style={[
+                  styles.textTab,
+                  status == '7' && styles.textActive,
+                ]}>
+                Selesai
+              </Text>
+            </TouchableOpacity>
+          </View>
 
-        <FlatList
-          data={dataList}
-          renderItem={renderItem}
-          ListFooterComponent={<View style={{height: 250}} />}
-          showsVerticalScrollIndicator={false}
-        />
-      </View>
-    </View>
+          <FlatList
+            data={dataList}
+            renderItem={renderItem}
+            ListFooterComponent={<View style={{ height: 250 }} />}
+            showsVerticalScrollIndicator={false}
+          />
+        </View>
+      </View >
   );
 };
 
@@ -251,7 +218,7 @@ const styles = StyleSheet.create({
     marginLeft: 2,
     color: '#000',
     textAlign: 'center',
-    fontFamily:'Montserrat-SemiBold'
+    fontFamily: 'Montserrat-SemiBold'
   },
   wrapItem: {
     flexDirection: 'row',

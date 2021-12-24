@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   FlatList,
   Image,
@@ -7,43 +7,25 @@ import {
   Text,
   View,
 } from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import {iconTimbangan, outletLogo} from '../../../../assets/images';
-import {HeaderBar} from '../../../../components';
-import SIZES, {ColorDanger, ColorPrimary} from '../../../../utils/constanta';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { iconTimbangan, outletLogo } from '../../../../assets/images';
+import { HeaderBar } from '../../../../components';
+import SIZES, { ColorDanger, ColorPrimary } from '../../../../utils/constanta';
 import { globalStyles } from '../../../../utils/global';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const data = [
-  {
-    icon: iconTimbangan,
-    nama: 'Regular',
-    waktu: '3 hari',
-    harga: '4.000',
-  },
-  {
-    icon: iconTimbangan,
-    nama: 'Ekspress',
-    waktu: '2 hari',
-    harga: '5.000',
-  },
-  {
-    icon: iconTimbangan,
-    nama: 'Kilat',
-    waktu: '1 hari',
-    harga: '6.000',
-  },
-];
-
-const DetailPesanan = ({navigation}) => {
+const DetailPesanan = ({ navigation, route }) => {
+  const { data, address, coordinate } = route.params
   const [isPress, setIsPress] = useState(false);
+  const [catalog, setCatalog] = useState({ id: data.catalogs[0].id })
 
-  const touchProps = {
-    style: isPress ? styles.btnPress : styles.btnNormal,
-    onPress: () => {
-      setIsPress(!isPress);
-    },
-  };
-  function renderItem({item, index}) {
+  function renderItem({ item, index }) {
+    const touchProps = {
+      style: catalog.id == item.id ? styles.btnPress : styles.btnNormal,
+      onPress: () => {
+        setIsPress(!isPress);
+      },
+    };
     return (
       <View
         style={{
@@ -52,37 +34,44 @@ const DetailPesanan = ({navigation}) => {
           justifyContent: 'space-between',
           marginTop: 10,
         }}>
-        <View style={{flexDirection: 'row'}}>
-          <Image style={{width:65, height:65}} source={item.icon} />
-          <View style={{marginLeft:10}}>
-            <Text style={globalStyles.bodyText}>{item.nama}</Text>
-            <Text  style={globalStyles.bodyText}>{item.waktu}</Text>
-            <Text style={globalStyles.bodyText}>Rp {item.harga}</Text>
+        <View style={{ flexDirection: 'row' }}>
+          <MaterialCommunityIcons
+            name={item.icon}
+            style={{
+              fontSize: 65,
+              color: 'black',
+            }}
+          />
+          <View style={{ marginLeft: 10 }}>
+            <Text style={{ ...globalStyles.bodyText, fontSize: 14 }}>{item.name.substring(0, 25)}...</Text>
+            <Text style={{ ...globalStyles.bodyText, fontSize: 14 }}>{item.estimation_complete} {item.estimation_type}</Text>
+            <Text style={{ ...globalStyles.bodyText, fontSize: 14 }}>Rp.{item.price} / {item.unit}</Text>
           </View>
         </View>
-        <TouchableOpacity {...touchProps}>
+        <TouchableOpacity {...touchProps}
+          onPress={() => { setCatalog(item); }}>
           <Text
             style={{
               ...globalStyles.bodyText2,
               color: 'white',
               textAlign: 'center',
-              fontSize:12
+              fontSize: 12
             }}>
-            {isPress === false ? 'Pilih' : 'Hapus'}
+            {catalog.id != item.id ? 'Pilih' : 'Hapus'}
           </Text>
         </TouchableOpacity>
       </View>
     );
   }
   return (
-    <View style={{flex: 1, backgroundColor: 'white'}}>
+    <View style={{ flex: 1, backgroundColor: 'white' }}>
       <HeaderBar
         navigation={navigation}
         screenName="Tabs"
         title="Nama Outlet Laundry"
       />
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={{paddingHorizontal: 20}}>
+      <View>
+        <View style={{ paddingHorizontal: 20 }}>
           <View
             style={{
               flexDirection: 'row',
@@ -91,11 +80,11 @@ const DetailPesanan = ({navigation}) => {
             }}>
             <Image
               source={outletLogo}
-              style={{width: 100, height: 100}}
+              style={{ width: 100, height: 100 }}
               resizeMode="contain"
             />
-            <View style={{flex: 1}}>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <View style={{ flex: 1 }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <View
                   style={{
                     width: 10,
@@ -107,32 +96,21 @@ const DetailPesanan = ({navigation}) => {
                 />
                 <Text style={globalStyles.captionText}>Buka</Text>
               </View>
-              <Text style={globalStyles.H3}>Dennis Laundry</Text>
-              <Text style={globalStyles.captionText}  numberOfLines={2}>Jl. Ryacudu No.05, Sukarame, Bandar Lampung </Text>
+              <Text style={globalStyles.H3}>{data.name}</Text>
+              <Text style={globalStyles.captionText}>{data.distance} km</Text>
+              <Text style={globalStyles.captionText} numberOfLines={2}>{data.address}</Text>
             </View>
           </View>
 
-          <Image
-            source={{
-              uri: 'https://1.bp.blogspot.com/-Wch9riepMds/X-kjArlyeII/AAAAAAAAI1c/Nz_ISWN0LmA_JHRwQ9cduwt0dCfYiOwGQCLcBGAsYHQ/w640-h218/spanduk%2Bbanner%2Blaundry%2Bcdr.png',
-            }}
-            resizeMode="cover"
-            style={{
-              width: '100%',
-              height: 140,
-              borderRadius: 20,
-              marginBottom: 10,
-            }}
-          />
           <Text style={globalStyles.H3}>Layanan Kami</Text>
           <FlatList
-            data={data}
+            data={data.catalogs}
             renderItem={renderItem}
             showsVerticalScrollIndicator={false}
           />
         </View>
-        <View style={{height: 40}} />
-      </ScrollView>
+        <View style={{ height: 40 }} />
+      </View>
       <View
         style={{
           // flex: 1,
@@ -141,14 +119,14 @@ const DetailPesanan = ({navigation}) => {
         }}>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate('KonfirmasiPesanan')}>
+          onPress={() => navigation.navigate('KonfirmasiPesanan', { data: data, catalog: catalog, address: address, coordinate: coordinate })}>
           <View
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
               alignItems: 'center',
             }}>
-            <Text style={{...globalStyles.H3, color:'white'}}>1 Layanan</Text>
+            <Text style={{ ...globalStyles.H3, color: 'white' }}>1 Layanan</Text>
             <Text
               style={{
                 ...globalStyles.captionText,

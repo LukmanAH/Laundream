@@ -17,7 +17,7 @@ const TambahParfum = ({ navigation }) => {
 
       const token = await AsyncStorage.getItem('token');
 
-      await fetch(`http://192.168.42.63:8000/api/v1/owner/laundries/${laundryParse.id}/parfumes`, {
+      await fetch(`http://192.168.42.174:8000/api/v1/owner/laundries/${laundryParse.id}/parfumes`, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -101,6 +101,6 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     marginTop: 20,
     borderWidth: 1,
-    borderColor:'grey'
+    borderColor: 'grey'
   },
 });

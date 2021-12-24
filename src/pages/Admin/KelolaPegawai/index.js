@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, TouchableOpacity, View, Alert, ToastAndroid } from 'react-native';
 import { FAB, Text } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { HeaderBar } from '../../../components';
+import { HeaderBar, Loading } from '../../../components';
 import { ColorDanger, ColorPrimary, token } from '../../../utils/constanta';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { globalStyles } from '../../../utils/global';
 
 const Pegawai = ({ navigation, data }) => {
 
@@ -25,7 +26,7 @@ const Pegawai = ({ navigation, data }) => {
         {
           text: 'Ya',
           onPress: async () => {
-            await fetch(`http://192.168.42.63:8000/api/v1/owner/laundries/${laundryParse.id}/employees/${data.id}`, {
+            await fetch(`http://192.168.42.174:8000/api/v1/owner/laundries/${laundryParse.id}/employees/${data.id}`, {
               method: 'DELETE',
               headers: {
                 Accept: 'application/json',
@@ -56,7 +57,7 @@ const Pegawai = ({ navigation, data }) => {
         borderRadius: 20,
         marginTop: 10
       }}>
-      <Text style={{ fontSize: 16, fontWeight: '600' }}>{data.user.name}</Text>
+      <Text style={{ ...globalStyles.bodyText }}>{data.user.name}</Text>
       <View style={{ flexDirection: 'row' }}>
         <TouchableOpacity
           style={{
@@ -97,6 +98,7 @@ const Pegawai = ({ navigation, data }) => {
 
 const PegawaiScreen = ({ navigation }) => {
   const [pegawai, setPegawai] = useState([]);
+  const [loading, setLoading] = useState(false)
 
   const fetchPegawaiApi = async () => {
     const laundry = await AsyncStorage.getItem('laundry')
@@ -104,7 +106,7 @@ const PegawaiScreen = ({ navigation }) => {
 
     const token = await AsyncStorage.getItem('token');
 
-    await fetch(`http://192.168.42.63:8000/api/v1/owner/laundries/${laundryParse.id}/employees`, {
+    await fetch(`http://192.168.42.174:8000/api/v1/owner/laundries/${laundryParse.id}/employees`, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
@@ -115,34 +117,37 @@ const PegawaiScreen = ({ navigation }) => {
       .then(response => response.json())
       .then(responseJson => {
         setPegawai(responseJson)
+        setLoading(false)
       });
   }
 
   useEffect(() => {
+    setLoading(true)
     fetchPegawaiApi();
-  }, [pegawai])
+  }, [])
 
   return (
-    <View style={{ backgroundColor: 'white', flex: 1 }}>
-      <HeaderBar
-        navigation={navigation}
-        screenName="HomePage"
-        title="Kelola Pegawai"
-      />
-      <ScrollView
-        style={{ paddingHorizontal: 20, paddingVertical: 5 }}>
-        {pegawai.length > 0 && pegawai.map((data, index) => {
-          return <Pegawai navigation={navigation} key={index} data={data} />
-        })}
-      </ScrollView>
+    loading ? <Loading />
+      : <View style={{ backgroundColor: 'white', flex: 1 }}>
+        <HeaderBar
+          navigation={navigation}
+          screenName="HomePage"
+          title="Kelola Pegawai"
+        />
+        <ScrollView
+          style={{ paddingHorizontal: 20, paddingVertical: 5 }}>
+          {pegawai.length > 0 && pegawai.map((data, index) => {
+            return <Pegawai navigation={navigation} key={index} data={data} />
+          })}
+        </ScrollView>
 
-      <FAB
-        style={styles.fab}
-        medium
-        icon="plus"
-        onPress={() => navigation.navigate('TambahPegawai')}
-      />
-    </View>
+        <FAB
+          style={styles.fab}
+          medium
+          icon="plus"
+          onPress={() => navigation.navigate('TambahPegawai')}
+        />
+      </View>
   );
 };
 

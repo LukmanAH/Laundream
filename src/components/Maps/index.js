@@ -18,28 +18,30 @@ import Geolocation from '@react-native-community/geolocation';
 export default class Maps extends React.Component {
     state = {
         region: {
-            longitude: parseFloat(this.props.location.longitude),
-            latitude: parseFloat(this.props.location.latitude),
-            latitudeDelta: parseFloat(this.props.location.latitudeDelta),
-            longitudeDelta: parseFloat(this.props.location.longitudeDelta),
+            longitude: this.props.location.longitude,
+            latitude: this.props.location.latitude,
+            latitudeDelta: this.props.location.latitudeDelta,
+            longitudeDelta: this.props.location.longitudeDelta,
         },
         loc: {
             longitude: this.props.location.longitude,
             latitude: this.props.location.latitude,
         },
         heightMap: SIZES.height / 2,
+        laundry: this.props.laundry,
+        type: this.props.type,
     };
 
     UNSAFE_componentWillMount() {
         Geolocation.getCurrentPosition(x => {
             this.setState({
                 region: {
-                    latitude: parseFloat((x.coords.latitude + this.props.location.latitude) / 2),
-                    longitude: parseFloat((x.coords.longitude + this.props.location.longitude) / 2),
+                    latitude: (x.coords.latitude + this.props.location.latitude) / 2,
+                    longitude: (x.coords.longitude + this.props.location.longitude) / 2,
                     latitudeDelta:
-                        Math.abs(x.coords.latitude - this.props.location.latitude) * 2,
+                        Math.abs(x.coords.latitude - this.props.location.latitude) * 1.5,
                     longitudeDelta:
-                        Math.abs(x.coords.longitude - this.props.location.longitude) * 2,
+                        Math.abs(x.coords.longitude - this.props.location.longitude) * 1.5,
                 },
             });
         });
@@ -81,9 +83,31 @@ export default class Maps extends React.Component {
                     showsMyLocationButton={true}
                     showsUserLocation
                     userLocationUpdateInterval={10000}
-                    showsCompass={true}
-                    onRegionChangeComplete={this.onRegionChange}>
-
+                    onRegionChangeComplete={this.onRegionChange}
+                    showsCompass={true}>
+                    {data.type != 'user' ? null : (
+                        <>
+                            <Marker
+                                title={data.laundry}
+                                coordinate={{ latitude: this.props.location.latitude, longitude: this.props.location.longitude }}
+                            >
+                                <MaterialCommunityIcons
+                                    name={'bucket'}
+                                    style={{
+                                        fontSize: 30,
+                                        color: 'black',
+                                    }}
+                                />
+                            </Marker>
+                            <Marker
+                                title="Geser marker"
+                                description={"Lokasi penjemputan"}
+                                draggable
+                                coordinate={{ latitude: this.props.pickCoordinate.latitude, longitude: this.props.pickCoordinate.longitude }}
+                                onDragEnd={(e) => this.props.getLocation(e.nativeEvent.coordinate)}
+                            />
+                        </>
+                    )}
                 </MapView>
 
                 {this.props.type == 'create' ? (

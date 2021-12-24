@@ -19,7 +19,7 @@ const RegisterScreen = ({ navigation }) => {
     if (email && password && passwordConf && phoneNumber && name) {
       if (emailRegex.test(email)) {
         if (password == passwordConf) {
-          await fetch('http://192.168.42.63:8000/api/v1/register', {
+          await fetch('http://192.168.42.174:8000/api/v1/register', {
             method: 'POST',
             headers: {
               Accept: 'application/json',

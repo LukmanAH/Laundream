@@ -16,6 +16,7 @@ import Geocoder from 'react-native-geocoding';
 import GOOGLE_MAPS_API from '../../../utils/maps'
 import { globalStyles } from '../../../utils/global';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Loading } from '../../../components';
 
 const data = [
   {
@@ -47,17 +48,20 @@ const data = [
 const Home = ({ navigation }) => {
   const [location, setLocation] = useState('')
   const [coordinate, setCoordinate] = useState({
-    lat: '',
-    lng: ''
+    latitude: '',
+    longitude: '',
+
   });
   const [laundries, setLaundries] = useState([])
   const [loading, setLoading] = useState(false)
+  const [address, setAddress] = useState('')
 
-  const getNearestLaundry = async () => {
+  const getNearestLaundry = async (x) => {
     setLoading(true)
     const token = await AsyncStorage.getItem('token');
+    console.log(token)
 
-    await fetch(`http://192.168.42.174:8000/api/v1/customer/laundries/`, {
+    await fetch(`http://192.168.42.174:8000/api/v1/customer/laundries?lat=${x.coords.latitude}&lng=${x.coords.longitude}`, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
@@ -67,15 +71,21 @@ const Home = ({ navigation }) => {
     })
       .then(response => response.json())
       .then(responseJson => {
-        console.log(responseJson)
-        // setLaundries(responseJson)
+        setLaundries(responseJson)
+        setLoading(false)
       });
   }
 
   useEffect(() => {
+    setLoading(true)
+
     Geocoder.init(GOOGLE_MAPS_API);
     Geolocation.getCurrentPosition(x => {
-      setCoordinate({ lat: x.coords.latitude, lng: x.coords.longitude })
+      setCoordinate({
+        latitude: x.coords.latitude,
+        longitude: x.coords.longitude,
+      })
+      getNearestLaundry(x)
 
       Geocoder.from([x.coords.latitude, x.coords.longitude])
         .then(response => {
@@ -85,11 +95,12 @@ const Home = ({ navigation }) => {
             },
           );
           setLocation(filterred_area[0].long_name);
+          setAddress(response.results[0].formatted_address)
         })
         .catch(error => console.warn(error));
     });
+    console.log(coordinate.lat, coordinate.lng)
 
-    getNearestLaundry()
   }, [])
 
   const renderItem = ({ item, index }) => {
@@ -104,19 +115,19 @@ const Home = ({ navigation }) => {
           marginBottom: 16,
           ...styles.shadow,
         }}
-        onPress={() => navigation.navigate('DetailPesanan')}>
+        onPress={() => navigation.navigate('DetailPesanan', { data: item, address: address, coordinate: coordinate })}>
         <View
           style={{
             width: 20,
             height: 20,
-            backgroundColor: (item.status === 'online') ? '#42E379' : 'red',
+            backgroundColor: (item.status === 1) ? '#42E379' : 'red',
             borderRadius: 10,
             alignSelf: 'flex-end',
             margin: 15,
           }}
         />
         <Image
-          source={item.image}
+          source={{ uri: item.banner }}
           resizeMode="contain"
           style={{ width: 100, height: 84, alignSelf: 'center' }}
         />
@@ -132,10 +143,10 @@ const Home = ({ navigation }) => {
             padding: 16,
           }}>
           <Text style={{ ...globalStyles.bodyText2, fontSize: 14 }} numberOfLines={1}>
-            {item.nama}
+            {item.name}
           </Text>
           <Text style={{ ...globalStyles.captionText, color: '#6D6D6D', fontSize: 10 }} numberOfLines={2}>
-            {item.alamat}
+            {item.distance} km
           </Text>
         </View>
       </TouchableOpacity>
@@ -165,71 +176,72 @@ const Home = ({ navigation }) => {
     );
   };
   return (
-    <ScrollView style={styles.container}>
-      <ImageBackground
-        source={userHeader}
-        style={{ width: SIZES.width, height: 166 }}>
-        <View
-          style={{
-            paddingBottom: 25,
-            paddingHorizontal: 40,
-            justifyContent: 'space-between',
-            flexDirection: 'row',
-            flex: 1,
-            alignItems: 'center',
-          }}>
+    loading ? <Loading />
+      : <ScrollView style={styles.container}>
+        <ImageBackground
+          source={userHeader}
+          style={{ width: SIZES.width, height: 166 }}>
           <View
             style={{
+              paddingBottom: 25,
+              paddingHorizontal: 40,
+              justifyContent: 'space-between',
               flexDirection: 'row',
+              flex: 1,
+              alignItems: 'center',
             }}>
-            <View style={{ flexDirection: 'row' }}>
-              <TouchableOpacity>
-                <Icon name="location" size={40} color="white" />
-              </TouchableOpacity>
-              <View>
-                <Text style={{ ...globalStyles.bodyText2, color: 'white', }}>
-                  Lokasi
-                </Text>
-                <Text style={{ ...globalStyles.bodyText, color: 'white' }}>{location}</Text>
+            <View
+              style={{
+                flexDirection: 'row',
+              }}>
+              <View style={{ flexDirection: 'row' }}>
+                <TouchableOpacity>
+                  <Icon name="location" size={40} color="white" />
+                </TouchableOpacity>
+                <View>
+                  <Text style={{ ...globalStyles.bodyText2, color: 'white', }}>
+                    Lokasi
+                  </Text>
+                  <Text style={{ ...globalStyles.bodyText, color: 'white' }}>{location}</Text>
+                </View>
               </View>
             </View>
+            <TouchableOpacity>
+              <Icon name="notifications" size={40} color="white" />
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity>
-            <Icon name="notifications" size={40} color="white" />
-          </TouchableOpacity>
+        </ImageBackground>
+
+        <View style={{ paddingLeft: 28 }}>
+          <Text
+            style={{
+              ...globalStyles.titleText,
+              marginBottom: 12,
+              marginTop: 10,
+            }}>
+            Outlet Sekitar Anda
+          </Text>
+
+          <FlatList
+            data={laundries}
+            renderItem={renderItem}
+            showsHorizontalScrollIndicator={false}
+            horizontal={true}
+          />
+
+          <Text
+            style={{
+              ...globalStyles.titleText,
+              marginBottom: 12,
+              marginTop: 10,
+            }}>
+            Info dan Promo
+          </Text>
+          <InfoCard />
+          <InfoCard />
+          <View style={{ height: 100 }} />
         </View>
-      </ImageBackground>
-
-      <View style={{ paddingLeft: 28 }}>
-        <Text
-          style={{
-            ...globalStyles.titleText,
-            marginBottom: 12,
-            marginTop: 10,
-          }}>
-          Outlet Sekitar Anda
-        </Text>
-
-        <FlatList
-          data={data}
-          renderItem={renderItem}
-          showsHorizontalScrollIndicator={false}
-          horizontal={true}
-        />
-
-        <Text
-          style={{
-            ...globalStyles.titleText,
-            marginBottom: 12,
-            marginTop: 10,
-          }}>
-          Info dan Promo
-        </Text>
-        <InfoCard />
-        <InfoCard />
-        <View style={{ height: 100 }} />
-      </View>
-    </ScrollView>
+      </ScrollView>
   );
 };
 

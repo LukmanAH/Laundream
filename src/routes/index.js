@@ -1,5 +1,5 @@
 import React from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import {
   SplashScreen,
   LoginScreen,
@@ -53,10 +53,9 @@ const Route = () => {
       <Stack.Screen
         name="LoginScreen"
         component={LoginScreen}
-        options={{gesturesEnabled: false}}
+        options={{ gesturesEnabled: false }}
       />
       <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
-      {/* <Stack.Screen name="HomePage" component={HomePage} /> */}
       <Stack.Screen name="MainApp" component={DrawerMenu} />
       <Stack.Screen
         name="KelolaOutlet"

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -9,8 +9,9 @@ import {
   TouchableOpacity,
   FlatList,
   Button,
+  ToastAndroid,
 } from 'react-native';
-import {Checkbox, RadioButton} from 'react-native-paper';
+import { Checkbox, RadioButton } from 'react-native-paper';
 import Modal from 'react-native-modal';
 import {
   iconMotor,
@@ -19,214 +20,279 @@ import {
   KeranjangIcon1,
   outletLogo,
 } from '../../../../assets/images';
-import {HeaderBar} from '../../../../components';
-import SIZES, {ColorPrimary} from '../../../../utils/constanta';
+import { HeaderBar, Maps } from '../../../../components';
+import SIZES, { ColorPrimary } from '../../../../utils/constanta';
 import { globalStyles } from '../../../../utils/global';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const dataParfum = [
-  {
-    nama: 'Parfum A',
-  },
-  {
-    nama: 'Parfum B',
-  },
-  {
-    nama: 'Parfum C',
-  },
-  {
-    nama: 'Parfum D',
-  },
-  {
-    nama: 'Parfum E',
-  },
-];
-
-const KonfirmasiPesanan = ({navigation}) => {
-  const [layanan, setLayanan] = useState('pickUp');
-  const [parfum, setParfum] = useState('Parfum A');
-  const [pembayaran, setPembayaran] = useState('awal');
-  const [isPress, setIsPress] = useState(false);
+const KonfirmasiPesanan = ({ navigation, route }) => {
+  const { data, catalog, address, coordinate } = route.params;
+  const [layanan, setLayanan] = useState('2');
+  const [parfum, setParfum] = useState(data.parfumes[0].id);
+  const [pembayaran, setPembayaran] = useState('1');
   const [checked, setChecked] = React.useState(false);
   const [isModalVisible, setIsModalVisible] = React.useState(false);
+  const [laundryCoordinate, setLaundryCoordinate] = useState({
+    latitude: parseFloat(data.lat),
+    longitude: parseFloat(data.lng),
+    latitudeDelta: 0.005,
+    longitudeDelta: 0.005,
+  });
+  const [pickUpCoordinate, setPickUpCoordinate] = useState({
+    latitude: parseFloat(coordinate.latitude),
+    longitude: parseFloat(coordinate.longitude)
+  })
+  const [additional, setAdditional] = useState('')
+  const [addressInput, setAddressInput] = useState(address)
 
   const handleModal = () => setIsModalVisible(() => !isModalVisible);
 
-  const touchProps = {
-    style: isPress ? styles.btnPress : styles.btnNormal,
-    onPress: () => {
-      setIsPress(!isPress);
-    },
-  };
+  const confirmPressed = async () => {
+    if (checked) {
+      const token = await AsyncStorage.getItem('token');
 
-  const renderItem = ({item}) => (
-    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+      await fetch(`http://192.168.42.174:8000/api/v1/customer/laundries/${data.id}/store`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          catalog_id: catalog.id,
+          parfume_id: parfum,
+          service_type: layanan,
+          delivery_type: pembayaran,
+          lat: parseFloat(pickUpCoordinate.latitude).toFixed(7),
+          lng: parseFloat(pickUpCoordinate.longitude).toFixed(7),
+          additional_information_user: additional,
+          address: addressInput,
+          status: layanan
+        })
+      })
+        .then(response => response.json())
+        .then(responseJson => {
+          console.log(responseJson)
+          if (responseJson.errors == null) {
+            navigation.replace('Tabs')
+            ToastAndroid.show('Sukses membuat pesanan', ToastAndroid.SHORT)
+            handleModal()
+          }
+        });
+    } else {
+      alert('Setujui ketentuan laundry')
+    }
+  }
+
+  const renderItem = ({ item }) => (
+    <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, paddingVertical: 3 }}>
       <RadioButton
-        value={item.nama}
-        status={parfum === item.nama ? 'checked' : 'unchecked'}
-        onPress={() => setParfum(item.nama)}
+        value={item.id}
+        status={parfum === item.id ? 'checked' : 'unchecked'}
+        onPress={() => setParfum(item.id)}
         color={ColorPrimary}
+        uncheckedColor="black"
       />
-      <Text style={{width: SIZES.width * 0.2, ...globalStyles.captionText}} numberOfLines={1}>
-        {item.nama}
+      <Text style={{ width: SIZES.width * 0.2, ...globalStyles.captionText }} numberOfLines={1}>
+        {item.name}
       </Text>
     </View>
   );
-  return (
-    <View style={{flex: 1, backgroundColor: 'white'}}>
-      <HeaderBar
-        navigation={navigation}
-        screenName="DetailPesanan"
-        title="Konfirmasi Pesanan"
-      />
-      <ScrollView
-        style={{paddingHorizontal: 20, paddingVertical: 16}}
-        showsVerticalScrollIndicator={false}>
-        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-          <Image
-            source={outletLogo}
-            style={{width: 100, height: 100}}
-            resizeMode="contain"
-          />
-          <View style={{flex: 1}}>
-            <Text style={globalStyles.H3}>Dennis Laundry</Text>
-            <Text style={globalStyles.captionText}>Jl. Ryacudu No.05, Sukarame, Bandar Lampung</Text>
-          </View>
-        </View>
 
-        <Text style={globalStyles.H3}>Layanan Pengantaran</Text>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <RadioButton
-            value="pickUp"
-            status={layanan === 'pickUp' ? 'checked' : 'unchecked'}
-            onPress={() => setLayanan('pickUp')}
-            color={ColorPrimary}
-          />
-          <Text style={globalStyles.captionText}>Pickup - Delivery </Text>
-          <RadioButton
-            value="antar"
-            status={layanan === 'antar' ? 'checked' : 'unchecked'}
-            onPress={() => setLayanan('antar')}
-            color={ColorPrimary}
-          />
-          <Text style={globalStyles.captionText}>Antar Sendiri</Text>
-        </View>
+  const getLocation = (data) => {
+    setPickUpCoordinate({ latitude: data.latitude, longitude: data.longitude })
+    console.log(data)
+  }
 
-        <Text style={{marginTop: 10, ...globalStyles.H3}}>Lokasi Penjemputan</Text>
-        <TextInput
-          style={{
-            flex: 1,
-            height: 75,
-            borderWidth: 1,
-            borderRadius: 20,
-            paddingVertical: 20,
-            paddingHorizontal: 10,
-            marginVertical: 10,
-            borderColor: '#C4C4C4',
-            ...globalStyles.captionText
-          }}
-          multiline={true}
+  const HeaderComponentList = () => {
+    return (
+      <>
+        <HeaderBar
+          navigation={navigation}
+          screenName="DetailPesanan"
+          title="Konfirmasi Pesanan"
+          data={data}
+          address={address}
+          coordinate={coordinate}
         />
-
-        <Text style={{marginTop: 10, ...globalStyles.H3}}>Detail Pesanan</Text>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginTop: 10,
-          }}>
-          <View style={{flexDirection: 'row'}}>
-            <Image style={{width:65, height:65}} source={iconTimbangan} />
-            <View style={{marginLeft: 5}}>
-              <Text style={globalStyles.bodyText}>Ekspress</Text>
-              <Text style={globalStyles.bodyText}>2 Hari</Text>
-              <Text style={globalStyles.bodyText}>Rp 5000</Text>
+        <View style={{ paddingHorizontal: 20, paddingVertical: 16 }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+            <Image
+              source={{ uri: data.banner }}
+              style={{ width: 100, height: 100 }}
+              resizeMode="contain"
+            />
+            <View style={{ flex: 1 }}>
+              <Text style={globalStyles.H3}>{data.name}</Text>
+              <Text style={globalStyles.captionText} numberOfLines={2}>{data.address}</Text>
+              <Text style={globalStyles.captionText}>{data.distance} km</Text>
             </View>
           </View>
-          {/* <TouchableOpacity {...touchProps}>
-            <Text
-              style={{
-                color: 'white',
-                fontWeight: '600',
-                fontSize: 15,
-                textAlign: 'center',
-              }}>
-              {isPress === false ? 'Pilih' : 'Hapus'}
-            </Text>
-          </TouchableOpacity> */}
-        </View>
 
-        <Text style={{marginTop: 10, ...globalStyles.H3}}>Pilih Parfum</Text>
-        <FlatList
-          data={dataParfum}
-          renderItem={renderItem}
-          horizontal={false}
-          numColumns={3}
-        />
-        <Text style={{marginTop: 10, ...globalStyles.H3}}>Metode Pembayaran</Text>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <RadioButton
-            value="awal"
-            status={pembayaran === 'awal' ? 'checked' : 'unchecked'}
-            onPress={() => setPembayaran('awal')}
-            color={ColorPrimary}
-          />
-          <Text style={globalStyles.captionText}>Di Awal</Text>
-          <RadioButton
-            value="akhir"
-            status={pembayaran === 'akhir' ? 'checked' : 'unchecked'}
-            onPress={() => setPembayaran('akhir')}
-            color={ColorPrimary}
-          />
-          <Text style={globalStyles.captionText}>Di Akhir</Text>
-        </View>
-        <Text style={{...globalStyles.captionText ,flex: 1, marginBottom: 10, color: ColorPrimary}}>
-          Pembayaran dapat dilakukan ketika kurir menjemput ataupun mengantarkan
-          pakaian.
-        </Text>
+          <Text style={globalStyles.H3}>Layanan Pengantaran</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <RadioButton
+              value="1"
+              uncheckedColor="black"
+              status={layanan === '2' ? 'checked' : 'unchecked'}
+              onPress={() => setLayanan('2')}
+              color={ColorPrimary}
+            />
+            <Text style={globalStyles.captionText}>Antar - Jemput </Text>
+            <RadioButton
+              value="2"
+              uncheckedColor="black"
+              status={layanan === '1' ? 'checked' : 'unchecked'}
+              onPress={() => setLayanan('1')}
+              color={ColorPrimary}
+            />
+            <Text style={globalStyles.captionText}>Antar Sendiri</Text>
+          </View>
 
-        <Text style={globalStyles.H3}>Informasi Tambahan</Text>
-        <TextInput
-          style={{
-            flex: 1,
-            height: 75,
-            borderWidth: 1,
-            borderRadius: 20,
-            paddingVertical: 20,
-            paddingHorizontal: 10,
-            marginVertical: 10,
-            borderColor: '#C4C4C4',
-            ...globalStyles.captionText
-          }}
-          multiline={true}
-        />
-        <View style={{flexDirection: 'row', flex: 1}}>
-          <Checkbox
-            status={checked ? 'checked' : 'unchecked'}
-            onPress={() => {
-              setChecked(!checked);
+          <Maps location={laundryCoordinate} laundry={data.name} type="user" getLocation={getLocation} pickCoordinate={pickUpCoordinate} />
+
+          <Text style={{ marginTop: 10, ...globalStyles.H3 }}>Lokasi Penjemputan</Text>
+          <TextInput
+            style={{
+              flex: 1,
+              height: 75,
+              borderWidth: 1,
+              borderRadius: 20,
+              paddingHorizontal: 10,
+              marginVertical: 10,
+              borderColor: '#C4C4C4',
+              ...globalStyles.captionText
             }}
-            color={ColorPrimary}
+            onChangeText={(e) => setAddressInput(e)}
+            value={address}
+            multiline={true}
           />
-          <Text style={globalStyles.captionText}>
-            Dengan ini, kamu setuju ketentuan perhitungan berat, ongkir dan
-            total harga akan dihitung oleh pihak laundry disaat pakaian dijemput
-            / diantarkan.
+
+          <Text style={{ marginTop: 10, ...globalStyles.H3 }}>Detail Pesanan</Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginTop: 10,
+            }}>
+            <View style={{ flexDirection: 'row' }}>
+              <MaterialCommunityIcons
+                name={catalog.icon}
+                style={{
+                  fontSize: 65,
+                  color: 'black',
+                }}
+              />
+              <View style={{ marginLeft: 10 }}>
+                <Text style={globalStyles.bodyText}>{catalog.name}</Text>
+                <Text style={globalStyles.bodyText}>{catalog.estimation_complete} {catalog.estimation_type}</Text>
+                <Text style={globalStyles.bodyText}>Rp.{catalog.price}</Text>
+              </View>
+            </View>
+          </View>
+
+          <Text style={{ marginTop: 10, ...globalStyles.H3 }}>Pilih Parfum</Text>
+        </View>
+      </>
+    )
+  }
+
+  const FooterComponentList = () => {
+    return (
+      <>
+        <View style={{ paddingHorizontal: 20 }}>
+          <Text style={{ marginTop: 5, ...globalStyles.H3 }}>Metode Pembayaran</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <RadioButton
+              value="1"
+              uncheckedColor="black"
+              status={pembayaran === '1' ? 'checked' : 'unchecked'}
+              onPress={() => setPembayaran('1')}
+              color={ColorPrimary}
+            />
+            <Text style={globalStyles.captionText}>Di Awal</Text>
+            <RadioButton
+              value="2"
+              uncheckedColor="black"
+              status={pembayaran === '2' ? 'checked' : 'unchecked'}
+              onPress={() => setPembayaran('2')}
+              color={ColorPrimary}
+            />
+            <Text style={globalStyles.captionText}>Di Akhir</Text>
+          </View>
+          <Text style={{ ...globalStyles.captionText, flex: 1, marginBottom: 10, color: ColorPrimary }}>
+            Pembayaran dapat dilakukan ketika kurir menjemput ataupun mengantarkan
+            pakaian.
           </Text>
+
+          <Text style={globalStyles.H3}>Informasi Tambahan</Text>
+          <TextInput
+            style={{
+              flex: 1,
+              height: 75,
+              borderWidth: 1,
+              borderRadius: 20,
+              paddingHorizontal: 10,
+              marginVertical: 10,
+              borderColor: '#C4C4C4',
+              ...globalStyles.captionText
+            }}
+            onChangeText={(e) => setAdditional(e)}
+            value={additional}
+            multiline={true}
+          />
+          <View style={{ flexDirection: 'row', flex: 1 }}>
+            <Checkbox
+              status={checked ? 'checked' : 'unchecked'}
+              onPress={() => {
+                setChecked(checked => !checked);
+              }}
+              color={ColorPrimary}
+              uncheckedColor="black"
+            />
+            <Text style={globalStyles.captionText}>
+              Dengan ini, kamu setuju ketentuan perhitungan berat, ongkir dan
+              total harga akan dihitung oleh pihak laundry disaat pakaian dijemput
+              / diantarkan.
+            </Text>
+          </View>
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'flex-end',
+              alignItems: 'center',
+              marginBottom: 20,
+            }}>
+            <TouchableOpacity style={styles.button} onPress={() => {
+              if (checked) {
+                handleModal()
+              } else {
+                alert('Harap setujui ketentuan laundry')
+              }
+            }}>
+              <Text style={{ ...globalStyles.H3, color: 'white' }}>Pesan Sekarang</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={{ height: 10 }} />
         </View>
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'flex-end',
-            alignItems: 'center',
-            marginBottom: 20,
-          }}>
-          <TouchableOpacity style={styles.button} onPress={handleModal}>
-            <Text style={{...globalStyles.H3, color:'white'}}>Pesan Sekarang</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={{height: 10}} />
-      </ScrollView>
+      </>
+    )
+  }
+
+  return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+      <FlatList
+        data={data.parfumes}
+        renderItem={renderItem}
+        horizontal={false}
+        numColumns={3}
+        ListHeaderComponent={HeaderComponentList}
+        ListFooterComponent={FooterComponentList}
+      />
+
       <Modal
         isVisible={isModalVisible}
         backdropOpacity={0.8}
@@ -246,7 +312,7 @@ const KonfirmasiPesanan = ({navigation}) => {
             borderRadius: 20,
             paddingHorizontal: 40,
           }}>
-          {layanan === 'pickUp' ? (
+          {layanan === '2' ? (
             <View>
               <Image
                 source={iconMotor}
@@ -257,7 +323,7 @@ const KonfirmasiPesanan = ({navigation}) => {
                 }}
                 resizeMode="contain"
               />
-              <Text style={{textAlign: 'center', paddingVertical: 16}}>
+              <Text style={{ ...globalStyles.captionText, textAlign: 'center', paddingVertical: 16 }}>
                 Berhasil Order, Silahkan tunggu karyawan kami menjemput pakaian
                 anda.
               </Text>
@@ -273,17 +339,14 @@ const KonfirmasiPesanan = ({navigation}) => {
                 }}
                 resizeMode="contain"
               />
-              <Text style={{textAlign: 'center', paddingVertical: 16}}>
+              <Text style={{ ...globalStyles.captionText, textAlign: 'center', paddingVertical: 16 }}>
                 Berhasil Order, Silahkan antarkan pakaian anda ke gerai kami
                 untuk di proses lebih lanjut.
               </Text>
             </View>
           )}
           <TouchableOpacity
-            onPress={() => {
-              handleModal();
-              navigation.navigate('Tabs');
-            }}
+            onPress={confirmPressed}
             style={{
               backgroundColor: ColorPrimary,
               alignSelf: 'center',
@@ -291,13 +354,13 @@ const KonfirmasiPesanan = ({navigation}) => {
               paddingVertical: 18,
               borderRadius: 16,
             }}>
-            <Text style={{fontSize: 18, fontWeight: '700', color: 'white'}}>
+            <Text style={{ fontSize: 18, fontWeight: '700', color: 'white' }}>
               Ok
             </Text>
           </TouchableOpacity>
         </View>
       </Modal>
-    </View>
+    </SafeAreaView>
   );
 };
 

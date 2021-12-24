@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   SafeAreaView,
@@ -9,17 +9,17 @@ import {
 } from 'react-native';
 import { HeaderBar } from '../../../../components';
 
-const StatusSelesai = ({navigation}) => {
-    return(
-        <SafeAreaView>
-<HeaderBar
+const StatusSelesai = ({ navigation }) => {
+  return (
+    <SafeAreaView>
+      <HeaderBar
         navigation={navigation}
-        screenName="StatusPesanan"
+        screenName="MainApp"
         title="Detail Pesanan"
       />
       <Text>StatusSelesai</Text>
-        </SafeAreaView>
-    )
+    </SafeAreaView>
+  )
 }
 
 export default StatusSelesai;

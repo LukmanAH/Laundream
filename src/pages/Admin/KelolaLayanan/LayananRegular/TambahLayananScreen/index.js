@@ -5,6 +5,7 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
+  ToastAndroid,
 } from 'react-native';
 import { RadioButton, TextInput } from 'react-native-paper';
 import DropDown from 'react-native-paper-dropdown';
@@ -20,56 +21,55 @@ import { globalStyles } from '../../../../../utils/global';
 LogBox.ignoreLogs(["EventEmitter.removeListener"]);
 
 const TambahLayanan = ({ navigation }) => {
-  const [checked, setChecked] = useState('kg');
+  const [unit, setUnit] = useState('kg');
   const [showDropDown, setShowDropDown] = useState(false);
   const [showDropDownLayanan, setShowDropDownLayanan] = useState(false);
-  const [waktu, setWaktu] = useState('');
+  const [estimationType, setEstimationType] = useState('');
   const [layanan, setLayanan] = useState('');
   const [name, setName] = useState('')
   const [price, setPrice] = useState('')
   const [estimationComplete, setEstimationComplete] = useState('')
 
-  const waktuList = [
+  const estimationTypeList = [
     {
       label: 'Jam',
-      value: 'Jam',
+      value: 'jam',
     },
     {
       label: 'Hari',
-      value: 'Hari',
+      value: 'hari',
     },
   ];
 
   const layananList = [
     {
+      label: 'Keranjang',
+      value: 'bucket-outline',
+    },
+    {
       label: 'Sprei',
-      value: 'Spreiasd',
-      icon: <Icon name="person" size={24} color="red" />,
+      value: 'bed-empty',
     },
     {
-      label: 'Pakaian',
-      value: 'Pakaian',
+      label: 'Baju',
+      value: 'tshirt-crew',
     },
     {
-      label: 'Daleman',
-      value: 'Daleman',
-    },
-    {
-      label: 'Bed',
-      value: 'Bed',
+      label: 'Pakaian Dalam',
+      value: 'lingerie',
     },
     {
       label: 'Karpet',
-      value: 'Karpet',
+      value: 'rug',
     },
     {
       label: 'Jas',
-      value: 'Jas',
+      value: 'account-tie',
     },
   ];
 
   const addCatalogPressed = async () => {
-    if (name) {
+    if (name && price && estimationComplete && layanan && estimationType) {
       const laundry = await AsyncStorage.getItem('laundry')
       const laundryParse = JSON.parse(laundry);
 
@@ -84,12 +84,18 @@ const TambahLayanan = ({ navigation }) => {
         },
         body: JSON.stringify({
           name: name,
+          icon: layanan,
+          unit: unit,
+          price: price,
+          estimation_complete: estimationComplete,
+          estimation_type: estimationType
         })
       })
         .then(response => response.json())
         .then(responseJson => {
           if (responseJson.errors == null) {
-            navigation.replace('Parfum')
+            navigation.replace('LayananRegular')
+            ToastAndroid.show('Sukses menambah layanan', ToastAndroid.SHORT)
           }
         });
     } else {
@@ -105,6 +111,7 @@ const TambahLayanan = ({ navigation }) => {
         title="Tambah Layanan"
       />
       <ScrollView style={{ paddingHorizontal: 20, paddingVertical: 10 }} showsVerticalScrollIndicator={false}>
+        <Text style={styles.titleText}>Nama Layanan</Text>
         <Fumi
           label={'Nama Layanan'}
           iconClass={FontAwesomeIcon}
@@ -119,10 +126,9 @@ const TambahLayanan = ({ navigation }) => {
           style={styles.textInput}
         />
 
-        <Text style={styles.titleText}>Jenis Item</Text>
+        <Text style={styles.titleText}>Icon Item</Text>
         <DropDown
-          // label={'Waktu'}
-          placeholder="Jenis Item"
+          placeholder="Icon Layanan"
           mode={'outlined'}
           visible={showDropDownLayanan}
           showDropDown={() => setShowDropDownLayanan(true)}
@@ -130,7 +136,8 @@ const TambahLayanan = ({ navigation }) => {
           value={layanan}
           setValue={setLayanan}
           list={layananList}
-          showTickIcon={true}
+          backgroundColor="white"
+
         />
 
         {/* RadioButton */}
@@ -139,22 +146,22 @@ const TambahLayanan = ({ navigation }) => {
           <RadioButton
             value="kg"
             uncheckedColor="black"
-            status={checked === 'kg' ? 'checked' : 'unchecked'}
-            onPress={() => setChecked('kg')}
+            status={unit === 'kg' ? 'checked' : 'unchecked'}
+            onPress={() => setUnit('kg')}
           />
           <Text style={{ ...globalStyles.captionText }}>Kg </Text>
           <RadioButton
             value="meter"
             uncheckedColor="black"
-            status={checked === 'meter' ? 'checked' : 'unchecked'}
-            onPress={() => setChecked('meter')}
+            status={unit === 'meter' ? 'checked' : 'unchecked'}
+            onPress={() => setUnit('meter')}
           />
           <Text style={{ ...globalStyles.captionText }}>Meter</Text>
           <RadioButton
             value="satuan"
             uncheckedColor="black"
-            status={checked === 'satuan' ? 'checked' : 'unchecked'}
-            onPress={() => setChecked('satuan')}
+            status={unit === 'satuan' ? 'checked' : 'unchecked'}
+            onPress={() => setUnit('satuan')}
           />
           <Text style={{ ...globalStyles.captionText }}>Satuan</Text>
         </View>
@@ -197,16 +204,16 @@ const TambahLayanan = ({ navigation }) => {
             visible={showDropDown}
             showDropDown={() => setShowDropDown(true)}
             onDismiss={() => setShowDropDown(false)}
-            value={waktu}
-            setValue={setWaktu}
-            list={waktuList}
+            value={estimationType}
+            setValue={setEstimationType}
+            list={estimationTypeList}
             activeColor="white"
             dropDownStyle={{ color: 'red', backgroundColor: 'black' }}
           />
         </View>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => console.log('test')}>
+          onPress={addCatalogPressed}>
           <Text style={styles.btnText}>Simpan</Text>
         </TouchableOpacity>
       </ScrollView>

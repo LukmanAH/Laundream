@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { RadioButton, Text, TextInput } from 'react-native-paper';
-import { HeaderBar } from '../../../../components';
+import { HeaderBar, Loading } from '../../../../components';
 import SIZES, { ColorPrimary } from '../../../../utils/constanta';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import { Fumi } from 'react-native-textinput-effects';
@@ -19,7 +19,7 @@ const TambahPegawaiScreen = ({ navigation }) => {
 
       const token = await AsyncStorage.getItem('token');
 
-      await fetch(`http://192.168.42.63:8000/api/v1/owner/laundries/${laundryParse.id}/employees`, {
+      await fetch(`http://192.168.42.174:8000/api/v1/owner/laundries/${laundryParse.id}/employees`, {
         method: 'POST',
         headers: {
           Accept: 'application/json',

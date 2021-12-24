@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   SafeAreaView,
@@ -13,12 +13,13 @@ import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
 
 import Icon from 'react-native-vector-icons/Ionicons';
-import {KeranjangIcon, outletLogo} from '../../../../assets/images';
-import {HeaderBar} from '../../../../components';
-import SIZES, {ColorPrimary} from '../../../../utils/constanta';
+import { KeranjangIcon, outletLogo } from '../../../../assets/images';
+import { HeaderBar } from '../../../../components';
+import SIZES, { ColorPrimary } from '../../../../utils/constanta';
 import { globalStyles } from '../../../../utils/global';
 
-const DetailTransaksi = ({navigation}) => {
+const DetailTransaksi = ({ navigation, route }) => {
+  const { data } = route.params;
   const renderContent = () => (
     <View
       style={{
@@ -28,7 +29,7 @@ const DetailTransaksi = ({navigation}) => {
         height: 310,
         // marginTop:-10
       }}>
-      <Text style={{alignSelf: 'center'}}>Total Tagihan</Text>
+      <Text style={{ alignSelf: 'center' }}>Total Tagihan</Text>
       <Text
         style={{
           alignSelf: 'center',
@@ -36,15 +37,15 @@ const DetailTransaksi = ({navigation}) => {
           fontWeight: '700',
           color: 'black',
         }}>
-        23000
+        {data.amount + data.delivery_fee}
       </Text>
       <View>
-        <Text style={{fontSize: 16, fontWeight: '600', color: 'black'}}>
+        <Text style={{ fontSize: 16, fontWeight: '600', color: 'black' }}>
           Detail Tagihan
         </Text>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <Text>Subtotal</Text>
-          <Text>23000</Text>
+          <Text>{data.amount + data.delivery_fee}</Text>
         </View>
         <View
           style={{
@@ -52,8 +53,8 @@ const DetailTransaksi = ({navigation}) => {
             justifyContent: 'space-between',
             marginLeft: 8,
           }}>
-          <Text>Bed Cover Single</Text>
-          <Text>20000</Text>
+          <Text>{data.catalog.name}</Text>
+          <Text>{data.catalog.price}</Text>
         </View>
         <View
           style={{
@@ -62,7 +63,7 @@ const DetailTransaksi = ({navigation}) => {
             marginLeft: 8,
           }}>
           <Text>Ongkir</Text>
-          <Text>3000</Text>
+          <Text>{data.delivery_fee}</Text>
         </View>
       </View>
       <View
@@ -73,9 +74,9 @@ const DetailTransaksi = ({navigation}) => {
           marginVertical: 5,
         }}
       />
-      <Text style={{alignSelf: 'center', color: 'black'}}>Pembayaran</Text>
+      <Text style={{ alignSelf: 'center', color: 'black' }}>Pembayaran</Text>
       <TouchableOpacity
-        style={[styles.button, {backgroundColor: '#22C058'}]}
+        style={[styles.button, { backgroundColor: '#22C058' }]}
         onPress={() => sheetRef.current.snapTo(1)}>
         <Text style={styles.textLogin}>Lunas Akhir</Text>
       </TouchableOpacity>
@@ -94,7 +95,7 @@ const DetailTransaksi = ({navigation}) => {
   const fall = new Animated.Value(1);
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
       <BottomSheet
         ref={sheetRef}
         snapPoints={[330, 0, 0]}
@@ -108,14 +109,14 @@ const DetailTransaksi = ({navigation}) => {
         borderColor="black"
       />
       <Animated.View
-        style={{opacity: Animated.add(0.3, Animated.multiply(fall, 1.0))}}>
+        style={{ opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)) }}>
         <HeaderBar
           navigation={navigation}
-          screenName="Transaksi"
+          screenName="Tabs"
           title="Detail Transaksi"
         />
-        <ScrollView style={{padding: 20}}>
-          <Text style={{...globalStyles.H3, color: 'black'}}>
+        <ScrollView style={{ padding: 20 }}>
+          <Text style={{ ...globalStyles.H3, color: 'black' }}>
             TRX/20212101/00112
           </Text>
 
@@ -141,11 +142,11 @@ const DetailTransaksi = ({navigation}) => {
           </View>
 
           <View
-            style={{flexDirection: 'row', alignItems: 'center', marginTop: 10}}>
+            style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
             <Icon name="map-outline" size={30} color="grey" />
             <Text style={globalStyles.bodyText}>Maps</Text>
           </View>
-          <View style={{borderWidth: 1, height: 160, borderRadius: 20}}></View>
+          <View style={{ borderWidth: 1, height: 160, borderRadius: 20 }}></View>
           <Text style={globalStyles.captionText}>
             Jl. Airan Raya No.99, Way Huwi, Kec. Jati Agung, Kabupaten Lampung
             Selatan, Lampung, Indonesia.
@@ -163,7 +164,7 @@ const DetailTransaksi = ({navigation}) => {
               Layanan Antar
             </Text>
             <Text
-              style={{color: ColorPrimary, fontFamily:'Montserrat-SemiBold', fontSize: 15}}>
+              style={{ color: ColorPrimary, fontFamily: 'Montserrat-SemiBold', fontSize: 15 }}>
               Pickup -Delivery
             </Text>
           </View>
@@ -180,9 +181,9 @@ const DetailTransaksi = ({navigation}) => {
               Status Pembayaran
             </Text>
             <TouchableOpacity
-              style={{flexDirection: 'row'}}
+              style={{ flexDirection: 'row' }}
               onPress={() => sheetRef.current.snapTo(0)}>
-              <Text style={{color: '#22C058', fontFamily:'Montserrat-SemiBold', fontSize: 15}}>
+              <Text style={{ color: '#22C058', fontFamily: 'Montserrat-SemiBold', fontSize: 15 }}>
                 Lunas Akhir
               </Text>
               <Icon name="chevron-forward-outline" size={20} color="#22C058" />
@@ -206,7 +207,7 @@ const DetailTransaksi = ({navigation}) => {
           </View>
 
           <Text
-            style={{...globalStyles.bodyText2, marginVertical:10}}>
+            style={{ ...globalStyles.bodyText2, marginVertical: 10 }}>
             Detail Pesanan
           </Text>
           <View
@@ -218,7 +219,7 @@ const DetailTransaksi = ({navigation}) => {
             }}>
             <Image
               source={KeranjangIcon}
-              style={{width: 70, height: 70, marginRight: 10}}
+              style={{ width: 70, height: 70, marginRight: 10 }}
               resizeMode="contain"
             />
             <View>
@@ -243,12 +244,12 @@ const DetailTransaksi = ({navigation}) => {
                 paddingVertical: 7,
                 borderRadius: 20,
               }}>
-              <Text style={{color: 'white', fontFamily:'Montserrat-SemiBold', fontSize: 14}}>
+              <Text style={{ color: 'white', fontFamily: 'Montserrat-SemiBold', fontSize: 14 }}>
                 Penjemputan
               </Text>
             </View>
           </View>
-          <View style={{height: 160}} />
+          <View style={{ height: 160 }} />
         </ScrollView>
       </Animated.View>
     </SafeAreaView>
@@ -281,7 +282,7 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: 'white',
     shadowColor: 'black',
-    shadowOffset: {width: 0, height: -3},
+    shadowOffset: { width: 0, height: -3 },
     shadowRadius: 2,
     shadowOpacity: 0.4,
     paddingTop: 20,

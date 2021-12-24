@@ -15,3 +15,10 @@ export const ColorDanger = '#FF0000';
 export const ROLE_OWNER = 2;
 export const ROLE_EMPLOYEE = 3;
 export const ROLE_CUSTOMER = 4;
+
+export const STATUS_CONFIRMATION = 1;
+export const STATUS_PICKUP = 2;
+export const STATUS_QUEUE = 3;
+export const STATUS_PROCESS = 4;
+export const STATUS_READY = 5;
+export const STATUS_DELIVER = 6;

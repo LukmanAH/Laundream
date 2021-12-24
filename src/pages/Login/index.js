@@ -8,8 +8,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { globalStyles } from '../../utils/global';
 
 const LoginScreen = ({ navigation }) => {
-  const [email, setEmail] = useState('owner@owner.com');
-  const [password, setPassword] = useState('password');
+  const [email, setEmail] = useState('bals@bal.com');
+  const [password, setPassword] = useState('1');
 
   const loginPressed = async () => {
     const emailRegex = /\S+@\S+\.\S+/;

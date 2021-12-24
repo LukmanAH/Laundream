@@ -19,7 +19,7 @@ const EditParfum = ({ navigation, route }) => {
 
       const token = await AsyncStorage.getItem('token');
 
-      await fetch(`http://192.168.42.63:8000/api/v1/owner/laundries/${laundryParse.id}/parfumes/${data.id}`, {
+      await fetch(`http://192.168.42.174:8000/api/v1/owner/laundries/${laundryParse.id}/parfumes/${data.id}`, {
         method: 'PUT',
         headers: {
           Accept: 'application/json',

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Alert, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { HeaderBar } from '../../../../../components';
+import { HeaderBar, Loading } from '../../../../../components';
 import { ColorPrimary } from '../../../../../utils/constanta';
 import { FAB } from 'react-native-paper';
 import { KeranjangIcon } from '../../../../../assets/images';
@@ -26,7 +26,7 @@ const Parfum = ({ navigation, data, screenName }) => {
         {
           text: 'Ya',
           onPress: async () => {
-            await fetch(`http://192.168.42.63:8000/api/v1/owner/laundries/${laundryParse.id}/parfumes/${data.id}`, {
+            await fetch(`http://192.168.42.174:8000/api/v1/owner/laundries/${laundryParse.id}/parfumes/${data.id}`, {
               method: 'DELETE',
               headers: {
                 Accept: 'application/json',
@@ -100,6 +100,7 @@ const Parfum = ({ navigation, data, screenName }) => {
 
 const ParfumScreen = ({ navigation }) => {
   const [parfumes, setParfumes] = useState([])
+  const [loading, setLoading] = useState(false)
 
   const fetchParfumesApi = async () => {
     const laundry = await AsyncStorage.getItem('laundry')
@@ -107,7 +108,7 @@ const ParfumScreen = ({ navigation }) => {
 
     const token = await AsyncStorage.getItem('token');
 
-    await fetch(`http://192.168.42.63:8000/api/v1/owner/laundries/${laundryParse.id}/parfumes`, {
+    await fetch(`http://192.168.42.174:8000/api/v1/owner/laundries/${laundryParse.id}/parfumes`, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
@@ -117,41 +118,44 @@ const ParfumScreen = ({ navigation }) => {
     })
       .then(response => response.json())
       .then(responseJson => {
+        setLoading(false)
         setParfumes(responseJson)
       });
   }
 
   useEffect(() => {
+    setLoading(true)
     fetchParfumesApi();
-  }, [parfumes])
+  }, [])
 
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: 'white',
-      }}>
-      <HeaderBar
-        navigation={navigation}
-        screenName="KelolaLayanan"
-        title="Parfum"
-      />
-      <ScrollView
+    loading ? <Loading />
+      : <View
         style={{
-          paddingHorizontal: 20,
-          marginTop: 10,
+          flex: 1,
+          backgroundColor: 'white',
         }}>
-        {parfumes.length > 0 && parfumes.map((data, index) => {
-          return <Parfum data={data} navigation={navigation} screenName='EditParfum' key={index} />
-        })}
-      </ScrollView>
-      <FAB
-        style={styles.fab}
-        medium
-        icon="plus"
-        onPress={() => navigation.navigate('TambahParfum')}
-      />
-    </View>
+        <HeaderBar
+          navigation={navigation}
+          screenName="KelolaLayanan"
+          title="Parfum"
+        />
+        <ScrollView
+          style={{
+            paddingHorizontal: 20,
+            marginTop: 10,
+          }}>
+          {parfumes.length > 0 && parfumes.map((data, index) => {
+            return <Parfum data={data} navigation={navigation} screenName='EditParfum' key={index} />
+          })}
+        </ScrollView>
+        <FAB
+          style={styles.fab}
+          medium
+          icon="plus"
+          onPress={() => navigation.navigate('TambahParfum')}
+        />
+      </View>
   );
 };
 

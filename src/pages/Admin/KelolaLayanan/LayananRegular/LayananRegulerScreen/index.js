@@ -1,12 +1,51 @@
-import React from 'react';
-import {Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {HeaderBar} from '../../../../../components';
-import {ColorPrimary} from '../../../../../utils/constanta';
-import {FAB} from 'react-native-paper';
-import {KeranjangIcon} from '../../../../../assets/images';
+import React, { useState, useEffect } from 'react';
+import { Alert, RefreshControl, ScrollView, StyleSheet, Text, ToastAndroid, TouchableOpacity, View } from 'react-native';
+import { HeaderBar, Loading } from '../../../../../components';
+import { ColorPrimary } from '../../../../../utils/constanta';
+import { FAB } from 'react-native-paper';
+import { KeranjangIcon } from '../../../../../assets/images';
 import Icon from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const Layanan = ({navigation, harga, waktu, layanan, screenName}) => {
+const Layanan = ({ navigation, data, screenName }) => {
+  const deleteCatalogPressed = async () => {
+    const laundry = await AsyncStorage.getItem('laundry')
+    const laundryParse = JSON.parse(laundry);
+
+    const token = await AsyncStorage.getItem('token');
+
+    Alert.alert(
+      `Peringatan`,
+      `Hapus layanan ${data.name}`,
+      [
+        {
+          text: 'Tidak',
+          style: 'cancel',
+        },
+        {
+          text: 'Ya',
+          onPress: async () => {
+            await fetch(`http://192.168.42.174:8000/api/v1/owner/laundries/${laundryParse.id}/catalogs/${data.id}`, {
+              method: 'DELETE',
+              headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+              },
+            })
+              .then(response => response.json())
+              .then(responseJson => {
+                console.log(responseJson)
+              });
+            ToastAndroid.show(`Sukses menghapus layanan ${data.name}`, ToastAndroid.SHORT)
+          },
+        },
+      ],
+    );
+
+  }
+
   return (
     <View
       style={{
@@ -17,26 +56,25 @@ const Layanan = ({navigation, harga, waktu, layanan, screenName}) => {
         backgroundColor: '#f6f6f6',
         borderRadius: 10,
         padding: 5,
-        marginTop:10
+        marginTop: 10
       }}>
-      <View style={{flexDirection: 'row'}}>
-        <Image
-          source={KeranjangIcon}
+      <View style={{ flexDirection: 'row' }}>
+        <MaterialCommunityIcons
+          name={data.icon}
           style={{
-            width:60,
-            height:60,
-            resizeMode: 'contain',
+            fontSize: 60,
+            color: 'black',
           }}
         />
-        <View style={{paddingLeft: 10}}>
-          <Text style={{fontWeight: '700', fontSize: 16, color: 'black', width:180}}>
-            {layanan}
+        <View style={{ paddingLeft: 10 }}>
+          <Text style={{ fontWeight: '700', fontSize: 16, color: 'black', width: 180 }}>
+            {data.name}
           </Text>
-          <Text style={{color:'black'}}>{waktu}</Text>
-          <Text style={{color:'black'}}>{harga} / Kg</Text>
+          <Text style={{ color: 'black' }}>{`${data.estimation_complete} ${data.estimation_type} `}</Text>
+          <Text style={{ color: 'black' }}>{data.price} / {data.unit}</Text>
         </View>
       </View>
-      <View style={{flexDirection: 'row'}}>
+      <View style={{ flexDirection: 'row' }}>
         <TouchableOpacity
           style={{
             backgroundColor: ColorPrimary,
@@ -45,7 +83,7 @@ const Layanan = ({navigation, harga, waktu, layanan, screenName}) => {
             justifyContent: 'center',
             marginRight: 10,
           }}
-          onPress={() => navigation.navigate(screenName)}>
+          onPress={() => navigation.navigate(screenName, { data: data })}>
           <Icon name="create-outline" size={25} color="white" />
         </TouchableOpacity>
         <TouchableOpacity
@@ -55,7 +93,7 @@ const Layanan = ({navigation, harga, waktu, layanan, screenName}) => {
             borderRadius: 10,
             justifyContent: 'center',
           }}
-          onPress={() => alert('Hapus')}>
+          onPress={deleteCatalogPressed}>
           <Icon name="trash-outline" size={25} color="white" />
         </TouchableOpacity>
       </View>
@@ -63,35 +101,82 @@ const Layanan = ({navigation, harga, waktu, layanan, screenName}) => {
   );
 };
 
-const LayananRegular = ({navigation}) => {
-  return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: 'white',
-      }}>
-      <HeaderBar
-        navigation={navigation}
-        screenName="KelolaLayanan"
-        title="Layanan Regular"
-      />
-      <ScrollView
-        style={{
-          paddingHorizontal: 20,
-          marginTop: 10,
-        }}>
-        <Text style={{fontSize:24, fontWeight:'700', color:'black'}}>Layanan</Text>
-        <Layanan layanan='Regular ' waktu='3 Hari' harga='Rp.8000' navigation={navigation} screenName='EditLayanan'/>
-        <Layanan layanan='Ekspress' waktu='2 Hari' harga='Rp.12000' navigation={navigation} screenName='EditLayanan'/>
-      </ScrollView>
+const LayananRegular = ({ navigation }) => {
+  const [catalogs, setCatalogs] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [refreshing, setRefreshing] = useState(false);
 
-      <FAB
-        style={styles.fab}
-        medium
-        icon="plus"
-        onPress={() => navigation.navigate('TambahLayanan')}
-      />
-    </View>
+  const fetchCatalogApi = async () => {
+    const laundry = await AsyncStorage.getItem('laundry')
+    const laundryParse = JSON.parse(laundry);
+
+    const token = await AsyncStorage.getItem('token');
+
+    await fetch(`http://192.168.42.174:8000/api/v1/owner/laundries/${laundryParse.id}/catalogs`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+    })
+      .then(response => response.json())
+      .then(responseJson => {
+        setLoading(false)
+        setCatalogs(responseJson)
+      });
+  }
+
+  useEffect(() => {
+    setLoading(true)
+    fetchCatalogApi()
+  }, [])
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      fetchCatalogApi();
+    }, 1000);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
+  }, []);
+
+  return (
+    loading ? <Loading />
+      : <View
+        style={{
+          flex: 1,
+          backgroundColor: 'white',
+        }}>
+        <HeaderBar
+          navigation={navigation}
+          screenName="KelolaLayanan"
+          title="Layanan Regular"
+        />
+        <ScrollView
+          style={{
+            paddingHorizontal: 20,
+            marginTop: 10,
+          }}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }>
+          <Text style={{ fontSize: 24, fontWeight: '700', color: 'black' }}>Layanan</Text>
+          {
+            catalogs.map((data, index) => {
+              return <Layanan data={data} navigation={navigation} screenName='EditLayanan' key={index} />
+            })
+          }
+        </ScrollView>
+
+        <FAB
+          style={styles.fab}
+          medium
+          icon="plus"
+          onPress={() => navigation.navigate('TambahLayanan')}
+        />
+      </View>
   );
 };
 
