@@ -18,14 +18,15 @@ import { Loading } from '../../../components';
 const Transaksi = ({ navigation }) => {
   const [status, setStatus] = useState('1');
   const [dataList, setDataList] = useState([]);
+  const [dataListFilter, setDataListFilter] = useState([]);
   const [loading, setLoading] = useState(false)
 
   const setStatusFilter = status => {
-    // if (status === '1') {
-    //   setDataList([...dataList.filter(e => e.status != '7')]);
-    // } else {
-    //   setDataList([...dataList.filter(e => e.status == '7')]);
-    // }
+    if (status === '1') {
+      setDataListFilter([...dataList.filter(e => e.status != '7')]);
+    } else {
+      setDataListFilter([...dataList.filter(e => e.status == '7')]);
+    }
 
     setStatus(status);
   };
@@ -44,6 +45,7 @@ const Transaksi = ({ navigation }) => {
       .then(response => response.json())
       .then(responseJson => {
         setDataList(responseJson)
+        setDataListFilter([...dataList.filter(e => e.status != '7')])
         setLoading(false)
       });
   }
@@ -188,7 +190,7 @@ const Transaksi = ({ navigation }) => {
           </View>
 
           <FlatList
-            data={dataList}
+            data={dataListFilter}
             renderItem={renderItem}
             ListFooterComponent={<View style={{ height: 250 }} />}
             showsVerticalScrollIndicator={false}
