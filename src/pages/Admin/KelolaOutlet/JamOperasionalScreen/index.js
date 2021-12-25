@@ -3,7 +3,7 @@ import { SafeAreaView, TouchableOpacity, View, StyleSheet } from 'react-native';
 import { Text } from 'react-native-paper';
 import { TimePickerModal } from 'react-native-paper-dates';
 import { HeaderBar, Loading } from '../../../../components';
-import SIZES, { ColorPrimary } from '../../../../utils/constanta';
+import SIZES, { API, ColorPrimary } from '../../../../utils/constanta';
 import { globalStyles } from '../../../../utils/global';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -29,29 +29,33 @@ const JamOperasional = ({ navigation }) => {
   }, [setVisibleSabtuClose]);
 
   const [loading, setLoading] = useState(false)
-  const [senin, setSenin] = useState({
+  const [seninOpen, setSeninOpen] = useState({
     openHour: '00',
     openMinute: '00',
+  })
+  const [seninClose, setSeninClose] = useState({
     closeHour: '00',
     closeMinute: '00',
   });
-  const [sabtu, setSabtu] = useState({
+  const [sabtuOpen, setSabtuOpen] = useState({
     openHour: '00',
     openMinute: '00',
+  })
+  const [sabtuClose, setSabtuClose] = useState({
     closeHour: '00',
     closeMinute: '00',
   })
 
   const onConfirmSeninOpen = useCallback(
     ({ hours, minutes }) => {
-      // hours = hours < 10 ? `0${hours}` : hours
-      // minutes = minutes < 10 ? `0${minutes}` : minutes
-      setSenin({
-        ...senin,
-        openHour: hours,
-        openMinute: minutes
+      hours = parseInt(hours);
+      minutes = parseInt(minutes)
+      setSeninOpen({
+        ...seninOpen,
+        openHour: hours < 10 ? `0${hours}`: `${hours}`,
+        openMinute: minutes < 10 ? `0${minutes}`: `${minutes}`,
       })
-      console.log(senin)
+      console.log(seninOpen)
       setVisibleSeninOpen(false);
       console.log({ hours, minutes }, 'senin open');
     },
@@ -60,14 +64,14 @@ const JamOperasional = ({ navigation }) => {
 
   const onConfirmSeninClose = useCallback(
     ({ hours, minutes }) => {
-      // hours = hours < 10 ? `0${hours}` : hours
-      // minutes = minutes < 10 ? `0${minutes}` : minutes
-      setSenin({
-        ...senin,
-        closeHour: hours,
-        closeMinute: minutes
+      hours = parseInt(hours);
+      minutes = parseInt(minutes)
+      setSeninClose({
+        ...seninClose,
+        closeHour: hours < 10 ? `0${hours}`: `${hours}`,
+        closeMinute: minutes < 10 ? `0${minutes}`: `${minutes}`,
       })
-      console.log(senin)
+      console.log(seninClose)
       setVisibleSeninClose(false);
       console.log({ hours, minutes }, 'senin close');
     },
@@ -76,14 +80,14 @@ const JamOperasional = ({ navigation }) => {
 
   const onConfirmSabtuOpen = useCallback(
     ({ hours, minutes }) => {
-      // hours = hours < 10 ? `0${hours}` : hours
-      // minutes = minutes < 10 ? `0${minutes}` : minutes
-      setSabtu({
-        ...sabtu,
-        openHour: hours,
-        openMinute: minutes
+      hours = parseInt(hours);
+      minutes = parseInt(minutes)
+      setSabtuOpen({
+        ...sabtuOpen,
+        openHour: hours < 10 ? `0${hours}`: `${hours}`,
+        openMinute: minutes < 10 ? `0${minutes}`: `${minutes}`,
       })
-      console.log(sabtu)
+      console.log(sabtuOpen)
       setVisibleSabtuOpen(false);
       console.log({ hours, minutes }, 'sabtu open');
     },
@@ -92,14 +96,14 @@ const JamOperasional = ({ navigation }) => {
 
   const onConfirmSabtuClose = useCallback(
     ({ hours, minutes }) => {
-      // hours = hours < 10 ? `0${hours}` : hours
-      // minutes = minutes < 10 ? `0${minutes}` : minutes
-      setSabtu({
-        ...sabtu,
-        closeHour: hours,
-        closeMinute: minutes
+      hours = parseInt(hours);
+      minutes = parseInt(minutes)
+      setSabtuClose({
+        ...sabtuClose,
+        closeHour: hours < 10 ? `0${hours}`: `${hours}`,
+        closeMinute: minutes < 10 ? `0${minutes}`: `${minutes}`,
       })
-      console.log(sabtu)
+      console.log(sabtuClose)
       setVisibleSabtuClose(false);
       console.log({ hours, minutes }, 'sabtu close');
     },
@@ -112,7 +116,7 @@ const JamOperasional = ({ navigation }) => {
 
     const token = await AsyncStorage.getItem('token');
 
-    await fetch(`http://192.168.42.174:8000/api/v1/owner/laundries/${laundryParse.id}/operationalhour`, {
+    await fetch(`${API}/api/v1/owner/laundries/${laundryParse.id}/operationalhour`, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
@@ -122,15 +126,19 @@ const JamOperasional = ({ navigation }) => {
     })
       .then(response => response.json())
       .then(responseJson => {
-        setSenin({
+        setSeninOpen({
           openHour: responseJson.senin.open.substring(0, 2),
           openMinute: responseJson.senin.open.substring(3, 5),
+        })
+        setSeninClose({
           closeHour: responseJson.senin.close.substring(0, 2),
           closeMinute: responseJson.senin.close.substring(3, 5),
         })
-        setSabtu({
+        setSabtuOpen({
           openHour: responseJson.sabtu.open.substring(0, 2),
           openMinute: responseJson.sabtu.open.substring(3, 5),
+        })
+        setSabtuClose({
           closeHour: responseJson.sabtu.close.substring(0, 2),
           closeMinute: responseJson.sabtu.close.substring(3, 5),
         })
@@ -160,8 +168,8 @@ const JamOperasional = ({ navigation }) => {
                 visible={visibleSeninOpen}
                 onDismiss={onDismissSeninOpen}
                 onConfirm={onConfirmSeninOpen}
-                hours={senin.openHour} // default: current hours
-                minutes={senin.openMinute} // default: current minutes
+                hours={seninOpen.openHour} // default: current hours
+                minutes={seninOpen.openMinute} // default: current minutes
                 label="Pilih Jam" // optional, default 'Select time'
                 cancelLabel="Cancel" // optional, default: 'Cancel'
                 confirmLabel="Ok" // optional, default: 'Ok'
@@ -172,7 +180,7 @@ const JamOperasional = ({ navigation }) => {
                 onPress={() => setVisibleSeninOpen(true)}
                 style={styles.inputTime}>
                 <Text style={{ ...globalStyles.bodyText }}>
-                  {senin.openHour} : {senin.openMinute}{' '}
+                  {seninOpen.openHour} : {seninOpen.openMinute}{' '}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -182,8 +190,8 @@ const JamOperasional = ({ navigation }) => {
                 visible={visibleSeninClose}
                 onDismiss={onDismissSeninClose}
                 onConfirm={onConfirmSeninClose}
-                hours={senin.closeHour} // default: current hours
-                minutes={senin.closeMinute} // default: current minutes
+                hours={seninClose.closeHour} // default: current hours
+                minutes={seninClose.closeMinute} // default: current minutes
                 label="Pilih Jam" // optional, default 'Select time'
                 cancelLabel="Cancel" // optional, default: 'Cancel'
                 confirmLabel="Ok" // optional, default: 'Ok'
@@ -194,7 +202,7 @@ const JamOperasional = ({ navigation }) => {
                 onPress={() => setVisibleSeninClose(true)}
                 style={styles.inputTime}>
                 <Text style={{ ...globalStyles.bodyText }}>
-                  {senin.closeHour} : {senin.closeMinute}{' '}
+                  {seninClose.closeHour} : {seninClose.closeMinute}{' '}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -209,8 +217,8 @@ const JamOperasional = ({ navigation }) => {
                 visible={visibleSabtuOpen}
                 onDismiss={onDismissSabtuOpen}
                 onConfirm={onConfirmSabtuOpen}
-                hours={sabtu.openHour} // default: current hours
-                minutes={sabtu.openMinute} // default: current minutes
+                hours={sabtuOpen.openHour} // default: current hours
+                minutes={sabtuOpen.openMinute} // default: current minutes
                 label="Pilih Jam" // optional, default 'Select time'
                 cancelLabel="Cancel" // optional, default: 'Cancel'
                 confirmLabel="Ok" // optional, default: 'Ok'
@@ -221,7 +229,7 @@ const JamOperasional = ({ navigation }) => {
                 onPress={() => setVisibleSabtuOpen(true)}
                 style={styles.inputTime}>
                 <Text style={{ ...globalStyles.bodyText }}>
-                  {sabtu.openHour} : {sabtu.openMinute}{' '}
+                  {sabtuOpen.openHour} : {sabtuOpen.openMinute}{' '}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -231,8 +239,8 @@ const JamOperasional = ({ navigation }) => {
                 visible={visibleSabtuClose}
                 onDismiss={onDismissSabtuClose}
                 onConfirm={onConfirmSabtuClose}
-                hours={sabtu.closeHour} // default: current hours
-                minutes={sabtu.closeMinute} // default: current minutes
+                hours={sabtuClose.closeHour} // default: current hours
+                minutes={sabtuClose.closeMinute} // default: current minutes
                 label="Pilih Jam" // optional, default 'Select time'
                 cancelLabel="Cancel" // optional, default: 'Cancel'
                 confirmLabel="Ok" // optional, default: 'Ok'
@@ -243,7 +251,7 @@ const JamOperasional = ({ navigation }) => {
                 onPress={() => setVisibleSabtuClose(true)}
                 style={styles.inputTime}>
                 <Text style={{ ...globalStyles.bodyText }}>
-                  {sabtu.closeHour} : {sabtu.closeMinute}{' '}
+                  {sabtuClose.closeHour} : {sabtuClose.closeMinute}{' '}
                 </Text>
               </TouchableOpacity>
             </View>
