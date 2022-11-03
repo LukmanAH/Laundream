@@ -110,10 +110,10 @@ const ExportTransaksi = ({ navigation }) => {
               });
             }else{
               Alert.alert('Tidak ada transaksi pada '+ month[parseInt(valueMonth)-1].label +' '+ year);
-              console.log(month[valueMonth])
+              console.log(month[valueMonth])    
             }
           }else{
-           Alert.alert(responseJson.error);
+           Alert.alert(responseJson.error); 
           }
         });
     } else {
