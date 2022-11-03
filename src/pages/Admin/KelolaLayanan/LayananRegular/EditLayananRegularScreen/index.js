@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Alert,Image, ToastAndroid, ScrollView } from 'react-native';
 import { RadioButton, TextInput } from 'react-native-paper';
 import DropDown from 'react-native-paper-dropdown';
 import { HeaderBar } from '../../../../../components';
-import SIZES, { ColorPrimary } from '../../../../../utils/constanta';
+import SIZES, { API, ColorPrimary } from '../../../../../utils/constanta';
 import { iconTimbangan, jas, KeranjangIcon, shirt } from '../../../../../assets/images';
 import { Fumi } from 'react-native-textinput-effects';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { globalStyles } from '../../../../../utils/global';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
-LogBox.ignoreLogs(["EventEmitter.removeListener"]);
 
 
 const EditLayanan = ({ navigation, route }) => {
@@ -39,24 +38,13 @@ const EditLayanan = ({ navigation, route }) => {
   const [valueLayanan, setValueLayanan] = useState(data.icon);
   const [layananList, setLayanan] = useState([
     {
-      label: 'Keranjang',
-      value: 'bucket-outline',
-      icon: () => <MaterialCommunityIcons
-        name='bucket-outline'
-        style={{
-          fontSize: 24,
-          color: 'black',
-        }}
-      />
-    },
-    {
       label: 'Sprei',
       value: 'bed-empty',
       icon: () => <MaterialCommunityIcons
         name='bed-empty'
         style={{
           fontSize: 24,
-          color: 'black',
+          color: ColorPrimary,
         }}
       />
     },
@@ -67,7 +55,7 @@ const EditLayanan = ({ navigation, route }) => {
         name='tshirt-crew'
         style={{
           fontSize: 24,
-          color: 'black',
+          color: ColorPrimary,
         }}
       />
     },
@@ -78,7 +66,7 @@ const EditLayanan = ({ navigation, route }) => {
         name='lingerie'
         style={{
           fontSize: 24,
-          color: 'black',
+          color: ColorPrimary,
         }}
       />
     },
@@ -89,7 +77,7 @@ const EditLayanan = ({ navigation, route }) => {
         name='rug'
         style={{
           fontSize: 24,
-          color: 'black',
+          color: ColorPrimary,
         }}
       />
     },
@@ -100,29 +88,51 @@ const EditLayanan = ({ navigation, route }) => {
         name='account-tie'
         style={{
           fontSize: 24,
-          color: 'black',
+          color: ColorPrimary,
+        }}
+      />
+    },
+    {
+      label: 'Sepatu',
+      value: 'shoe-formal',
+      icon: () => <MaterialCommunityIcons
+        name='shoe-formal'
+        style={{
+          fontSize: 24,
+          color: ColorPrimary,
+        }}
+      />
+    },
+    {
+      label: 'Keranjang',
+      value: 'bucket-outline',
+      icon: () => <MaterialCommunityIcons
+        name='bucket-outline'
+        style={{
+          fontSize: 24,
+          color: ColorPrimary,
         }}
       />
     },
   ]);
 
   const editCatalogPressed = async () => {
-    if (name && price && estimationComplete && layanan && valueWaktu) {
+    if (name && price && estimationComplete && valueLayanan && valueWaktu) {
       const laundry = await AsyncStorage.getItem('laundry')
       const laundryParse = JSON.parse(laundry);
 
       const token = await AsyncStorage.getItem('token');
 
-      await fetch(`http://192.168.42.174:8000/api/v1/owner/laundries/${laundryParse.id}/catalogs/${data.id}`, {
+      await fetch(`${API}/api/v1/owner/laundries/${laundryParse.id}/catalogs/${data.id}`, {
         method: 'PUT',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           name: name,
-          icon: layanan,
+          icon: valueLayanan,
           unit: unit,
           price: price,
           estimation_complete: estimationComplete,
@@ -131,13 +141,15 @@ const EditLayanan = ({ navigation, route }) => {
       })
         .then(response => response.json())
         .then(responseJson => {
-          if (responseJson.errors == null) {
-            navigation.navigate('LayananRegular')
-            ToastAndroid.show('Sukses mengubah layanan', ToastAndroid.SHORT)
+          if (responseJson.error == null) {
+            navigation.replace('LayananRegular')
+            ToastAndroid.show('Berhasil mengubah layanan', ToastAndroid.SHORT)
+          }else{
+            Alert.alert(responseJson.error);
           }
         });
     } else {
-      alert('Masukkan semua field');
+      Alert.alert('Masukkan semua field');
     }
   }
 
@@ -266,7 +278,8 @@ const EditLayanan = ({ navigation, route }) => {
         </View>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => console.log('test')}>
+          onPress={editCatalogPressed}
+        >
           <Text style={styles.btnText}>Simpan</Text>
         </TouchableOpacity>
       </View>

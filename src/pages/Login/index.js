@@ -1,65 +1,80 @@
 import React, { useState } from 'react';
-import { Text, View, StyleSheet, Button } from 'react-native';
+import { Text, View, Alert, Image, StyleSheet, Button } from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import SIZES, { ColorPrimary, ROLE_CUSTOMER, API } from '../../utils/constanta';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import { Fumi } from 'react-native-textinput-effects';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { globalStyles } from '../../utils/global';
+import { Logo, IlustrasiRegister } from '../../assets/images';
+import { Checkbox, RadioButton } from 'react-native-paper';
+import {useNetInfo} from "@react-native-community/netinfo";
+import OfflineNotice from '../../components/OfflineNotice';
 
 const LoginScreen = ({ navigation }) => {
-  const [email, setEmail] = useState('bals@bal.com');
-  const [password, setPassword] = useState('1');
+  const [email, setEmail] = useState('lukmandihakimi07@gmail.com');
+  const [password, setPassword] = useState('kharisma');
+  const [checked, setChecked] = useState(false);
+  const netInfo = useNetInfo();
 
   const loginPressed = async () => {
     const emailRegex = /\S+@\S+\.\S+/;
     if (email && password) {
       if (emailRegex.test(email)) {
-        await fetch(`${API}/api/v1/login`, {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            email: email,
-            password: password,
-          }),
-        })
-          .then(response => response.json())
-          .then(responseJson => {
-            if (responseJson.error == null) {
-              AsyncStorage.setItem('token', responseJson.token);
-              AsyncStorage.setItem('user', JSON.stringify(responseJson.user));
+        if(password.length >= 8){
+            if (netInfo.isConnected) {
+              await fetch(`${API}/api/v1/login`, {
+                method: 'POST',
+                headers: {
+                  Accept: 'application/json',
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  email: email,
+                  password: password,
+                }),
+              })
+                .then(response => response.json())
+                .then(responseJson => {
+                  if (responseJson.error == null) {
+                    AsyncStorage.setItem('token', responseJson.token);
+                    AsyncStorage.setItem('user', JSON.stringify(responseJson.user));
 
-              if (responseJson.laundry != null) {
-                AsyncStorage.setItem('laundry', JSON.stringify(responseJson.laundry))
-              }
+                    if (responseJson.laundry != null) {
+                      AsyncStorage.setItem('laundry', JSON.stringify(responseJson.laundry))
+                    }
 
-              setEmail('');
-              setPassword('');
+                    setEmail('');
+                    setPassword('');
 
-              if (responseJson.user.role == ROLE_CUSTOMER) {
-                navigation.replace('Tabs');
-              } else {
-                navigation.replace('MainApp');
-              }
-            } else {
-              alert(responseJson.error);
-            }
-          });
+                    if (responseJson.user.role == ROLE_CUSTOMER) {
+                      navigation.replace('Tabs'); //home customer screen
+                    } else {
+                      navigation.replace('MainApp'); //home Admin/employee screen
+                    }
+                  } else {
+                    Alert.alert(responseJson.error);
+                  }
+              });
+            }else{
+                Alert.alert("Anda sedang offline, periksa kembali koneksi internet anda!");
+            } 
+        }else{
+            Alert.alert('Password harus tediri dari minimal 8 karakter');
+         }
       } else {
-        alert('Email tidak sesuai');
+          Alert.alert('Format Email tidak sesuai');
       }
     } else {
-      alert('Masukkan email dan password');
+        Alert.alert('Field tidak boleh kosong');
     }
   }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.headerText}>Masuk Laundream</Text>
-
+      {netInfo.isConnected ? null:<OfflineNotice/>}
+      <Text style={styles.headerText}>Masuk LaunDream</Text>
+      <Image source={IlustrasiRegister} resizeMode='center' style={{width: SIZES.width/2, height: SIZES.width*0.6 }}/>
       <Fumi
         label={'Email'}
         iconClass={FontAwesomeIcon}
@@ -88,10 +103,23 @@ const LoginScreen = ({ navigation }) => {
         autoCapitalize="none"
         value={password}
         style={styles.textInput}
-        secureTextEntry={true}
+        secureTextEntry={!checked}
         inputStyle={globalStyles.bodyText}
         labelStyle={globalStyles.captionText}
       />
+       <View style={{ flexDirection:'row', paddingHorizontal: 20, paddingVertical: 1}}>
+        
+        <Checkbox
+              status={checked ? 'checked' : 'unchecked'}
+              onPress={() => {
+                setChecked(!checked);
+              }}
+              color={ColorPrimary}
+              uncheckedColor="black"
+        />
+        <Text style={{ marginTop:9, color:'black' }}>Tampilkan Password</Text>
+        
+      </View>
 
       <View style={styles.bottom}>
         {/* ganti ke user screen bentar */}
@@ -135,8 +163,8 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: ColorPrimary,
-    width: SIZES.width - 50,
-    height: 66,
+    width: SIZES.width - 100,
+    height: 55,
     borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',

@@ -9,7 +9,7 @@ import {
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {
   iconJam,
-  iconOutlet,
+  outletIcon,
   iconScooter,
 } from '../../../../assets/images';
 import { HeaderBar } from '../../../../components';
@@ -48,7 +48,7 @@ const KelolaOutlet = ({navigation}) => {
     <View style={styles.container}>
       <HeaderBar navigation={navigation} screenName='HomePage' title='Kelola Outlet' />
       <ScrollView>
-        <MenuOutlet icon={iconOutlet} title="Profile Outlet" navigation={navigation} screenName='EditProfileOutlet'/>
+        <MenuOutlet icon={outletIcon} title="Profile Outlet" navigation={navigation} screenName='EditProfileOutlet'/>
         <MenuOutlet icon={iconJam} title="Jam Operasional"  navigation={navigation} screenName='JamOperasional'/>
         <MenuOutlet icon={iconScooter} title="Tarif Ongkir" navigation={navigation} screenName='TarifOngkirScreen'/>
       </ScrollView>

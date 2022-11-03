@@ -1,6 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import {
+  ExportTransaksi,
   SplashScreen,
   LoginScreen,
   HomePage,
@@ -15,6 +16,7 @@ import {
   TambahTarifOngkirScreen,
   EditLayanan,
   ParfumScreen,
+  Profil,
   EditParfum,
   TambahParfum,
   PegawaiScreen,
@@ -30,9 +32,11 @@ import {
   Proses,
   StatusSelesai,
   DetailPesanan,
+  DetailInfo,
   KonfirmasiPesanan,
   DetailTransaksi,
-  EditProfile
+  EditProfile,
+  EditOngkirScreen,
 } from '../pages';
 import Tabs from '../bottomTabs';
 import DrawerMenu from './drawer';
@@ -66,6 +70,10 @@ const Route = () => {
         component={EditProfileOutlet}
       />
       <Stack.Screen
+        name="ExportTransaksi"
+        component={ExportTransaksi}
+      />
+      <Stack.Screen
         name="JamOperasional"
         component={JamOperasional}
       />
@@ -88,6 +96,10 @@ const Route = () => {
       <Stack.Screen
         name="TambahTarifOngkir"
         component={TambahTarifOngkirScreen}
+      />
+      <Stack.Screen
+        name="EditOngkir"
+        component={EditOngkirScreen}
       />
       <Stack.Screen
         name="LayananRegular"
@@ -126,9 +138,14 @@ const Route = () => {
         component={DetailPegawaiScreen}
       />
       <Stack.Screen
+        name="DetailInfo"
+        component={DetailInfo}
+      />
+      <Stack.Screen
         name="StatusPesanan"
         component={StatusPesanan}
       />
+      
       <Stack.Screen
         name="Konfirmasi"
         component={Konfirmasi}
@@ -176,6 +193,10 @@ const Route = () => {
       <Stack.Screen
         name="EditProfile"
         component={EditProfile}
+      />
+      <Stack.Screen
+        name="Profil"
+        component={Profil}
       />
     </Stack.Navigator>
   );

@@ -17,6 +17,8 @@ import {
   KeranjangIcon,
   KeranjangIcon1,
   markIcon,
+  iconList,
+  doneIcon,
 } from '../../../assets/images';
 import { HeaderBar } from '../../../components';
 import SIZES, { ColorPrimary } from '../../../utils/constanta';
@@ -54,73 +56,21 @@ const listTab = [
     status: '6',
     icon: iconMotor,
   },
+  {
+    name: 'Selesai',
+    status: '7',
+    icon: doneIcon,
+  },
 ];
 
-// const data = [
-//   {
-//     status: 'Konfirmasi',
-//     icon: iconTimbangan,
-//     invoice: 'TRX/20212101/002',
-//     pelanggan: 'Lukman',
-//     tglPesan: '15 Oktober 2021',
-//     estimasi: '15 Oktober 2021',
-//   },
-//   {
-//     status: 'Konfirmasi',
-//     icon: iconTimbangan,
-//     invoice: 'TRX/20212101/002',
-//     pelanggan: 'Apip',
-//     tglPesan: '15 Oktober 2021',
-//     estimasi: '15 Oktober 2021',
-//   },
-//   {
-//     status: 'Penjemputan',
-//     icon: iconTimbangan,
-//     invoice: 'TRX/20212101/002',
-//     pelanggan: 'Lukmen',
-//     tglPesan: '15 Oktober 2021',
-//     estimasi: '15 Oktober 2021',
-//   },
-//   {
-//     status: 'Antrian',
-//     icon: iconTimbangan,
-//     invoice: 'TRX/20212101/002',
-//     pelanggan: 'Lukmin',
-//     tglPesan: '15 Oktober 2021',
-//     estimasi: '15 Oktober 2021',
-//   },
-//   {
-//     status: 'Proses',
-//     icon: iconTimbangan,
-//     invoice: 'TRX/20212101/002',
-//     pelanggan: 'Lukmun',
-//     tglPesan: '15 Oktober 2021',
-//     estimasi: '15 Oktober 2021',
-//   },
-//   {
-//     status: 'Siap Ambil',
-//     icon: iconTimbangan,
-//     invoice: 'TRX/20212101/002',
-//     pelanggan: 'Lukmon',
-//     tglPesan: '15 Oktober 2021',
-//     estimasi: '15 Oktober 2021',
-//   },
-//   {
-//     status: 'Siap Antar',
-//     icon: iconTimbangan,
-//     invoice: 'TRX/20212101/002',
-//     pelanggan: 'Lukmain',
-//     tglPesan: '15 Oktober 2021',
-//     estimasi: '15 Oktober 2021',
-//   },
-// ];
 
 const StatusPesanan = ({ navigation, route }) => {
   const { statusName, data } = route.params;
   const [status, setStatus] = useState(statusName);
   const [dataList, setDataList] = useState(
-    data.filter(e => e.status == '1'),
+    data.filter(e => e.status == statusName),
   );
+
   const setStatusFilter = status => {
     setDataList([...data.filter(e => e.status == status)]);
     setStatus(status);
@@ -139,6 +89,8 @@ const StatusPesanan = ({ navigation, route }) => {
       navigation.navigate('Pengambilan', { data: data });
     } else if (status == '6') {
       navigation.navigate('Pengantaran', { data: data });
+    } else if (status == '7') {
+      navigation.navigate('StatusSelesai', { data: data });
     }
   }
 
@@ -187,6 +139,7 @@ const StatusPesanan = ({ navigation, route }) => {
       <View style={{ paddingHorizontal: 20 }}>
         <FlatList
           horizontal={true}
+          
           data={listTab}
           renderItem={({ item }) => (
             <TouchableOpacity
@@ -214,12 +167,43 @@ const StatusPesanan = ({ navigation, route }) => {
           showsHorizontalScrollIndicator={false}
         />
 
+      {dataList.length > 0 ?(
         <FlatList
           data={dataList}
           renderItem={renderItem}
           ListFooterComponent={<View style={{ height: 210 }} />}
           showsVerticalScrollIndicator={false}
         />
+      ): (
+        <View 
+          style={{ width: SIZES.width, height: SIZES.height*0.6, alignItems:'center', justifyContent:'center' }}  
+        >
+          <Image
+                source={iconList}
+                style={{ width: 150, height: 150 }}
+                resizeMode="contain"
+          />
+          <Text 
+            style={{
+              ...globalStyles.H3,
+              color:'grey',
+              margin:5
+            }}
+          > 
+            Belum ada isinya nih...
+          </Text>
+          <Text 
+            style={{
+              ...globalStyles.H5,
+              color:'grey',
+              margin:3
+            }}
+          > 
+            Seluruh transaksi telah melewati proses ini.
+          </Text>
+        </View>  
+        )
+      }
       </View>
     </SafeAreaView>
   );

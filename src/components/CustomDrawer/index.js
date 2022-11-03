@@ -1,13 +1,54 @@
 import React from 'react';
 import { DrawerItem, DrawerContentScrollView } from '@react-navigation/drawer';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, ToastAndroid, Text, Alert,TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import { ColorPrimary } from '../../utils/constanta';
+import { ColorPrimary, API } from '../../utils/constanta';
 import { useNavigation } from '@react-navigation/native';
 import { globalStyles } from '../../utils/global';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const CustomDrawer = props => {
   const navigation = useNavigation();
+
+  const logoutPressed = async () => {
+    console.log('logout');
+    const token = await AsyncStorage.getItem('token');
+
+    Alert.alert(
+      `Peringatan`,
+      `Apakah anda yakin ingin logout?`,
+      [
+        {
+          text: 'Tidak',
+          style: 'cancel',
+        },
+        {
+          text: 'Ya',
+          onPress: async () => {
+            await fetch(`${API}/api/v1/logout`, {
+              method: 'POST',
+              headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+              },
+            })
+              .then(response => response.json())
+              .then(responseJson => {
+                console.log(responseJson)
+              });
+            
+            await AsyncStorage.removeItem('token');
+            ToastAndroid.show(`Berhasil Logout`, ToastAndroid.SHORT)
+            navigation.navigate('LoginScreen')
+          },
+        },
+      ],
+    );
+
+  }
+
   return (
     <View style={{ padding: 20, flex: 1 }}>
       <View style={{ flex: 1 }}>
@@ -44,11 +85,12 @@ const CustomDrawer = props => {
             icon={() => (
               <Icon name="sign-out-alt" color='red' size={24} />
             )}
-            label="Sign Out"
+            label="Keluar"
             labelStyle={{ ...globalStyles.bodyText2, marginLeft: -15, color: 'red' }}
             onPress={() => {
-              navigation.navigate('LoginScreen')
-            }}
+              logoutPressed()
+            }
+          }
           />
         </View>
         <Text style={styles.copyright}>

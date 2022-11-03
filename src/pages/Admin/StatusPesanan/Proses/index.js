@@ -6,6 +6,7 @@ import {
   Text,
   TouchableOpacity,
   Image,
+  Linking,
   ScrollView,
   TextInput,
   ToastAndroid,
@@ -16,12 +17,12 @@ import BottomSheet from 'reanimated-bottom-sheet';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { KeranjangIcon, outletLogo } from '../../../../assets/images';
 import { HeaderBar, Maps } from '../../../../components';
-import SIZES, { ColorPrimary } from '../../../../utils/constanta';
+import SIZES, { API, ColorPrimary, STATUS_DELIVER, STATUS_READY } from '../../../../utils/constanta';
 import { globalStyles } from '../../../../utils/global';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const Konfirmasi = ({ navigation, route }) => {
+const Proses = ({ navigation, route }) => {
   const { data } = route.params
   const [location, setLocation] = useState({
     latitude: parseFloat(data.lat),
@@ -34,7 +35,7 @@ const Konfirmasi = ({ navigation, route }) => {
   const processPressed = async () => {
     const token = await AsyncStorage.getItem('token');
 
-    await fetch(`http://192.168.42.174:8000/api/v1/owner/laundries/${data.laundry.id}/transaction/${data.id}`, {
+    await fetch(`${API}/api/v1/owner/laundries/${data.laundry.id}/transaction/${data.id}`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -43,15 +44,15 @@ const Konfirmasi = ({ navigation, route }) => {
       },
       body: JSON.stringify({
         additional_information_laundry: info,
-        status: data.delivery_type == '1' ? '5' : '6'
+        status: data.service_type == '1' ? STATUS_READY : STATUS_DELIVER
       })
     })
       .then(response => response.json())
       .then(responseJson => {
-        if (responseJson.errors == null) {
+        if (responseJson.error == null) {
           navigation.replace('MainApp')
-          ToastAndroid.show('Sukses mengubah status', ToastAndroid.SHORT)
-        }
+          ToastAndroid.show('Berhasil mengubah status', ToastAndroid.SHORT)
+        } 
       });
   }
 
@@ -60,26 +61,58 @@ const Konfirmasi = ({ navigation, route }) => {
       style={{
         backgroundColor: 'white',
         paddingHorizontal: 30,
-        paddingTop: 22,
-        height: 310,
+        height: 330,
         // marginTop:-10
       }}>
-      <Text style={{ alignSelf: 'center', ...globalStyles.bodyText }}>
-        Total Tagihan
-      </Text>
+      
+      <Text style={{ alignSelf: 'center', fontSize: 16, fontWeight: '600', color: 'black',paddingTop:20 }}>Total Tagihan</Text>
       <Text
         style={{
           alignSelf: 'center',
-          ...globalStyles.bodyText2,
           fontSize: 36,
+          fontWeight: '700',
+          color: 'black',
         }}>
-        {data.amount}
+        {data.amount + data.delivery_fee}
       </Text>
       <View>
-        <Text style={globalStyles.bodyText2}>Detail Tagihan</Text>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <Text style={globalStyles.captionText}>Subtotal</Text>
-          <Text style={globalStyles.captionText}>{data.amount}</Text>
+        <Text style={{ fontSize: 16, fontWeight: '600', color: 'black' }}>
+          Detail Tagihan
+        </Text>
+        <View style={{ marginLeft: 5, flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={{ fontSize: 15, fontWeight: '500', color: 'black' }}> Harga :</Text>
+          {data.amount == null?(
+              <Text style={{ fontSize: 14, fontWeight: '500', color: ColorPrimary }}> Menunggu dihitung pihak laundry</Text>
+            ):(
+              <Text style={{ fontSize: 15, fontWeight: '500', color: 'black' }}> {data.amount}</Text>
+            )
+          }
+        </View>
+        <View style={{ marginLeft: 5, flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={{ fontSize: 15, fontWeight: '500', color: 'black' }}> Ongkir :</Text>
+          <Text style={{ fontSize: 15, fontWeight: '500', color: 'black' }}> {data.delivery_fee}</Text>
+        </View>
+
+        <Text style={{ fontSize: 16, fontWeight: '600', color: 'black' }}>
+          Detail Layanan
+        </Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginLeft: 5
+          }}>
+          <Text style={{ fontSize: 15, fontWeight: '500', color:'black' }}>Nama Layanan</Text>
+          <Text style={{ fontSize: 15, fontWeight: '500', color:'black' }}>{data.catalog.name}</Text>
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginLeft: 5
+          }}>
+          <Text style={{ fontSize: 15, fontWeight: '500', color:'black' }}>Harga Layanan</Text>
+          <Text style={{ fontSize: 15, fontWeight: '500', color:'black' }}>{data.catalog.price}/{data.catalog.unit}</Text>
         </View>
         <View
           style={{
@@ -87,18 +120,9 @@ const Konfirmasi = ({ navigation, route }) => {
             justifyContent: 'space-between',
             marginLeft: 8,
           }}>
-          <Text style={globalStyles.captionText}>{data.catalog.name}</Text>
-          <Text style={globalStyles.captionText}>{data.catalog.price}</Text>
+          <Text>Ongkir</Text>
+          <Text>{data.delivery_fee}</Text>
         </View>
-        {/* <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            marginLeft: 8,
-          }}>
-          <Text style={globalStyles.captionText}>Ongkir</Text>
-          <Text style={globalStyles.captionText}>3000</Text>
-        </View> */}
       </View>
       <View
         style={{
@@ -108,14 +132,23 @@ const Konfirmasi = ({ navigation, route }) => {
           marginVertical: 5,
         }}
       />
-      <Text style={{ alignSelf: 'center', ...globalStyles.bodyText }}>
-        Pembayaran
-      </Text>
-      <TouchableOpacity
-        style={[styles.button, { backgroundColor: '#22C058' }]}
+      <Text style={{ alignSelf: 'center', color: 'black' }}>Status Pembayaran</Text>
+      {/* <TouchableOpacity
+        style={[styles.button, { backgroundColor: 'white', borderWidth:2, borderColor:ColorPrimary }]}
         onPress={() => sheetRef.current.snapTo(1)}>
-        <Text style={styles.textLogin}>{data.delivery_type == '1' ? 'Lunas Awal' : 'Lunas Akhir'}</Text>
-      </TouchableOpacity>
+          
+        <Text style={[styles.textLogin, {color:'black'}]}>Lunas Akhir</Text>
+      </TouchableOpacity> */}
+      
+      {data.payment_type == 1 ? 
+        (
+          <Text style={[styles.textLogin, {color:'#22C058', alignSelf:'center'}]}>Lunas Awal</Text>
+        ):(
+          <Text style={[styles.textLogin, {color: ColorDanger, alignSelf:'center'}]}>Lunas Akhir</Text>
+        )
+      }
+      
+      
     </View>
   );
 
@@ -155,13 +188,19 @@ const Konfirmasi = ({ navigation, route }) => {
           <Text style={globalStyles.bodyText}>{data.serial}</Text>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <View style={{ flexDirection: 'row' }}>
-              <Image source={outletLogo} style={{ width: 60, height: 60 }} />
               <View style={{ marginTop: 10 }}>
                 <Text style={globalStyles.bodyText2}>{data.user.name}</Text>
                 <Text style={globalStyles.captionText}>{data.user.no_hp}</Text>
               </View>
             </View>
-            <Icon name="logo-whatsapp" size={30} color="#189D0E" />
+            {data.user.no_hp.substring(0,1) == '0'?
+              <TouchableOpacity onPress={()=>{ Linking.openURL('https://wa.me/62'+data.user.no_hp.substring(1,data.user.no_hp.length))}}>
+                <Icon name="logo-whatsapp" size={30} color="#189D0E" />
+              </TouchableOpacity>:
+              <TouchableOpacity onPress={()=>{ Linking.openURL('https://wa.me/'+data.user.no_hp)}}>
+                <Icon name="logo-whatsapp" size={30} color="#189D0E" />
+              </TouchableOpacity>
+            }
           </View>
           <View
             style={{
@@ -173,12 +212,13 @@ const Konfirmasi = ({ navigation, route }) => {
             {/* <Text style={globalStyles.bodyText}>Total Jarak : 12 KM</Text> */}
           </View>
 
-          <View
+          {/* <View
             style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
             <Icon name="map-outline" size={30} color="grey" />
             <Text style={{ ...globalStyles.bodyText, marginLeft: 5 }}>Maps</Text>
           </View>
-          <Maps location={location} />
+          <Maps location={location}/> */}
+
           <Text style={globalStyles.captionText} numberOfLines={2}>
             {data.address}
           </Text>
@@ -195,6 +235,19 @@ const Konfirmasi = ({ navigation, route }) => {
             </Text>
           </View>
 
+          {data.service_type == '2' ?  
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                marginTop: 10,
+              }}>
+              <Text style={styles.textBold}>Jarak</Text>
+              <Text style={{ ...globalStyles.bodyText2}}>
+                {data.distance >= 1 ? data.distance +' KM' : data.distance*1000 +' M'}
+              </Text>
+            </View> : null}
+
           <View
             style={{
               flexDirection: 'row',
@@ -206,27 +259,21 @@ const Konfirmasi = ({ navigation, route }) => {
               style={{ flexDirection: 'row' }}
               onPress={() => sheetRef.current.snapTo(0)}>
               <Text style={{ ...globalStyles.bodyText2, color: '#22C058' }}>
-                {data.delivery_type == '1' ? 'Lunas Awal' : 'Lunas Akhir'}
+                {data.payment_type == '1' ? 'Lunas Awal' : 'Lunas Akhir'}
               </Text>
               <Icon name="chevron-forward-outline" size={20} color="#22C058" />
             </TouchableOpacity>
           </View>
 
-          {/* <Text
-            style={{
-              ...styles.textBold,
-              marginTop: 20,
-            }}>
-            Estimasi Selesai
-          </Text>
           <View
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
+              marginTop: 20,
             }}>
-            <Text style={globalStyles.bodyText}>03 Oktober 2021</Text>
-            <Text style={globalStyles.bodyText}>15:00:00 WIB</Text>
-          </View> */}
+            <Text style={{...styles.textBold }}>Estimasi Selesai </Text>
+            <Text style={globalStyles.bodyText2}>{data.catalog.estimation_complete} {data.catalog.estimation_type} </Text>
+          </View>
 
           <Text
             style={[
@@ -290,7 +337,7 @@ const Konfirmasi = ({ navigation, route }) => {
   );
 };
 
-export default Konfirmasi;
+export default Proses;
 
 const styles = StyleSheet.create({
   textBold: {

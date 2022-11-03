@@ -9,7 +9,8 @@ import TarifOngkirScreen from './Admin/KelolaOutlet/TarifOngkirScreen';
 import KelolaLayanan from './Admin/KelolaLayanan/KelolaLayananScreen';
 import TambahLayanan from './Admin/KelolaLayanan/LayananRegular/TambahLayananScreen';
 import LayananRegular from './Admin/KelolaLayanan/LayananRegular/LayananRegulerScreen';
-import TambahTarifOngkirScreen from './Admin/KelolaOutlet/TarifOngkirScreen/TambahTarifOngkir';
+import TambahTarifOngkirScreen from './Admin/KelolaOutlet/TarifOngkirScreen/TambahTarifOngkirScreen';
+import EditOngkirScreen from './Admin/KelolaOutlet/TarifOngkirScreen/EditOngkirScreen';
 import EditLayanan from './Admin/KelolaLayanan/LayananRegular/EditLayananRegularScreen';
 import ParfumScreen from './Admin/KelolaLayanan/Parfum/ParfumScreen';
 import TambahParfum from './Admin/KelolaLayanan/Parfum/TambahParfum';
@@ -30,10 +31,13 @@ import Home from './User/HomeUser';
 import Profil from './User/Profil';
 import Transaksi from './User/Transaksi';
 import DetailPesanan from './User/HomeUser/PesanScreenUser';
+import DetailInfo from './User/HomeUser/DetailInformasi';
 import KonfirmasiPesanan from './User/HomeUser/KonfirmasiPesananUser';
 import DetailTransaksi from './User/Transaksi/DetailTransaksiUser';
 import EditProfile from './User/Profil/EditProfil';
 import EditAdmin from './Admin/HomeAdmin/EditAdmin';
+
+import ExportTransaksi from './Admin/ExportTransaksiScreen';
 
 export {
   SplashScreen,
@@ -47,7 +51,7 @@ export {
   KelolaLayanan,
   TambahLayanan,
   LayananRegular,
-  TambahTarifOngkirScreen,
+  TambahTarifOngkirScreen, 
   EditLayanan,
   ParfumScreen,
   TambahParfum,
@@ -68,8 +72,11 @@ export {
   Transaksi,
   Profil,
   DetailPesanan,
+  DetailInfo,
   KonfirmasiPesanan,
   DetailTransaksi,
   EditProfile,
-  EditAdmin
+  EditAdmin,
+  ExportTransaksi,
+  EditOngkirScreen
 };

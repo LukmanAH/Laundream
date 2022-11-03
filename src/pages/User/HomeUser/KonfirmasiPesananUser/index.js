@@ -10,6 +10,7 @@ import {
   FlatList,
   Button,
   ToastAndroid,
+  Alert,
 } from 'react-native';
 import { Checkbox, RadioButton } from 'react-native-paper';
 import Modal from 'react-native-modal';
@@ -21,16 +22,20 @@ import {
   outletLogo,
 } from '../../../../assets/images';
 import { HeaderBar, Maps } from '../../../../components';
-import SIZES, { ColorPrimary } from '../../../../utils/constanta';
+import SIZES, { S3, API, ColorPrimary } from '../../../../utils/constanta';
 import { globalStyles } from '../../../../utils/global';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Geocoder from 'react-native-geocoding';
+import GOOGLE_MAPS_API from '../../../../utils/maps'
+import { Fumi } from 'react-native-textinput-effects';
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 
 const KonfirmasiPesanan = ({ navigation, route }) => {
   const { data, catalog, address, coordinate } = route.params;
   const [layanan, setLayanan] = useState('2');
-  const [parfum, setParfum] = useState(data.parfumes[0].id);
+  const [parfum, setParfum] = useState();
   const [pembayaran, setPembayaran] = useState('1');
   const [checked, setChecked] = React.useState(false);
   const [isModalVisible, setIsModalVisible] = React.useState(false);
@@ -49,11 +54,17 @@ const KonfirmasiPesanan = ({ navigation, route }) => {
 
   const handleModal = () => setIsModalVisible(() => !isModalVisible);
 
+  const okPressed = ()=>{
+    handleModal()
+    navigation.replace('Tabs')
+  };
+
   const confirmPressed = async () => {
+    if(parfum){
     if (checked) {
       const token = await AsyncStorage.getItem('token');
 
-      await fetch(`http://192.168.42.174:8000/api/v1/customer/laundries/${data.id}/store`, {
+      await fetch(`${API}/api/v1/customer/laundries/${data.id}/store`, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -64,7 +75,7 @@ const KonfirmasiPesanan = ({ navigation, route }) => {
           catalog_id: catalog.id,
           parfume_id: parfum,
           service_type: layanan,
-          delivery_type: pembayaran,
+          payment_type: pembayaran,
           lat: parseFloat(pickUpCoordinate.latitude).toFixed(7),
           lng: parseFloat(pickUpCoordinate.longitude).toFixed(7),
           additional_information_user: additional,
@@ -75,14 +86,18 @@ const KonfirmasiPesanan = ({ navigation, route }) => {
         .then(response => response.json())
         .then(responseJson => {
           console.log(responseJson)
-          if (responseJson.errors == null) {
-            navigation.replace('Tabs')
-            ToastAndroid.show('Sukses membuat pesanan', ToastAndroid.SHORT)
+          if (responseJson.error == null) {
             handleModal()
+            // navigation.replace('Tabs')
+            // ToastAndroid.show('Berhasil membuat pesanan', ToastAndroid.SHORT)
+            
           }
         });
     } else {
-      alert('Setujui ketentuan laundry')
+      Alert.alert('Harap setujui ketentuan laundry')
+    }
+    }else{
+      Alert.alert('Silahkan pilih parfume yang tersedia')
     }
   }
 
@@ -101,8 +116,30 @@ const KonfirmasiPesanan = ({ navigation, route }) => {
     </View>
   );
 
+  const getGeocoding = data => {
+    Geocoder.init(GOOGLE_MAPS_API);
+    Geocoder.from([data.latitude, data.longitude])
+      .then(response => {
+        // const getCity = response.results[0].address_components.filter(
+        //   address => {
+        //     return address.types.includes('administrative_area_level_2');
+        //   },
+        // );
+        // const getProvince = response.results[0].address_components.filter(
+        //   address => {
+        //     return address.types.includes('administrative_area_level_1');
+        //   },
+        // );
+        setAddressInput(response.results[0].formatted_address)
+        // setCity(getCity[0].long_name);
+        // setProvince(getProvince[0].long_name)
+      })
+      .catch(error => console.warn(error));
+  }
+
   const getLocation = (data) => {
     setPickUpCoordinate({ latitude: data.latitude, longitude: data.longitude })
+    getGeocoding(data)
     console.log(data)
   }
 
@@ -120,14 +157,19 @@ const KonfirmasiPesanan = ({ navigation, route }) => {
         <View style={{ paddingHorizontal: 20, paddingVertical: 16 }}>
           <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
             <Image
-              source={{ uri: data.banner }}
-              style={{ width: 100, height: 100 }}
+              source={{ uri: S3 + '/' + data.banner }}
+              style={{ width: 55, height: 55 }}
               resizeMode="contain"
             />
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 1, marginLeft:10 }}>
               <Text style={globalStyles.H3}>{data.name}</Text>
               <Text style={globalStyles.captionText} numberOfLines={2}>{data.address}</Text>
-              <Text style={globalStyles.captionText}>{data.distance} km</Text>
+              {data.distance >= 1? (
+                  <Text style={globalStyles.captionText}>{data.distance} KM</Text>
+                ):(
+                  <Text style={globalStyles.captionText}>{data.distance * 1000} M</Text>
+                )
+              }
             </View>
           </View>
 
@@ -150,25 +192,34 @@ const KonfirmasiPesanan = ({ navigation, route }) => {
             />
             <Text style={globalStyles.captionText}>Antar Sendiri</Text>
           </View>
+        { 
+          layanan == '2'? (
+            <View>
+              <Maps location={laundryCoordinate} banner={data.banner} laundry={data.name} type="user" getLocation={getLocation} pickCoordinate={pickUpCoordinate} />
 
-          <Maps location={laundryCoordinate} laundry={data.name} type="user" getLocation={getLocation} pickCoordinate={pickUpCoordinate} />
-
-          <Text style={{ marginTop: 10, ...globalStyles.H3 }}>Lokasi Penjemputan</Text>
-          <TextInput
-            style={{
-              flex: 1,
-              height: 75,
-              borderWidth: 1,
-              borderRadius: 20,
-              paddingHorizontal: 10,
-              marginVertical: 10,
-              borderColor: '#C4C4C4',
-              ...globalStyles.captionText
-            }}
-            onChangeText={(e) => setAddressInput(e)}
-            value={address}
-            multiline={true}
-          />
+              <Text style={{ marginTop: 10, ...globalStyles.H3 }}>Lokasi Penjemputan</Text>
+              <TextInput
+                style={{
+                  flex: 1,
+                  height: 75,
+                  borderWidth: 1,
+                  borderRadius: 20,
+                  paddingHorizontal: 10,
+                  marginVertical: 10,
+                  borderColor: '#C4C4C4',
+                  ...globalStyles.captionText
+                }}
+                onChangeText={(e) => setAddressInput(e)}
+                value={addressInput}
+                multiline={true}
+              />
+            </View>
+          ):(
+            <View>
+              <Maps location={laundryCoordinate} banner={data.banner} laundry={data.name} type="user" getLocation={getLocation} pickCoordinate={pickUpCoordinate} />
+            </View>
+          )
+        }
 
           <Text style={{ marginTop: 10, ...globalStyles.H3 }}>Detail Pesanan</Text>
           <View
@@ -244,6 +295,22 @@ const KonfirmasiPesanan = ({ navigation, route }) => {
             value={additional}
             multiline={true}
           />
+
+          {/* <Fumi
+            label={'Informasi Tambahan'}
+            iconClass={FontAwesomeIcon}
+            iconName={'user'}
+            iconColor={ColorPrimary}
+            iconSize={20}
+            iconWidth={40}
+            inputPadding={20}
+            onChangeText={text => setAdditional(text)}
+            autoCapitalize="none"
+            value={additional}
+            multiline={true}
+            style={styles.textInput}
+          /> */}
+
           <View style={{ flexDirection: 'row', flex: 1 }}>
             <Checkbox
               status={checked ? 'checked' : 'unchecked'}
@@ -266,13 +333,10 @@ const KonfirmasiPesanan = ({ navigation, route }) => {
               alignItems: 'center',
               marginBottom: 20,
             }}>
-            <TouchableOpacity style={styles.button} onPress={() => {
-              if (checked) {
-                handleModal()
-              } else {
-                alert('Harap setujui ketentuan laundry')
-              }
-            }}>
+            <TouchableOpacity 
+              style={styles.button} 
+              onPress={confirmPressed}
+            >
               <Text style={{ ...globalStyles.H3, color: 'white' }}>Pesan Sekarang</Text>
             </TouchableOpacity>
           </View>
@@ -288,7 +352,7 @@ const KonfirmasiPesanan = ({ navigation, route }) => {
         data={data.parfumes}
         renderItem={renderItem}
         horizontal={false}
-        numColumns={3}
+        numColumns={5}
         ListHeaderComponent={HeaderComponentList}
         ListFooterComponent={FooterComponentList}
       />
@@ -317,8 +381,8 @@ const KonfirmasiPesanan = ({ navigation, route }) => {
               <Image
                 source={iconMotor}
                 style={{
-                  width: SIZES.width * 0.3,
-                  height: SIZES.width * 0.3,
+                  width: SIZES.width * 0.5,
+                  height: SIZES.width * 0.5,
                   alignSelf: 'center',
                 }}
                 resizeMode="contain"
@@ -346,7 +410,7 @@ const KonfirmasiPesanan = ({ navigation, route }) => {
             </View>
           )}
           <TouchableOpacity
-            onPress={confirmPressed}
+            onPress={okPressed}  
             style={{
               backgroundColor: ColorPrimary,
               alignSelf: 'center',
@@ -394,6 +458,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '700',
     color: 'white',
+  },
+  textInput: {
+    width: SIZES.width - 50,
+    borderRadius: 16,
+    marginTop: 20,
+    borderWidth: 1,
   },
   h3: {
     fontSize: 20,

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Alert, TouchableOpacity, View } from 'react-native';
 import { Text, TextInput } from 'react-native-paper';
 import { HeaderBar } from '../../../../../components';
-import SIZES, { ColorPrimary } from '../../../../../utils/constanta';
+import SIZES,  { API, ColorPrimary } from '../../../../../utils/constanta';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import { Fumi } from 'react-native-textinput-effects';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -19,7 +19,7 @@ const EditParfum = ({ navigation, route }) => {
 
       const token = await AsyncStorage.getItem('token');
 
-      await fetch(`http://192.168.42.174:8000/api/v1/owner/laundries/${laundryParse.id}/parfumes/${data.id}`, {
+      await fetch(`${API}/api/v1/owner/laundries/${laundryParse.id}/parfumes/${data.id}`, {
         method: 'PUT',
         headers: {
           Accept: 'application/json',
@@ -32,12 +32,12 @@ const EditParfum = ({ navigation, route }) => {
       })
         .then(response => response.json())
         .then(responseJson => {
-          if (responseJson.errors == null) {
+          if (responseJson.error == null) {
             navigation.replace('Parfum')
           }
         });
     } else {
-      alert('Masukkan semua field');
+      Alert.alert('Masukkan semua field');
     }
   }
 

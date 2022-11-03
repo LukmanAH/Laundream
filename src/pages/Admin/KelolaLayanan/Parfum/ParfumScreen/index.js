@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Alert, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, ScrollView, StyleSheet, Text, ToastAndroid, TouchableOpacity, View } from 'react-native';
 import { HeaderBar, Loading } from '../../../../../components';
-import { ColorPrimary } from '../../../../../utils/constanta';
+import SIZES,{ ColorPrimary, API } from '../../../../../utils/constanta';
 import { FAB } from 'react-native-paper';
-import { KeranjangIcon } from '../../../../../assets/images';
+import { iconParfume, KeranjangIcon } from '../../../../../assets/images';
 import Icon from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -26,7 +26,7 @@ const Parfum = ({ navigation, data, screenName }) => {
         {
           text: 'Ya',
           onPress: async () => {
-            await fetch(`http://192.168.42.174:8000/api/v1/owner/laundries/${laundryParse.id}/parfumes/${data.id}`, {
+            await fetch(`${API}/api/v1/owner/laundries/${laundryParse.id}/parfumes/${data.id}`, {
               method: 'DELETE',
               headers: {
                 Accept: 'application/json',
@@ -36,7 +36,9 @@ const Parfum = ({ navigation, data, screenName }) => {
             })
               .then(response => response.json())
               .then(responseJson => {
-                ToastAndroid.show(`Sukses menghapus parfum ${data.name}`, ToastAndroid.SHORT)
+                
+                navigation.replace('Parfum')
+                ToastAndroid.show(`Berhasil menghapus parfum`, ToastAndroid.SHORT)
               });
           },
         },
@@ -56,12 +58,12 @@ const Parfum = ({ navigation, data, screenName }) => {
         padding: 5,
         marginTop: 10
       }}>
-      <View style={{ flexDirection: 'row' }}>
+      <View style={{ flexDirection: 'row', width : SIZES.width-200  }}>
         <Image
-          source={KeranjangIcon}
+          source={iconParfume}
           style={{
-            width: 60,
-            height: 60,
+            width: 55,
+            height: 55,
             resizeMode: 'contain',
           }}
         />
@@ -71,7 +73,7 @@ const Parfum = ({ navigation, data, screenName }) => {
           </Text>
         </View>
       </View>
-      <View style={{ flexDirection: 'row' }}>
+      <View style={{ flexDirection: 'row'}}>
         <TouchableOpacity
           style={{
             backgroundColor: ColorPrimary,
@@ -99,7 +101,7 @@ const Parfum = ({ navigation, data, screenName }) => {
 };
 
 const ParfumScreen = ({ navigation }) => {
-  const [parfumes, setParfumes] = useState([])
+  const [parfumes, setParfumes] = useState([]) 
   const [loading, setLoading] = useState(false)
 
   const fetchParfumesApi = async () => {
@@ -108,7 +110,7 @@ const ParfumScreen = ({ navigation }) => {
 
     const token = await AsyncStorage.getItem('token');
 
-    await fetch(`http://192.168.42.174:8000/api/v1/owner/laundries/${laundryParse.id}/parfumes`, {
+    await fetch(`${API}/api/v1/owner/laundries/${laundryParse.id}/parfumes`, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
@@ -120,6 +122,7 @@ const ParfumScreen = ({ navigation }) => {
       .then(responseJson => {
         setLoading(false)
         setParfumes(responseJson)
+             
       });
   }
 
@@ -143,11 +146,12 @@ const ParfumScreen = ({ navigation }) => {
         <ScrollView
           style={{
             paddingHorizontal: 20,
-            marginTop: 10,
+            marginTop: 10, 
           }}>
           {parfumes.length > 0 && parfumes.map((data, index) => {
             return <Parfum data={data} navigation={navigation} screenName='EditParfum' key={index} />
           })}
+
         </ScrollView>
         <FAB
           style={styles.fab}

@@ -6,18 +6,19 @@ import {
   StyleSheet,
   Text,
   View,
+  Alert
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { iconTimbangan, outletLogo } from '../../../../assets/images';
 import { HeaderBar } from '../../../../components';
-import SIZES, { ColorDanger, ColorPrimary } from '../../../../utils/constanta';
+import SIZES, {S3, ColorDanger, ColorPrimary } from '../../../../utils/constanta';
 import { globalStyles } from '../../../../utils/global';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const DetailPesanan = ({ navigation, route }) => {
   const { data, address, coordinate } = route.params
   const [isPress, setIsPress] = useState(false);
-  const [catalog, setCatalog] = useState({ id: data.catalogs[0].id })
+  const [catalog, setCatalog] = useState({ id: null });
 
   function renderItem({ item, index }) {
     const touchProps = {
@@ -34,6 +35,7 @@ const DetailPesanan = ({ navigation, route }) => {
           justifyContent: 'space-between',
           marginTop: 10,
         }}>
+          
         <View style={{ flexDirection: 'row' }}>
           <MaterialCommunityIcons
             name={item.icon}
@@ -49,7 +51,13 @@ const DetailPesanan = ({ navigation, route }) => {
           </View>
         </View>
         <TouchableOpacity {...touchProps}
-          onPress={() => { setCatalog(item); }}>
+          onPress={() => { 
+            if(catalog.id != item.id){
+              setCatalog(item); 
+            }else{
+              setCatalog({ id: null })
+            }
+            }}>
           <Text
             style={{
               ...globalStyles.bodyText2,
@@ -63,12 +71,14 @@ const DetailPesanan = ({ navigation, route }) => {
       </View>
     );
   }
+
+  
   return (
-    <View style={{ flex: 1, backgroundColor: 'white' }}>
+    <View style={{backgroundColor: 'white', height:SIZES.height }}>
       <HeaderBar
         navigation={navigation}
         screenName="Tabs"
-        title="Nama Outlet Laundry"
+        title="Daftar Layanan Laundry"
       />
       <View>
         <View style={{ paddingHorizontal: 20 }}>
@@ -79,35 +89,49 @@ const DetailPesanan = ({ navigation, route }) => {
               marginVertical: 20,
             }}>
             <Image
-              source={outletLogo}
-              style={{ width: 100, height: 100 }}
+              source={{ uri: `${S3}/`+ data.banner }}
+              style={{ width: 70, height: 70 }}
               resizeMode="contain"
             />
-            <View style={{ flex: 1 }}>
+            <View style={{ marginLeft:5 }}>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <View
                   style={{
                     width: 10,
                     height: 10,
                     borderRadius: 5,
-                    backgroundColor: '#42E379',
+                    backgroundColor: (data.condition === 1) ? '#42E379' : 'grey',
                     marginRight: 4,
                   }}
                 />
-                <Text style={globalStyles.captionText}>Buka</Text>
+                {
+                  data.condition === 1? (
+                    <Text style={globalStyles.captionText}>Buka</Text> 
+                  ):(
+                    <Text style={globalStyles.captionText}>Tutup</Text> 
+                  )
+                }
               </View>
               <Text style={globalStyles.H3}>{data.name}</Text>
-              <Text style={globalStyles.captionText}>{data.distance} km</Text>
+              {data.distance >= 1 ? (
+                  <Text style={globalStyles.captionText}>{data.distance} KM</Text>
+                ):(
+                  <Text style={globalStyles.captionText}>{data.distance * 1000} M</Text>
+                )
+              }
               <Text style={globalStyles.captionText} numberOfLines={2}>{data.address}</Text>
             </View>
           </View>
 
           <Text style={globalStyles.H3}>Layanan Kami</Text>
-          <FlatList
-            data={data.catalogs}
-            renderItem={renderItem}
-            showsVerticalScrollIndicator={false}
-          />
+          <View style={{ height:SIZES.height-400 }}>
+              <FlatList
+                data={data.catalogs}
+                renderItem={renderItem}
+                scrollEnabled={true}
+              />
+          </View>
+          
         </View>
         <View style={{ height: 40 }} />
       </View>
@@ -117,9 +141,10 @@ const DetailPesanan = ({ navigation, route }) => {
           // justifyContent: 'flex-end',
           alignItems: 'center',
         }}>
+        {catalog.id != null ?(
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate('KonfirmasiPesanan', { data: data, catalog: catalog, address: address, coordinate: coordinate })}>
+          onPress={() => navigation.replace('KonfirmasiPesanan', { data: data, catalog: catalog, address: address, coordinate: coordinate })}>
           <View
             style={{
               flexDirection: 'row',
@@ -136,6 +161,20 @@ const DetailPesanan = ({ navigation, route }) => {
             </Text>
           </View>
         </TouchableOpacity>
+        ):(
+          <View
+            style={styles.button2}
+          >
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+              <Text style={{ ...globalStyles.H3, color: 'white', alignContent:'center' }}>0 Layanan</Text>
+            </View>
+          </View>
+          )}
       </View>
     </View>
   );
@@ -175,6 +214,16 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: ColorPrimary,
+    width: SIZES.width - 50,
+    height: 66,
+    borderRadius: 16,
+    // alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 10,
+    paddingHorizontal: 20,
+  },
+  button2: {
+    backgroundColor: '#ced6e0',
     width: SIZES.width - 50,
     height: 66,
     borderRadius: 16,

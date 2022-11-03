@@ -5,10 +5,13 @@ import {
     View,
     Text,
     SafeAreaView,
+    Image
 } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { laundrymaps, KeranjangIcon, outletLogo } from '../../assets/images';
 import SIZES, {
+    S3,
     ColorDanger,
     ColorPrimary,
     ColorWhite,
@@ -29,6 +32,7 @@ export default class Maps extends React.Component {
         },
         heightMap: SIZES.height / 2,
         laundry: this.props.laundry,
+        banner: this.props.banner,
         type: this.props.type,
     };
 
@@ -91,12 +95,11 @@ export default class Maps extends React.Component {
                                 title={data.laundry}
                                 coordinate={{ latitude: this.props.location.latitude, longitude: this.props.location.longitude }}
                             >
-                                <MaterialCommunityIcons
-                                    name={'bucket'}
-                                    style={{
-                                        fontSize: 30,
-                                        color: 'black',
-                                    }}
+                                
+                                <Image
+                                    source={{ uri: `${S3}/`+ data.banner }}
+                                    
+                                    style={{ width: 50, height: 50, borderRadius:20 }}
                                 />
                             </Marker>
                             <Marker
@@ -105,6 +108,37 @@ export default class Maps extends React.Component {
                                 draggable
                                 coordinate={{ latitude: this.props.pickCoordinate.latitude, longitude: this.props.pickCoordinate.longitude }}
                                 onDragEnd={(e) => this.props.getLocation(e.nativeEvent.coordinate)}
+                            >
+                                <MaterialCommunityIcons
+                                    name="map-marker"
+                                    style={{
+                                        fontSize: 40,
+                                        color: 'blue',
+                                    }}
+                                />
+                            </Marker>
+                        </>
+                    )}
+
+                    {data.type != 'laundry' ? null : (
+                        <>
+                            <Marker
+                                title={data.laundry}
+                                coordinate={{ latitude: this.props.location.latitude, longitude: this.props.location.longitude }}
+                            >
+                                {/* <Image source={outletLogo} style={{ width: 60, height: 60 }} /> */}
+                                <MaterialCommunityIcons
+                                    name="map-marker"
+                                    style={{
+                                        fontSize: 40,
+                                        color: ColorPrimary,
+                                    }}
+                                />
+                            </Marker>
+                            <Marker
+                                title="Lokasi"
+                                description={"Lokasi penjemputan"}
+                                coordinate={{ latitude: this.props.pickCoordinate.latitude, longitude: this.props.pickCoordinate.longitude }}
                             />
                         </>
                     )}

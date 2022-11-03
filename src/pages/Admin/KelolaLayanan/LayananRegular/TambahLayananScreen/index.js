@@ -7,19 +7,18 @@ import {
   ScrollView,
   ToastAndroid,
   Image,
+  Alert
 } from 'react-native';
 import { RadioButton } from 'react-native-paper';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { HeaderBar } from '../../../../../components';
-import SIZES, { ColorPrimary, API } from '../../../../../utils/constanta';
+import SIZES, {API, ColorPrimary} from '../../../../../utils/constanta';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome5';
 import { Fumi } from 'react-native-textinput-effects';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { LogBox } from 'react-native';
 import { globalStyles } from '../../../../../utils/global';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-LogBox.ignoreLogs(['EventEmitter.removeListener']);
 
 const TambahLayanan = ({ navigation }) => {
   const [unit, setUnit] = useState('kg');
@@ -44,18 +43,7 @@ const TambahLayanan = ({ navigation }) => {
 
   const [openLayanan, setOpenLayanan] = useState(false);
   const [valueLayanan, setValueLayanan] = useState(null);
-  const [layananList, setLayanan] = useState([
-    {
-      label: 'Keranjang',
-      value: 'bucket-outline',
-      icon: () => <MaterialCommunityIcons
-        name='bucket-outline'
-        style={{
-          fontSize: 24,
-          color: 'black',
-        }}
-      />
-    },
+  const [layananList, setLayananList] = useState([
     {
       label: 'Sprei',
       value: 'bed-empty',
@@ -63,7 +51,7 @@ const TambahLayanan = ({ navigation }) => {
         name='bed-empty'
         style={{
           fontSize: 24,
-          color: 'black',
+          color: ColorPrimary,
         }}
       />
     },
@@ -74,7 +62,7 @@ const TambahLayanan = ({ navigation }) => {
         name='tshirt-crew'
         style={{
           fontSize: 24,
-          color: 'black',
+          color: ColorPrimary,
         }}
       />
     },
@@ -85,7 +73,7 @@ const TambahLayanan = ({ navigation }) => {
         name='lingerie'
         style={{
           fontSize: 24,
-          color: 'black',
+          color: ColorPrimary,
         }}
       />
     },
@@ -96,7 +84,7 @@ const TambahLayanan = ({ navigation }) => {
         name='rug'
         style={{
           fontSize: 24,
-          color: 'black',
+          color: ColorPrimary,
         }}
       />
     },
@@ -107,14 +95,36 @@ const TambahLayanan = ({ navigation }) => {
         name='account-tie'
         style={{
           fontSize: 24,
-          color: 'black',
+          color: ColorPrimary,
+        }}
+      />
+    },
+    {
+      label: 'Sepatu',
+      value: 'shoe-formal',
+      icon: () => <MaterialCommunityIcons
+        name='shoe-formal'
+        style={{
+          fontSize: 24,
+          color: ColorPrimary,
+        }}
+      />
+    },
+    {
+      label: 'Keranjang',
+      value: 'bucket-outline',
+      icon: () => <MaterialCommunityIcons
+        name='bucket-outline'
+        style={{
+          fontSize: 24,
+          color: ColorPrimary,
         }}
       />
     },
   ]);
 
   const addCatalogPressed = async () => {
-    if (name && price && estimationComplete && layanan && valueWaktu) {
+    if (name && price && estimationComplete && valueLayanan && valueWaktu) {
       const laundry = await AsyncStorage.getItem('laundry')
       const laundryParse = JSON.parse(laundry);
 
@@ -129,7 +139,7 @@ const TambahLayanan = ({ navigation }) => {
         },
         body: JSON.stringify({
           name: name,
-          icon: layanan,
+          icon: valueLayanan,
           unit: unit,
           price: price,
           estimation_complete: estimationComplete,
@@ -138,13 +148,13 @@ const TambahLayanan = ({ navigation }) => {
       })
         .then(response => response.json())
         .then(responseJson => {
-          if (responseJson.errors == null) {
+          if (responseJson.error == null) {
             navigation.replace('LayananRegular')
-            ToastAndroid.show('Sukses menambah layanan', ToastAndroid.SHORT)
+            ToastAndroid.show('Berhasil menambah layanan', ToastAndroid.SHORT)
           }
         });
     } else {
-      alert('Masukkan semua field');
+      Alert.alert('Masukkan semua field');
     }
   };
 
@@ -155,8 +165,8 @@ const TambahLayanan = ({ navigation }) => {
         screenName="LayananRegular"
         title="Tambah Layanan"
       />
-      <ScrollView style={{ paddingHorizontal: 20, paddingVertical: 10 }} showsVerticalScrollIndicator={false}>
-        <Text style={styles.titleText}>Nama Layanan</Text>
+
+      <View style={{ paddingHorizontal: 20, paddingVertical: 10 }}>
         <Fumi
           label={'Nama Layanan'}
           iconClass={FontAwesomeIcon}
@@ -168,33 +178,20 @@ const TambahLayanan = ({ navigation }) => {
           onChangeText={text => setName(text)}
           autoCapitalize="none"
           value={name}
+          keyboardType={'default'}
           style={styles.textInput}
           inputStyle={globalStyles.bodyText}
           labelStyle={globalStyles.captionText}
         />
 
-        <Text style={styles.titleText}>Icon Item</Text>
-        <DropDown
-          placeholder="Icon Layanan"
-          mode={'outlined'}
-          visible={showDropDownLayanan}
-          showDropDown={() => setShowDropDownLayanan(true)}
-          onDismiss={() => setShowDropDownLayanan(false)}
-          value={layanan}
-          setValue={setLayanan}
-          list={layananList}
-          backgroundColor="white"
-
-        />
-        <Text style={styles.titleText}>Jenis Item</Text>
-
+        <Text style={styles.titleText}>Jenis Item </Text>
         <DropDownPicker
           open={openLayanan}
           value={valueLayanan}
           items={layananList}
           setOpen={setOpenLayanan}
           setValue={setValueLayanan}
-          setItems={setLayanan}
+          setItems={setLayananList}
           style={{ backgroundColor: 'white', height: 65, borderRadius: 15, borderColor: 'grey' }}
           labelStyle={globalStyles.bodyText}
           textStyle={globalStyles.bodyText}
@@ -207,7 +204,7 @@ const TambahLayanan = ({ navigation }) => {
           listMode={'SCROLLVIEW'}
         />
 
-        {/* RadioButton */}
+
         <Text style={styles.titleText}>Satuan Hitung </Text>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <RadioButton
@@ -264,7 +261,7 @@ const TambahLayanan = ({ navigation }) => {
             autoCapitalize="none"
             value={estimationComplete}
             keyboardType="number-pad"
-            style={{ ...styles.textInput, flex: 2, marginTop: 0 }}
+            style={{ ...styles.textInput, flex: 2, marginTop: 0 , marginRight: 5}}
             inputStyle={globalStyles.bodyText}
             labelStyle={globalStyles.captionText}
           />
@@ -286,12 +283,13 @@ const TambahLayanan = ({ navigation }) => {
             listMode={'SCROLLVIEW'}
           />
         </View >
+        
         <TouchableOpacity
           style={styles.button}
           onPress={addCatalogPressed}>
           <Text style={styles.btnText}>Simpan</Text>
         </TouchableOpacity>
-      </ScrollView >
+      </View>
     </View >
   );
 };
@@ -307,7 +305,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 20,
+    marginTop: 50,
     marginBottom: 40,
   },
   btnText: {

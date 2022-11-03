@@ -4,11 +4,13 @@ import {
   Text,
   ImageBackground,
   StyleSheet,
+  Alert,
+  ToastAndroid,
   TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {bgHeader} from '../../../assets/images';
-import SIZES, { ColorPrimary } from '../../../utils/constanta';
+import SIZES, { ColorPrimary, API } from '../../../utils/constanta';
 import {globalStyles} from '../../../utils/global';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Loading} from '../../../components';
@@ -20,13 +22,47 @@ const Profil = ({navigation}) => {
   const [loading, setLoading] = useState(false);
 
   async function getUser() {
-    if (name == '') {
       const getUser = await AsyncStorage.getItem('user');
       const parseObject = JSON.parse(getUser);
       setName(parseObject.name);
       setPhone(parseObject.no_hp);
       setEmail(parseObject.email);
-    }
+  }
+
+  const logoutPressed = async () => {
+    const token = await AsyncStorage.getItem('token');
+
+    Alert.alert(
+      `Peringatan`,
+      `Apakah anda yakin ingin logout?`,
+      [
+        {
+          text: 'Tidak',
+          style: 'cancel',
+        },
+        {
+          text: 'Ya',
+          onPress: async () => {
+            await fetch(`${API}/api/v1/logout`, {
+              method: 'POST',
+              headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+              },
+            })
+              .then(response => response.json())
+              .then(responseJson => {
+                console.log(responseJson)
+              });
+            await AsyncStorage.removeItem('token');
+            ToastAndroid.show(`Berhasil Logout`, ToastAndroid.SHORT)
+            navigation.navigate('LoginScreen')
+          },
+        },
+      ],
+    );
+
   }
 
   useEffect(() => {
@@ -100,11 +136,13 @@ const Profil = ({navigation}) => {
           </Text>
         </View>
       </View>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate('LoginScreen')}>
-        <Text style={{...globalStyles.H3, color: 'white'}}>Keluar</Text>
-      </TouchableOpacity>
+      <View style={styles.viewLogoutBTN}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={logoutPressed}>
+          <Text style={{...globalStyles.H3, color: 'white'}}>Keluar</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -121,5 +159,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 20,
     alignSelf: 'center',
+  },
+
+  viewLogoutBTN: {
+    justifyContent: 'flex-end',
+    height:SIZES.height*0.53
   },
 });

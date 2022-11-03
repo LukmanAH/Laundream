@@ -1,6 +1,6 @@
 import React from 'react';
 import {Text, View, TouchableOpacity, Image} from 'react-native';
-import { iconJam, iconOutlet } from '../../../../assets/images';
+import { iconParfume,iconJam, outletIcon } from '../../../../assets/images';
 import { HeaderBar } from '../../../../components';
 
 const MenuLayanan = ({title, screenName, navigation, icon}) => {
@@ -41,8 +41,8 @@ const KelolaLayanan = ({navigation}) => {
         screenName="HomePage"
         title="Kelola Layanan"
       />
-      <MenuLayanan icon={iconOutlet} title="Layanan Regular" navigation={navigation} screenName='LayananRegular'/>
-        <MenuLayanan icon={iconJam} title="Parfum"  navigation={navigation} screenName='Parfum'/>
+      <MenuLayanan icon={outletIcon} title="Layanan Regular" navigation={navigation} screenName='LayananRegular'/>
+        <MenuLayanan icon={iconParfume} title="Parfum"  navigation={navigation} screenName='Parfum'/>
         
     </View>
   );

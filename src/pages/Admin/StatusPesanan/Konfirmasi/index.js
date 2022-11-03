@@ -6,14 +6,16 @@ import {
   Text,
   TouchableOpacity,
   Image,
+  Linking,
   ScrollView,
   TextInput,
+  Alert,
   ToastAndroid,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { KeranjangIcon, outletLogo } from '../../../../assets/images';
 import { HeaderBar, Maps } from '../../../../components';
-import SIZES, { ColorPrimary } from '../../../../utils/constanta';
+import SIZES, { API, ColorDanger, ColorPrimary, STATUS_CONFIRMATION,STATUS_QUEUE } from '../../../../utils/constanta';
 import { globalStyles } from '../../../../utils/global';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -30,28 +32,69 @@ const Konfirmasi = ({ navigation, route }) => {
   const [info, setInfo] = useState('')
 
   const confirmPressed = async () => {
+    if(amount){
+      const token = await AsyncStorage.getItem('token');
+
+      await fetch(`${API}/api/v1/owner/laundries/${data.laundry.id}/transaction/${data.id}`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          amount: amount,
+          additional_information_laundry: info,
+          status: STATUS_QUEUE,  
+        })
+      })
+        .then(response => response.json())
+        .then(responseJson => {
+          if (responseJson.error == null) {
+            navigation.replace('MainApp')
+            ToastAndroid.show('Berhasil mengubah status', ToastAndroid.SHORT)
+          }
+        });
+    }else{
+      Alert.alert('Field harga wajib diisi');
+    }
+  }
+
+  const cancelTransactionPressed = async () => {
+    const laundry = await AsyncStorage.getItem('laundry')
+    const laundryParse = JSON.parse(laundry);
+
     const token = await AsyncStorage.getItem('token');
 
-    await fetch(`http://192.168.42.174:8000/api/v1/owner/laundries/${data.laundry.id}/transaction/${data.id}`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        amount: amount,
-        additional_information_laundry: info,
-        status: 3
-      })
-    })
-      .then(response => response.json())
-      .then(responseJson => {
-        if (responseJson.errors == null) {
-          navigation.replace('MainApp')
-          ToastAndroid.show('Sukses mengubah status', ToastAndroid.SHORT)
-        }
-      });
+    Alert.alert(
+      `Peringatan`,
+      `Hapus Transaksi Ini ?`,
+      [
+        {
+          text: 'Tidak',
+          style: 'cancel',
+        },
+        {
+          text: 'Ya',
+          onPress: async () => {
+            await fetch(`${API}/api/v1/owner/laundries/${laundryParse.id}/transaction/${data.id}`, {
+              method: 'DELETE',
+              headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+              },
+            })
+              .then(response => response.json())
+              .then(responseJson => {
+                console.log(responseJson)
+                navigation.replace('MainApp')
+                ToastAndroid.show(`${responseJson.message}`, ToastAndroid.SHORT)
+              });
+          },
+        },
+      ],
+    );
   }
 
   return (
@@ -65,13 +108,19 @@ const Konfirmasi = ({ navigation, route }) => {
         <Text style={globalStyles.bodyText}>{data.serial}</Text>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <View style={{ flexDirection: 'row' }}>
-            <Image source={outletLogo} style={{ width: 60, height: 60 }} />
             <View style={{ marginTop: 10 }}>
               <Text style={globalStyles.bodyText2}>{data.user.name}</Text>
               <Text style={globalStyles.captionText}>{data.user.no_hp}</Text>
             </View>
           </View>
-          <Icon name="logo-whatsapp" size={30} color="#189D0E" />
+          {data.user.no_hp.substring(0,1) == '0'?
+            <TouchableOpacity onPress={()=>{ Linking.openURL('https://wa.me/62'+data.user.no_hp.substring(1,data.user.no_hp.length))}}>
+              <Icon name="logo-whatsapp" size={30} color="#189D0E" />
+            </TouchableOpacity>:
+            <TouchableOpacity onPress={()=>{ Linking.openURL('https://wa.me/'+data.user.no_hp)}}>
+              <Icon name="logo-whatsapp" size={30} color="#189D0E" />
+            </TouchableOpacity>
+          }
         </View>
         <View
           style={{
@@ -83,15 +132,15 @@ const Konfirmasi = ({ navigation, route }) => {
           {/* <Text style={globalStyles.bodyText}>Total Jarak : 12 KM</Text> */}
         </View>
 
-        <View
+        {/* <View
           style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
           <Icon name="map-outline" size={30} color="grey" />
           <Text style={{ ...globalStyles.bodyText, marginLeft: 5 }}>Maps</Text>
         </View>
-        <Maps location={location} />
-        <Text style={globalStyles.captionText} numberOfLines={2}>
+        <Maps location={location} /> */}
+        {/* <Text style={globalStyles.captionText} numberOfLines={2}>
           {data.address}
-        </Text>
+        </Text> */}
 
         <View
           style={{
@@ -103,7 +152,7 @@ const Konfirmasi = ({ navigation, route }) => {
             Layanan Antar
           </Text>
           <Text style={{ ...globalStyles.bodyText2, color: ColorPrimary, }}>
-            {data.service_type == '1' ? 'Pickup-Delivery' : 'Antar Sendiri'}
+            {data.service_type == '1' ? 'Antar Sendiri' : 'Pickup-Delivery'}
           </Text>
         </View>
 
@@ -117,25 +166,19 @@ const Konfirmasi = ({ navigation, route }) => {
             Status Pembayaran
           </Text>
           <Text style={{ ...globalStyles.bodyText2, color: '#22C058', }}>
-            {data.delivery_type == '1' ? 'Lunas Awal' : 'Lunas Akhir'}
+            {data.payment_type == '1' ? 'Lunas Awal' : 'Lunas Akhir'}
           </Text>
         </View>
 
-        {/* <Text
-          style={{
-            ...styles.textBold,
-            marginTop: 20,
-          }}>
-          Estimasi Selesai
-        </Text>
         <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}>
-          <Text style={globalStyles.bodyText}>03 Oktober 2021</Text>
-          <Text style={globalStyles.bodyText}>15:00:00 WIB</Text>
-        </View> */}
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginTop: 20,
+            }}>
+            <Text style={{...styles.textBold }}>Estimasi Selesai </Text>
+            <Text style={globalStyles.bodyText2}>{data.catalog.estimation_complete} {data.catalog.estimation_type} </Text>
+          </View>
 
         <Text
           style={[
@@ -206,6 +249,15 @@ const Konfirmasi = ({ navigation, route }) => {
           onPress={confirmPressed}>
           <Text style={styles.textLogin}>Konfirmasi Pesanan</Text>
         </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.button2}
+          onPress={cancelTransactionPressed}
+        >
+          <Text style={{ ...globalStyles.H3, color: 'white' }}>
+            Batalkan Pesanan
+          </Text>
+        </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   );
@@ -226,8 +278,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 20,
+    marginBottom: 20,
+  },
+
+  button2: {
+    backgroundColor: ColorDanger,
+    width: SIZES.width - 50,
+    height: 66,
+    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: 40,
   },
+
   textLogin: {
     ...globalStyles.H3,
     color: 'white',

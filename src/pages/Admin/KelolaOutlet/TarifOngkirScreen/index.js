@@ -3,10 +3,10 @@ import { Text, TouchableOpacity, View, StyleSheet, Alert, ToastAndroid } from 'r
 import { FAB } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { HeaderBar, Loading } from '../../../../components';
-import { ColorPrimary } from '../../../../utils/constanta';
+import { ColorPrimary,ColorDanger, API } from '../../../../utils/constanta';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const TarifOngkir = ({ data }) => {
+const TarifOngkir = ({ navigation, data }) => {
 
   const deleteShippingRatePressed = async () => {
     const laundry = await AsyncStorage.getItem('laundry')
@@ -25,7 +25,7 @@ const TarifOngkir = ({ data }) => {
         {
           text: 'Ya',
           onPress: async () => {
-            await fetch(`http://192.168.42.174:8000/api/v1/owner/laundries/${laundryParse.id}/shipping/${data.id}`, {
+            await fetch(`${API}/api/v1/owner/laundries/${laundryParse.id}/shipping/${data.id}`, {
               method: 'DELETE',
               headers: {
                 Accept: 'application/json',
@@ -35,7 +35,9 @@ const TarifOngkir = ({ data }) => {
             })
               .then(response => response.json())
               .then(responseJson => {
-                ToastAndroid.show(`Sukses menghapus tarif ongkir`, ToastAndroid.SHORT)
+                
+                navigation.replace('TarifOngkir')
+                ToastAndroid.show(`Berhasil menghapus tarif ongkir`, ToastAndroid.SHORT)
               });
           },
         },
@@ -69,13 +71,24 @@ const TarifOngkir = ({ data }) => {
         </View>
         <TouchableOpacity
           style={{
-            backgroundColor: 'white',
+            backgroundColor: ColorPrimary,
+            padding: 5,
+            borderRadius: 10,
+            justifyContent: 'center',
+            marginLeft: 50
+          }}
+          onPress={() => navigation.navigate('EditOngkir', { data: data })}>
+          <Icon name="create-outline" size={25} color="white" />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            backgroundColor: ColorDanger,
             padding: 5,
             borderRadius: 10,
             justifyContent: 'center',
           }}
           onPress={deleteShippingRatePressed}>
-          <Icon name="trash-outline" size={25} color="red" />
+          <Icon name="trash-outline" size={25} color="white" />
         </TouchableOpacity>
       </View>
     </View>
@@ -92,7 +105,7 @@ const TarifOngkirScreen = ({ navigation }) => {
 
     const token = await AsyncStorage.getItem('token');
 
-    await fetch(`http://192.168.42.174:8000/api/v1/owner/laundries/${laundryParse.id}/shipping`, {
+    await fetch(`${API}/api/v1/owner/laundries/${laundryParse.id}/shipping`, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
@@ -122,7 +135,7 @@ const TarifOngkirScreen = ({ navigation }) => {
         />
         <View style={{ paddingHorizontal: 20 }}>
           {tarif.length > 0 && tarif.map((data, index) => {
-            return <TarifOngkir data={data} key={index} />
+            return <TarifOngkir navigation={navigation} data={data} key={index} />
           })}
         </View>
 

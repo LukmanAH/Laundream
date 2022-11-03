@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+import { ColorPrimary } from './constanta';
 
 export const globalStyles = StyleSheet.create({
   titleText: {

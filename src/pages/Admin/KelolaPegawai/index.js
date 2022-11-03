@@ -3,7 +3,7 @@ import { ScrollView, StyleSheet, TouchableOpacity, View, Alert, ToastAndroid } f
 import { FAB, Text } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { HeaderBar, Loading } from '../../../components';
-import { ColorDanger, ColorPrimary, token } from '../../../utils/constanta';
+import { API, ColorDanger, ColorPrimary, token } from '../../../utils/constanta';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { globalStyles } from '../../../utils/global';
 
@@ -26,7 +26,7 @@ const Pegawai = ({ navigation, data }) => {
         {
           text: 'Ya',
           onPress: async () => {
-            await fetch(`http://192.168.42.174:8000/api/v1/owner/laundries/${laundryParse.id}/employees/${data.id}`, {
+            await fetch(`${API}/api/v1/owner/laundries/${laundryParse.id}/employees/${data.id}`, {
               method: 'DELETE',
               headers: {
                 Accept: 'application/json',
@@ -37,13 +37,13 @@ const Pegawai = ({ navigation, data }) => {
               .then(response => response.json())
               .then(responseJson => {
                 console.log(responseJson)
+                navigation.replace('Pegawai')
+                ToastAndroid.show(`${responseJson.message}`, ToastAndroid.SHORT)
               });
-            ToastAndroid.show(`Sukses menghapus karyawan ${data.user.name}`, ToastAndroid.SHORT)
           },
         },
       ],
     );
-
   }
 
   return (
@@ -106,7 +106,7 @@ const PegawaiScreen = ({ navigation }) => {
 
     const token = await AsyncStorage.getItem('token');
 
-    await fetch(`http://192.168.42.174:8000/api/v1/owner/laundries/${laundryParse.id}/employees`, {
+    await fetch(`${API}/api/v1/owner/laundries/${laundryParse.id}/employees`, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
@@ -117,13 +117,13 @@ const PegawaiScreen = ({ navigation }) => {
       .then(response => response.json())
       .then(responseJson => {
         setPegawai(responseJson)
-        setLoading(false)
       });
   }
 
   useEffect(() => {
     setLoading(true)
     fetchPegawaiApi();
+    setLoading(false)
   }, [])
 
   return (

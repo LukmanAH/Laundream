@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Alert, RefreshControl, ScrollView, StyleSheet, Text, ToastAndroid, TouchableOpacity, View } from 'react-native';
+import { Alert, RefreshControl, ScrollView, DropDown, StyleSheet, Text, ToastAndroid, TouchableOpacity, View } from 'react-native';
 import { HeaderBar, Loading } from '../../../../../components';
-import { ColorPrimary } from '../../../../../utils/constanta';
+import { ColorPrimary, API } from '../../../../../utils/constanta';
 import { FAB } from 'react-native-paper';
 import { KeranjangIcon } from '../../../../../assets/images';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -26,7 +26,7 @@ const Layanan = ({ navigation, data, screenName }) => {
         {
           text: 'Ya',
           onPress: async () => {
-            await fetch(`http://192.168.42.174:8000/api/v1/owner/laundries/${laundryParse.id}/catalogs/${data.id}`, {
+            await fetch(`${API}/api/v1/owner/laundries/${laundryParse.id}/catalogs/${data.id}`, {
               method: 'DELETE',
               headers: {
                 Accept: 'application/json',
@@ -36,9 +36,10 @@ const Layanan = ({ navigation, data, screenName }) => {
             })
               .then(response => response.json())
               .then(responseJson => {
-                console.log(responseJson)
+                console.log(responseJson)  
+                navigation.replace('LayananRegular')
+                ToastAndroid.show(`${responseJson.message}`, ToastAndroid.SHORT)
               });
-            ToastAndroid.show(`Sukses menghapus layanan ${data.name}`, ToastAndroid.SHORT)
           },
         },
       ],
@@ -59,13 +60,13 @@ const Layanan = ({ navigation, data, screenName }) => {
         marginTop: 10
       }}>
       <View style={{ flexDirection: 'row' }}>
-        <MaterialCommunityIcons
+        {/* <MaterialCommunityIcons
           name={data.icon}
           style={{
             fontSize: 60,
             color: 'black',
           }}
-        />
+        /> */}
         <View style={{ paddingLeft: 10 }}>
           <Text style={{ fontWeight: '700', fontSize: 16, color: 'black', width: 180 }}>
             {data.name}
@@ -102,8 +103,8 @@ const Layanan = ({ navigation, data, screenName }) => {
 };
 
 const LayananRegular = ({ navigation }) => {
-  const [catalogs, setCatalogs] = useState([])
-  const [loading, setLoading] = useState(false)
+  const [catalogs, setCatalogs] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
   const fetchCatalogApi = async () => {
@@ -112,7 +113,7 @@ const LayananRegular = ({ navigation }) => {
 
     const token = await AsyncStorage.getItem('token');
 
-    await fetch(`http://192.168.42.174:8000/api/v1/owner/laundries/${laundryParse.id}/catalogs`, {
+    await fetch(`${API}/api/v1/owner/laundries/${laundryParse.id}/catalogs`, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
@@ -162,9 +163,13 @@ const LayananRegular = ({ navigation }) => {
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }>
-          <Text style={{ fontSize: 24, fontWeight: '700', color: 'black' }}>Layanan</Text>
+
+          <Text style={{ fontSize: 24, fontWeight: '700', color: 'black' }}>
+            Layanan
+          </Text>
+          
           {
-            catalogs.map((data, index) => {
+            catalogs.length > 0 &&catalogs.map((data, index) => {
               return <Layanan data={data} navigation={navigation} screenName='EditLayanan' key={index} />
             })
           }

@@ -3,15 +3,17 @@ import {
   StyleSheet,
   View,
   Image,
+  ToastAndroid,
   ScrollView,
   TouchableOpacity,
   Text,
-  TextInput
+  TextInput,
+  Alert
 } from 'react-native';
 import DropDown from 'react-native-paper-dropdown';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { HeaderBar, Maps, Loading } from '../../../../components';
-import SIZES, { API, ColorPrimary } from '../../../../utils/constanta';
+import SIZES, { API,S3, ColorPrimary } from '../../../../utils/constanta';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { globalStyles } from '../../../../utils/global';
 import { Fumi } from 'react-native-textinput-effects';
@@ -52,8 +54,8 @@ const EditProfileOutlet = ({ navigation }) => {
         console.log('Cancel = ', response.errorCode);
       } else {
         const source = response.assets;
-        // source[0].uri == letak image
-        // source[0].filesize == ukuran image
+        //  source[0].uri == letak image;
+        //  source[0].filesize == ukuran image;
         if (tipe === 'banner') {
           setLogoOutlet(source);
         }
@@ -71,29 +73,49 @@ const EditProfileOutlet = ({ navigation }) => {
 
     const data = new FormData();
     if (logoOutlet != '') {
-      data.append('banner', logoOutlet[0].uri)
+      data.append('banner', {
+        name: logoOutlet[0].fileName,
+        type: logoOutlet[0].type,
+        uri: logoOutlet[0].uri  
+      });
     }
 
     data.append('city', city)
     data.append('address', address)
     data.append('phone', phone)
     data.append('name', outlet)
+    data.append('province', province)
     data.append('lat', parseFloat(coordinate.latitude).toFixed(7))
     data.append('lng', parseFloat(coordinate.longitude).toFixed(7))
 
     await fetch(`${API}/api/v1/owner/laundries/${laundryParse.id}/update`, {
-      method: 'PUT',
+      method: 'POST',
       enctype: 'multipart/form-data',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`
       },
+      body: data,
+      // body: JSON.stringify({
+      //   name: outlet,
+      //   phone: phone,
+      //   address: address,
+      //   lat: parseFloat(coordinate.latitude).toFixed(7),
+      //   lng: parseFloat(coordinate.longitude).toFixed(7),
+      //   city: city,
+      //   province: province
+      // })
     })
       .then(response => response.json())
       .then(responseJson => {
         console.log(responseJson)
-        // AsyncStorage.setItem('laundry', JSON.stringify(responseJson.laundry))
+        if(responseJson.error == null){
+          AsyncStorage.setItem('laundry', JSON.stringify(responseJson))
+          navigation.navigate('KelolaOutlet')
+          ToastAndroid.show(`Berhasil Memperbarui Profile Outlet`, ToastAndroid.SHORT)
+        }else{
+          Alert.alert(responseJson.message)
+        }
         setLoading(false)
       });
   }
@@ -186,18 +208,9 @@ const EditProfileOutlet = ({ navigation }) => {
             marginTop: 20,
           }}
           showsVerticalScrollIndicator={false}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10, justifyContent: 'space-between' }}>
-            <Image
-              source={{ uri: banner }}
-              style={{
-                flex: 1,
-                width: 80,
-                height: 80,
-                backgroundColor: '#c4c4c4',
-                borderRadius: 20,
-              }}
-            />
-            <Fumi
+          
+
+          <Fumi
               label={'Outlet Kamu'}
               iconClass={FontAwesomeIcon}
               iconName={'store'}
@@ -206,39 +219,22 @@ const EditProfileOutlet = ({ navigation }) => {
               iconWidth={40}
               inputPadding={20}
               autoCapitalize="none"
-              style={{ width: '75%', borderWidth: 1, borderRadius: 20, borderColor: 'grey', marginLeft: 16, }}
+              style={{  borderWidth: 1, borderRadius: 20, borderColor: 'grey', }}
               inputStyle={globalStyles.bodyText}
               labelStyle={globalStyles.captionText}
               onChangeText={text => setOutlet(text)}
               value={outlet}
             />
-          </View>
 
           <View
             style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
             <FontAwesomeIcon name='map-marker-alt' size={30} color="grey" />
-            <Text style={{ ...globalStyles.bodyText, marginLeft: 5 }}>Maps</Text>
+            <Text style={{ ...globalStyles.bodyText2, marginLeft: 5 }}>Lokasi</Text>
           </View>
           <View>
             <Maps location={coordinate} type="create" getCoordinate={getCoordinate} />
-
           </View>
-          <Fumi
-            label="Nomor Ponsel"
-            keyboardType="number-pad"
-            iconClass={FontAwesomeIcon}
-            iconName={'phone'}
-            iconColor={ColorPrimary}
-            iconSize={20}
-            iconWidth={40}
-            inputPadding={20}
-            autoCapitalize="none"
-            style={{ borderWidth: 1, borderRadius: 20, borderColor: 'grey', marginTop: 20 }}
-            inputStyle={globalStyles.bodyText}
-            labelStyle={globalStyles.captionText}
-            onChangeText={text => setPhone(text)}
-            value={phone}
-          />
+          
           <Text style={{ ...globalStyles.bodyText2, marginTop: 20, marginBottom: 10 }}>Alamat Lengkap</Text>
           <TextInput
             style={{
@@ -255,12 +251,29 @@ const EditProfileOutlet = ({ navigation }) => {
             multiline={true}
             numberOfLines={5}
             onChangeText={text => setAddress(text)}
-            value={address}
+            value={address} 
+          />
+
+          <Fumi
+            label="Nomor Ponsel"
+            keyboardType="number-pad"
+            iconClass={FontAwesomeIcon}
+            iconName={'phone'}
+            iconColor={ColorPrimary}
+            iconSize={20}
+            iconWidth={40}
+            inputPadding={20}
+            autoCapitalize="none"
+            style={{ borderWidth: 1, borderRadius: 20, borderColor: 'grey', marginTop: 20 }}
+            inputStyle={globalStyles.bodyText}
+            labelStyle={globalStyles.captionText}
+            onChangeText={text => setPhone(text)}
+            value={phone}
           />
 
           <Text
             style={{
-              ...globalStyles.bodyText,
+              ...globalStyles.bodyText2,
               marginVertical: 5,
             }}>
             Banner
@@ -271,22 +284,25 @@ const EditProfileOutlet = ({ navigation }) => {
               flexDirection: 'row',
               flex: 1,
               justifyContent: 'space-between',
+              
             }}>
             <Image
-              source={logoOutlet}
+               source=  { (!logoOutlet) ? { uri: S3 + '/' + banner } : logoOutlet}
               style={{
-                width: '65%',
-                height: 120,
+                width: 150,
+                height: 150,
                 borderWidth: 1,
                 backgroundColor: '#c4c4c4',
                 borderRadius: 20,
+                borderColor: '#c4c4c4',
+                borderWidth: 2
               }}
               resizeMode="cover"
             />
             <TouchableOpacity
               style={{
-                backgroundColor: '#C4C4C4',
-                height: 66,
+                backgroundColor: ColorPrimary,
+                height: 50,
                 width: '30%',
                 borderRadius: 20,
                 justifyContent: 'center',

@@ -17,7 +17,7 @@ const Tabs =  () => {
                 // left:20,
                 // right:20,
                 elevation:0,
-                backgroundColor:'#F5F4F1',
+                backgroundColor:'white',
                 // borderRadius:15,
                 height:90,
                 borderTopRightRadius:40,
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
         shadowColor:'#000',
         shadowOffset: {
             width:0,
-            height:-10
+            height:-20
         },
         shadowOpacity:0.25,
         shadowRadius:2.5,

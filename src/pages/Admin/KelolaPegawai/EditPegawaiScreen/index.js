@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, ToastAndroid, View, Alert } from 'react-native';
 import { Text } from 'react-native-paper';
 import { HeaderBar } from '../../../../components';
-import SIZES, { ColorPrimary } from '../../../../utils/constanta';
+import SIZES, { API, ColorPrimary } from '../../../../utils/constanta';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import { Fumi } from 'react-native-textinput-effects';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -11,17 +11,17 @@ const EditPegawaiScreen = ({ navigation, route }) => {
   const { data } = route.params
 
   const [name, setName] = useState(data.user.name)
-  const [email, setEmail] = useState(data.user.email)
   const [phone, setPhone] = useState(data.user.no_hp)
 
   const editEmployeePressed = async () => {
-    if (name && email && phone) {
+    if (name && phone) {
+      if(phone.length >= 11 && phone.length <=13){
       const laundry = await AsyncStorage.getItem('laundry')
       const laundryParse = JSON.parse(laundry);
 
       const token = await AsyncStorage.getItem('token');
 
-      await fetch(`http://192.168.42.174:8000/api/v1/owner/laundries/${laundryParse.id}/employees/${data.id}`, {
+      await fetch(`${API}/api/v1/owner/laundries/${laundryParse.id}/employees/${data.id}`, {
         method: 'PUT',
         headers: {
           Accept: 'application/json',
@@ -30,20 +30,25 @@ const EditPegawaiScreen = ({ navigation, route }) => {
         },
         body: JSON.stringify({
           name: name,
-          email: email,
-          no_hp: parseInt(phone)
+          status:1,
+          no_hp: phone
         })
       })
         .then(response => response.json())
         .then(responseJson => {
-          if (responseJson.errors == null) {
+          if (responseJson.error == null) {
             navigation.replace('Pegawai')
+            ToastAndroid.show('Berhasil mengubah data pegawai', ToastAndroid.SHORT)
           } else {
-            alert('Email telah digunakan');
+            Alert.alert(response.error);
           }
         });
+
+      } else {
+        Alert.alert('Nomor hp harus terdiri dari 11-13 karakter');
+      }
     } else {
-      alert('Masukkan semua field');
+      Alert.alert('Masukkan semua field');
     }
   }
 
@@ -85,20 +90,6 @@ const EditPegawaiScreen = ({ navigation, route }) => {
           keyboardType="phone-pad"
         />
 
-        <Fumi
-          label={'Email'}
-          iconClass={FontAwesomeIcon}
-          iconName={'envelope'}
-          iconColor={ColorPrimary}
-          iconSize={20}
-          iconWidth={40}
-          inputPadding={20}
-          onChangeText={text => setEmail(text)}
-          autoCapitalize="none"
-          value={email}
-          keyboardType="email-address"
-          style={styles.textInput}
-        />
       </View>
       <View
         style={{

@@ -8,8 +8,8 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import { bgHeader, iconTimbangan } from '../../../assets/images';
-import SIZES, { ColorPrimary } from '../../../utils/constanta';
+import { bgHeader, iconTimbangan, iconList } from '../../../assets/images';
+import SIZES, { ColorPrimary, API } from '../../../utils/constanta';
 import { globalStyles } from '../../../utils/global';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -19,10 +19,17 @@ const Transaksi = ({ navigation }) => {
   const [status, setStatus] = useState('1');
   const [dataList, setDataList] = useState([]);
   const [dataListFilter, setDataListFilter] = useState([]);
+  
+  const [dataProses, setDataProses] = useState([]);
+  const [dataSelesai, setDataSelesai] = useState([]);
+
   const [loading, setLoading] = useState(false)
 
+  
+
+
   const setStatusFilter = status => {
-    if (status === '1') {
+    if (status == '1') {
       setDataListFilter([...dataList.filter(e => e.status != '7')]);
     } else {
       setDataListFilter([...dataList.filter(e => e.status == '7')]);
@@ -34,7 +41,7 @@ const Transaksi = ({ navigation }) => {
   const fetchTransactionApi = async () => {
     const token = await AsyncStorage.getItem('token');
 
-    await fetch(`http://192.168.42.174:8000/api/v1/customer/laundries/transaction`, {
+    await fetch(`${API}/api/v1/customer/laundries/transaction`, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
@@ -45,14 +52,15 @@ const Transaksi = ({ navigation }) => {
       .then(response => response.json())
       .then(responseJson => {
         setDataList(responseJson)
-        setDataListFilter([...dataList.filter(e => e.status != '7')])
-        setLoading(false)
+        setDataListFilter([...responseJson.filter(e => e.status != '7')])
+        
       });
   }
 
   useEffect(() => {
     setLoading(true)
     fetchTransactionApi()
+    setLoading(false)
   }, [])
 
 
@@ -88,17 +96,17 @@ const Transaksi = ({ navigation }) => {
                     }}
                   />
                 </View>
-                <View style={{ marginLeft: 5 }}>
+                <View style={{ marginLeft: 5 }}> 
                   <Text
                     style={globalStyles.bodyText2}
                     numberOfLines={1}>
                     {item.serial}
                   </Text>
-                  <Text style={{ ...globalStyles.captionText, fontSize: 16 }} numberOfLines={1}>
-                    {item.amount}
+                  <Text style={{ ...globalStyles.bodyText }} numberOfLines={1}>
+                    Rp. {item.amount}
                   </Text>
                   <Text
-                    style={{ ...globalStyles.captionText, color: '#22C058' }}
+                    style={{ ...globalStyles.bodyText, color: '#22C058' }}
                     numberOfLines={1}>
                     {item.status == '1' ?
                       'Konfirmasi' : item.status == '2' ?
@@ -117,7 +125,7 @@ const Transaksi = ({ navigation }) => {
             key={index}
             style={styles.wrapItem2}
             onPress={() => {
-              navigation.navigate('DetailTransaksi');
+              navigation.navigate('DetailTransaksi',{ data: item });
             }}>
             <View style={{ flexDirection: 'row' }}>
               <MaterialCommunityIcons
@@ -178,7 +186,7 @@ const Transaksi = ({ navigation }) => {
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.tabBtn, status == '7' && styles.btnActive]}
-              onPress={() => { setStatusFilter('7'); console.log(dataList) }}>
+              onPress={() => { setStatusFilter('7');}}>
               <Text
                 style={[
                   styles.textTab,
@@ -188,13 +196,42 @@ const Transaksi = ({ navigation }) => {
               </Text>
             </TouchableOpacity>
           </View>
-
-          <FlatList
-            data={dataListFilter}
-            renderItem={renderItem}
-            ListFooterComponent={<View style={{ height: 250 }} />}
-            showsVerticalScrollIndicator={false}
-          />
+          {dataListFilter.length > 0 ?(
+            <FlatList
+              data={dataListFilter}
+              renderItem={renderItem}
+              ListFooterComponent={<View style={{ height: 250 }} />}
+              showsVerticalScrollIndicator={false}
+            />):(
+            <View 
+              style={{ width: SIZES.width, height: SIZES.height*0.6, alignItems:'center', justifyContent:'center' }}  
+            >
+              <Image
+                    source={iconList}
+                    style={{ width: 150, height: 150 }}
+                    resizeMode="contain"
+              />
+              <Text 
+                style={{
+                  ...globalStyles.H3,
+                  color:'grey',
+                  margin:5
+                }}
+              > 
+                Belum ada isinya nih...
+              </Text>
+              <Text 
+                style={{
+                  ...globalStyles.H5,
+                  color:'grey',
+                  margin:3
+                }}
+              > 
+                Gunakan layaan kami dan transaksi anda akan muncul disini.
+              </Text>
+            </View>  
+            )
+          }
         </View>
       </View >
   );

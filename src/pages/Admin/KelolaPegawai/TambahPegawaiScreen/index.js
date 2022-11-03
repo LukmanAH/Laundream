@@ -1,25 +1,34 @@
 import React, { useState } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { RadioButton, Text, TextInput } from 'react-native-paper';
+import { StyleSheet, TouchableOpacity, View, Alert } from 'react-native';
+import { Text, TextInput } from 'react-native-paper';
 import { HeaderBar, Loading } from '../../../../components';
-import SIZES, { ColorPrimary } from '../../../../utils/constanta';
+import SIZES, { API,ColorPrimary } from '../../../../utils/constanta';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import { Fumi } from 'react-native-textinput-effects';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Checkbox, RadioButton } from 'react-native-paper';
 
 const TambahPegawaiScreen = ({ navigation }) => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [checked, setChecked] = React.useState(false);
 
   const addEmployeePressed = async () => {
-    if (name && email && phone) {
+    const emailRegex = /\S+@\S+\.\S+/;
+    if (email && password && confirmPassword&& phone && name) {
+      if (emailRegex.test(email)) {
+        if(phone.length >= 11 && phone.length <=13){
+        if(password.length >= 8){
+          if (password == confirmPassword) {
       const laundry = await AsyncStorage.getItem('laundry')
       const laundryParse = JSON.parse(laundry);
 
       const token = await AsyncStorage.getItem('token');
 
-      await fetch(`http://192.168.42.174:8000/api/v1/owner/laundries/${laundryParse.id}/employees`, {
+      await fetch(`${API}/api/v1/owner/laundries/${laundryParse.id}/employees`, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -29,20 +38,33 @@ const TambahPegawaiScreen = ({ navigation }) => {
         body: JSON.stringify({
           name: name,
           email: email,
-          no_hp: parseInt(phone)
+          no_hp: phone,
+          password: password
         })
       })
         .then(response => response.json())
         .then(responseJson => {
-          if (responseJson.errors == null) {
+          if (responseJson.error == null) {
             navigation.replace('Pegawai')
           } else {
-            alert('Email telah digunakan');
+            Alert.alert(responseJson.error);
           }
         });
+      } else {
+        Alert.alert('Password tidak sesuai');
+      }
     } else {
-      alert('Masukkan semua field');
+      Alert.alert('Password harus tediri dari minimal 8 karakter');
     }
+  } else {
+    Alert.alert('Nomor hp harus terdiri dari 11-13 karakter');
+  }
+    } else {
+      Alert.alert('Email tidak valid');
+    }
+  } else {
+    Alert.alert('Seluruh field tidak boleh kosong');
+  }
   }
 
   return (
@@ -97,7 +119,55 @@ const TambahPegawaiScreen = ({ navigation }) => {
           keyboardType="email-address"
           style={styles.textInput}
         />
+
+        <Fumi
+          label={'Password'}
+          iconClass={FontAwesomeIcon}
+          iconName={'key'}
+          iconColor={ColorPrimary}
+          iconSize={20}
+          iconWidth={40}
+          inputPadding={20}
+          onChangeText={text => setPassword(text)}
+          autoCapitalize="none"
+          value={password}
+          secureTextEntry={!checked}
+          keyboardType="default"
+          style={styles.textInput}
+        />
+
+        <Fumi
+          label={'Konfirmasi Password'}
+          iconClass={FontAwesomeIcon}
+          iconName={'key'}
+          iconColor={ColorPrimary}
+          iconSize={20}
+          iconWidth={40}
+          inputPadding={20}
+          onChangeText={text => setConfirmPassword(text)}
+          autoCapitalize="none"
+          value={confirmPassword}
+          secureTextEntry={!checked}
+          keyboardType="default"
+          style={styles.textInput}
+        />
+
+        
       </View>
+      <View style={{ flexDirection:'row', paddingHorizontal: 20, paddingVertical: 1}}>
+        
+        <Checkbox
+              status={checked ? 'checked' : 'unchecked'}
+              onPress={() => {
+                setChecked(!checked);
+              }}
+              color={ColorPrimary}
+              uncheckedColor="black"
+        />
+        <Text style={{ margin:9, color:'black' }}>Tampilkan Password</Text>
+        
+        </View>
+
       <View
         style={{
           flex: 1,

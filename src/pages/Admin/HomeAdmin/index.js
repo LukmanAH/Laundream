@@ -7,7 +7,8 @@ import {
   SafeAreaView,
   StatusBar,
   ScrollView,
-  RefreshControl
+  RefreshControl,
+  Switch
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import {
@@ -15,64 +16,66 @@ import {
   iconKonfirmasi,
   iconMesinCuci,
   iconMoney,
-  iconMotor,
+  iconMotor2,
+  iconOutlet,
+  iconKatalog,
+  iconKaryawan,
+  iconRiwayat,
   iconRT,
   KeranjangIcon,
   KeranjangIcon1,
   markIcon,
   outletLogo,
+  iconHamburger
 } from '../../../assets/images';
-import SIZES, { ColorPrimary, ROLE_EMPLOYEE } from '../../../utils/constanta';
+import SIZES, { ColorPrimary, ROLE_EMPLOYEE, API } from '../../../utils/constanta';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { globalStyles } from '../../../utils/global';
 import { Badge } from 'react-native-paper';
 import { Loading } from '../../../components';
 import { STATUS_CONFIRMATION, STATUS_PICKUP, STATUS_QUEUE, STATUS_PROCESS, STATUS_READY, STATUS_DELIVER } from '../../../utils/constanta';
 
-const badge = {
-  konfirmasi: 1,
-  penjemputan: 0,
-  antrian: 0,
-  proses: 4,
-  siapAmbil: 3,
-  siapAntar: 1,
-};
-
 const HomePage = ({ navigation }) => {
   const [user, setUser] = useState('');
-  const [role, setRole] = useState(ROLE_EMPLOYEE);
+  const [role, setRole] = useState('');
   const [loading, setLoading] = useState(false);
-  const [laundry, setLaundry] = useState('')
-  const [confirmation, setConfirmation] = useState([])
-  const [pickUp, setPickUp] = useState([])
-  const [queue, setQueue] = useState([])
-  const [process, setProcess] = useState([])
-  const [ready, setReady] = useState([])
-  const [deliver, setDeliver] = useState([])
-  const [revenue, setRevenue] = useState('0')
+  const [laundry, setLaundry] = useState('');
+  const [confirmation, setConfirmation] = useState([]);
+  const [pickUp, setPickUp] = useState([]);
+  const [queue, setQueue] = useState([]);
+  const [process, setProcess] = useState([]);
+  const [ready, setReady] = useState([]);
+  const [deliver, setDeliver] = useState([]);
+  const [revenue, setRevenue] = useState('0');
   const [all, setAll] = useState([])
   const [refreshing, setRefreshing] = useState(false);
+  const [isOpen, setIsOpen] = useState(0);
+  const [badges, setBadges] = useState({
+    confirmation: 0, pickup: 0, queue: 0, process: 0, ready: 0, deliver: 0
+  })
 
   async function getUser() {
-    if (!user && !laundry) {
+    //if (!user && !laundry) {
       const getUser = await AsyncStorage.getItem('user');
       const userParse = JSON.parse(getUser);
       setUser(userParse.name);
       setRole(userParse.role);
 
-      const getLaundry = await AsyncStorage.getItem('laundry');
-      const laundryParse = JSON.parse(getLaundry)
-      setLaundry(laundryParse.name)
-    }
+      const laundry = await AsyncStorage.getItem('laundry');
+      const laundryParse = JSON.parse(laundry);
+
+      setLaundry(laundryParse);
+    
+    // }
   }
 
   const fetchHomeApi = async () => {
     const laundry = await AsyncStorage.getItem('laundry')
     const laundryParse = JSON.parse(laundry);
-
+    
     const token = await AsyncStorage.getItem('token');
 
-    await fetch(`http://192.168.42.174:8000/api/v1/owner/laundries/${laundryParse.id}/home`, {
+    await fetch(`${API}/api/v1/owner/laundries/${laundryParse.id}/home`, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
@@ -88,24 +91,44 @@ const HomePage = ({ navigation }) => {
         setProcess(responseJson.process)
         setReady(responseJson.ready)
         setDeliver(responseJson.deliver)
-        setRevenue(responseJson.revenue.toString())
+        setRevenue(String(responseJson.revenue))
         setAll(responseJson.all)
+        setBadges({
+          confirmation: (responseJson.confirmation).length, 
+          pickup: (responseJson.pickup).length, 
+          queue: (responseJson.queue).length, 
+          process: (responseJson.process).length, 
+          ready: (responseJson.ready).length, 
+          deliver: (responseJson.deliver).length
+        })
+        setIsOpen(responseJson.condition)
       });
   }
 
-  useEffect(() => {
-    getUser();
+
+  useEffect(() => {  
+    setLoading(true) 
+    getUser()
     fetchHomeApi()
+    setLoading(false) 
+
+    const interval=setInterval(()=>{ 
+      getUser()
+      fetchHomeApi()
+      console.log('refresh')
+     },10000)
+       
+     return()=>clearInterval(interval)
   }, []);
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     setTimeout(() => {
       fetchHomeApi();
-    }, 1000);
+    }, 100);
     setTimeout(() => {
       setRefreshing(false);
-    }, 1000);
+    }, 100);
   }, []);
 
   return (
@@ -113,21 +136,31 @@ const HomePage = ({ navigation }) => {
       : <SafeAreaView style={styles.container}>
         <StatusBar animated={true} barStyle="default" hidden={false} />
         <ScrollView refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} 
+          style={{ height: SIZES.height}} />
         }>
           <View style={styles.header}>
             <TouchableOpacity onPress={() => navigation.openDrawer()}>
-              <Image source={outletLogo} />
+              <Image 
+                source={iconHamburger} 
+                style={{ width: 45, height: 45 }}
+                resizeMode="contain"
+              />
             </TouchableOpacity>
-            <View style={{ flexDirection: 'column', marginLeft: 10 }}>
+            <View style={{ width:'40%',flexDirection: 'column', marginLeft: 20 }}>
               <Text style={globalStyles.bodyText}>Hai,</Text>
               <Text style={globalStyles.H3} numberOfLines={1}>
-                {laundry}
+                {laundry.name}
               </Text>
+            </View>
+        
+            <View style={{width:'40%', alignItems:'flex-end' }}>
+              <View style={{borderRadius:10, width:20, height:20,marginRight:7, backgroundColor: isOpen == 1? ColorPrimary : 'grey'}}/>
+              {isOpen == 1?<Text style={[globalStyles.bodyText,{color:ColorPrimary}]}>Buka</Text> : <Text style={globalStyles.bodyText}>Tutup</Text>}
             </View>
           </View>
 
-          <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+          <View style={{ justifyContent: 'center', alignItems: 'center', }}>
             <View style={[styles.hero, styles.shadow]}>
               <View style={{ flexDirection: 'column', width: '76%' }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -146,7 +179,8 @@ const HomePage = ({ navigation }) => {
               <Image source={iconRT} />
             </View>
 
-            <View style={{ marginTop: 24 }}>
+{/* ================== menuOption =============== */}
+            <View style={{ marginTop: 24, height: SIZES.height*0.27, }}>
               <View
                 style={{
                   flexDirection: 'row',
@@ -172,8 +206,9 @@ const HomePage = ({ navigation }) => {
                       color: 'white',
                     }}
                     size={24}
-                    visible={confirmation.length > 0}>
-                    {confirmation.length}
+                    visible={badges.confirmation != 0}
+                    >
+                    {badges.confirmation}
                   </Badge>
                   <Image
                     source={iconKonfirmasi}
@@ -201,8 +236,8 @@ const HomePage = ({ navigation }) => {
                       color: 'white',
                     }}
                     size={24}
-                    visible={pickUp.length > 0}>
-                    {pickUp.length}
+                    visible={badges.pickup != 0}>
+                    {badges.pickup}
                   </Badge>
                   <Image
                     style={{ width: 55, height: 55 }}
@@ -230,8 +265,8 @@ const HomePage = ({ navigation }) => {
                       color: 'white',
                     }}
                     size={24}
-                    visible={queue.length > 0}>
-                    {queue.length}
+                    visible={badges.queue != 0}>
+                    {badges.queue}
                   </Badge>
                   <Image
                     style={{ width: 55, height: 55 }}
@@ -268,8 +303,8 @@ const HomePage = ({ navigation }) => {
                       color: 'white',
                     }}
                     size={24}
-                    visible={process.length > 0}>
-                    {process.length}
+                    visible={badges.process != 0}>
+                    {badges.process}
                   </Badge>
                   <Image
                     style={{ width: 55, height: 55 }}
@@ -297,8 +332,8 @@ const HomePage = ({ navigation }) => {
                       color: 'white',
                     }}
                     size={24}
-                    visible={ready.length > 0}>
-                    {ready.length}
+                    visible={badges.ready != 0}>
+                    {badges.ready}
                   </Badge>
                   <Image
                     style={{ width: 55, height: 55 }}
@@ -320,7 +355,7 @@ const HomePage = ({ navigation }) => {
                   <Image
                     style={{ width: 55, height: 55 }}
                     resizeMode="contain"
-                    source={iconMotor}
+                    source={iconMotor2}
                   />
                   <Badge
                     style={{
@@ -331,8 +366,8 @@ const HomePage = ({ navigation }) => {
                       color: 'white',
                     }}
                     size={24}
-                    visible={deliver.length > 0}>
-                    {deliver.length}
+                    visible={badges.deliver != 0}>
+                    {badges.deliver}
                   </Badge>
                   <Text style={globalStyles.captionText} numberOfLines={1}>
                     Siap Antar
@@ -340,6 +375,10 @@ const HomePage = ({ navigation }) => {
                 </TouchableOpacity>
               </View>
             </View>
+
+{/* =============== NavigatorMenu ==================== */}
+
+          {role == ROLE_EMPLOYEE? null:(
             <View style={styles.wrapNavigation}>
               <View
                 style={{
@@ -350,19 +389,34 @@ const HomePage = ({ navigation }) => {
                   paddingHorizontal: 20,
                 }}>
                 <TouchableOpacity
-                  style={{ alignItems: 'center' }}
+                  style={[styles.menuNavigation, styles.shadow]}
                   onPress={() => navigation.navigate('KelolaOutlet')}>
-                  <View style={styles.menuNavigation} />
-                  <Text style={styles.labelNavigation}>Kelola Outlet</Text>
+                  <Image
+                    style={{ width: 50, height: 50 }}
+                    resizeMode="contain"
+                    source={iconOutlet}
+                  />
+                  <View style={{margin:10 }}>
+                      <Text style={styles.labelNavigation}>Kelola</Text>
+                      <Text style={styles.labelNavigation}>Outlet</Text>
+                    </View>
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                  style={{ alignItems: 'center' }}
+                  style={[styles.menuNavigation, styles.shadow]}
                   onPress={() => navigation.navigate('KelolaLayanan')}>
-                  <View style={styles.menuNavigation} />
-                  <Text style={styles.labelNavigation}>Kelola Layanan</Text>
+                    <Image
+                      style={{ width: 50, height: 50 }}
+                      resizeMode="contain"
+                      source={iconKatalog}
+                    />
+                    <View style={{margin:10 }}>
+                      <Text style={styles.labelNavigation}>Kelola</Text>
+                      <Text style={styles.labelNavigation}>Layanan</Text>
+                    </View>
                 </TouchableOpacity>
               </View>
+
               <View
                 style={{
                   flexDirection: 'row',
@@ -372,18 +426,35 @@ const HomePage = ({ navigation }) => {
                   paddingHorizontal: 20,
                 }}>
                 <TouchableOpacity
-                  style={{ alignItems: 'center' }}
+                  style={[styles.menuNavigation, styles.shadow]}
                   onPress={() => navigation.navigate('Pegawai')}>
-                  <View style={styles.menuNavigation} />
-                  <Text style={styles.labelNavigation}>Kelola Pegawai</Text>
+                    <Image
+                      style={{ width: 50, height: 50 }}
+                      resizeMode="contain"
+                      source={iconKaryawan}
+                    />
+                    <View style={{margin:10 }}>
+                      <Text style={styles.labelNavigation}>Kelola</Text>
+                      <Text style={styles.labelNavigation}>Pegawai</Text>
+                    </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={{ alignItems: 'center' }}>
-                  <View style={styles.menuNavigation} />
-                  <Text style={styles.labelNavigation}>Laporan Transaksi</Text>
+                <TouchableOpacity
+                  style={[styles.menuNavigation, styles.shadow]}
+                  onPress={() => navigation.navigate('ExportTransaksi')}>
+                    <Image
+                          style={{ width: 50, height: 50 }}
+                          resizeMode="contain"
+                          source={iconRiwayat}
+                      />
+                      <View style={{margin:10 }}>
+                      <Text style={styles.labelNavigation}>Export</Text>
+                      <Text style={styles.labelNavigation}>Laporan</Text>
+                    </View>
                 </TouchableOpacity>
               </View>
             </View>
+          )}
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -400,9 +471,8 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'row',
-    padding: 30,
-    paddingLeft: 40,
-    height: 120,
+    padding: 20,
+    height: SIZES.height*0.13,
     alignItems: 'center',
     width: SIZES.width,
   },
@@ -411,10 +481,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 20,
     backgroundColor: '#F6F6F6',
-    marginTop: 20,
+    marginTop: 10,
     borderRadius: 24,
     width: SIZES.width * 0.9,
+    height: SIZES.height*0.14+10,
   },
+
   menuOption: {
     alignItems: 'center',
     padding: 17,
@@ -431,20 +503,26 @@ const styles = StyleSheet.create({
   },
   wrapNavigation: {
     backgroundColor: ColorPrimary,
-    paddingTop: 20,
+    paddingTop: 25,
+    paddingBottom: 20,
     borderTopEndRadius: 20,
     borderTopStartRadius: 20,
     marginTop: 5,
+    height: SIZES.height*0.40,
   },
   menuNavigation: {
-    backgroundColor: '#f6f6f6',
+    backgroundColor: 'white',
     width: SIZES.width * 0.44,
-    height: 90,
+    height: SIZES.width* 0.30,
     borderRadius: 20,
+    alignItems:'center',
+    justifyContent: 'center',
+    borderColor: '#c6c6c6',
+    flexDirection: 'row',
   },
   labelNavigation: {
     ...globalStyles.bodyText2,
-    color: 'white',
+    color: ColorPrimary,
   },
   shadow: {
     shadowColor: '#000',

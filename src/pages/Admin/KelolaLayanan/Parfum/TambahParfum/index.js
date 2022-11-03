@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, Alert, View } from 'react-native';
 import { Text, TextInput } from 'react-native-paper';
 import { HeaderBar } from '../../../../../components';
-import SIZES, { ColorPrimary } from '../../../../../utils/constanta';
+import SIZES,  { API, ColorPrimary } from '../../../../../utils/constanta';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import { Fumi } from 'react-native-textinput-effects';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -17,7 +17,7 @@ const TambahParfum = ({ navigation }) => {
 
       const token = await AsyncStorage.getItem('token');
 
-      await fetch(`http://192.168.42.174:8000/api/v1/owner/laundries/${laundryParse.id}/parfumes`, {
+      await fetch(`${API}/api/v1/owner/laundries/${laundryParse.id}/parfumes`, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -30,12 +30,12 @@ const TambahParfum = ({ navigation }) => {
       })
         .then(response => response.json())
         .then(responseJson => {
-          if (responseJson.errors == null) {
+          if (responseJson.error == null) {
             navigation.replace('Parfum')
           }
         });
     } else {
-      alert('Masukkan semua field');
+      Alert.alert('Masukkan semua field');
     }
   }
 

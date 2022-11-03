@@ -1,6 +1,9 @@
 import { Dimensions } from "react-native";
 const { width, height } = Dimensions.get("window");
-export const API = 'http://192.168.1.6:8000';
+
+export const API = 'https://larav.fad.web.id';
+export const S3 = 'https://silka-itera.s3.ap-southeast-3.amazonaws.com'
+
 export const SIZES = {
     // app dimensions
     width,
@@ -22,3 +25,4 @@ export const STATUS_QUEUE = 3;
 export const STATUS_PROCESS = 4;
 export const STATUS_READY = 5;
 export const STATUS_DELIVER = 6;
+export const STATUS_CLEAR = 7;
