@@ -1,0 +1,310 @@
+[
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_src_assets_images_motor2.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\src_assets_images_motor2.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_src_assets_images_iconparfume.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\src_assets_images_iconparfume.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_node_modules_reactnativedropdownpicker_src_themes_light_icons_tick.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\node_modules_reactnativedropdownpicker_src_themes_light_icons_tick.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_src_assets_images_outlet.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\src_assets_images_outlet.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxxhdpi_ic_launcher_foreground.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\mipmap-xxxhdpi\\ic_launcher_foreground.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_src_assets_images_userheader.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\src_assets_images_userheader.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi_node_modules_reactnavigation_drawer_src_views_assets_toggledrawericon.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-xxhdpi\\node_modules_reactnavigation_drawer_src_views_assets_toggledrawericon.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxxhdpi_node_modules_reactnavigation_elements_src_assets_backicon.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-xxxhdpi\\node_modules_reactnavigation_elements_src_assets_backicon.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_src_assets_images_iconkatalog.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\src_assets_images_iconkatalog.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_src_assets_images_header.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\src_assets_images_header.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi_node_modules_reactnavigation_elements_src_assets_backicon.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-xhdpi\\node_modules_reactnavigation_elements_src_assets_backicon.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_src_assets_images_doneicon.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\src_assets_images_doneicon.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_src_assets_images_iconjam.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\src_assets_images_iconjam.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_src_assets_images_iconriwayat.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\src_assets_images_iconriwayat.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_src_assets_images_icontimbangan.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\src_assets_images_icontimbangan.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxhdpi_ic_launcher_round.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\mipmap-xxhdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_src_assets_images_mesincuci.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\src_assets_images_mesincuci.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_src_assets_images_iconrt.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\src_assets_images_iconrt.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_node_modules_reactnavigation_drawer_src_views_assets_toggledrawericon.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\node_modules_reactnavigation_drawer_src_views_assets_toggledrawericon.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_node_modules_reactnavigation_elements_src_assets_backicon.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\node_modules_reactnavigation_elements_src_assets_backicon.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi_node_modules_reactnavigation_elements_src_assets_backicon.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-xxhdpi\\node_modules_reactnavigation_elements_src_assets_backicon.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_node_modules_reactnativedropdownpicker_src_themes_dark_icons_tick.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\node_modules_reactnativedropdownpicker_src_themes_dark_icons_tick.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_src_assets_icons_profilicon.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\src_assets_icons_profilicon.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi_node_modules_reactnavigation_elements_src_assets_backicon.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-hdpi\\node_modules_reactnavigation_elements_src_assets_backicon.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_src_assets_images_outleticon.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\src_assets_images_outleticon.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-mdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\mipmap-mdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_src_assets_images_iconhamburger.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\src_assets_images_iconhamburger.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi_ic_launcher_foreground.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\mipmap-xhdpi\\ic_launcher_foreground.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_node_modules_reactnavigation_elements_src_assets_backiconmask.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\node_modules_reactnavigation_elements_src_assets_backiconmask.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\mipmap-anydpi-v26\\ic_launcher.xml"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_src_assets_images_smatlaundry.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\src_assets_images_smatlaundry.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_src_assets_images_money.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\src_assets_images_money.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_src_assets_images_noto_motorscooter.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\src_assets_images_noto_motorscooter.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi_node_modules_reactnavigation_stack_node_modules_reactnavigation_elements_src_assets_backicon.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-xxhdpi\\node_modules_reactnavigation_stack_node_modules_reactnavigation_elements_src_assets_backicon.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxxhdpi_node_modules_reactnavigation_stack_node_modules_reactnavigation_elements_src_assets_backicon.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-xxxhdpi\\node_modules_reactnavigation_stack_node_modules_reactnavigation_elements_src_assets_backicon.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_src_assets_images_iconlist.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\src_assets_images_iconlist.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\mipmap-xxhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_node_modules_reactnativedropdownpicker_src_themes_light_icons_arrowdown.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\node_modules_reactnativedropdownpicker_src_themes_light_icons_arrowdown.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi_ic_launcher_foreground.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\mipmap-hdpi\\ic_launcher_foreground.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi_node_modules_reactnavigation_stack_node_modules_reactnavigation_elements_src_assets_backicon.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-xhdpi\\node_modules_reactnavigation_stack_node_modules_reactnavigation_elements_src_assets_backicon.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxxhdpi_ic_launcher_round.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\mipmap-xxxhdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_node_modules_reactnavigation_stack_node_modules_reactnavigation_elements_src_assets_backiconmask.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\node_modules_reactnavigation_stack_node_modules_reactnavigation_elements_src_assets_backiconmask.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_node_modules_reactnativepaper_src_assets_backchevron.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\node_modules_reactnativepaper_src_assets_backchevron.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\mipmap-anydpi-v26\\ic_launcher_round.xml"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi_node_modules_reactnavigation_drawer_src_views_assets_toggledrawericon.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-xhdpi\\node_modules_reactnavigation_drawer_src_views_assets_toggledrawericon.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\mipmap-xhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-mdpi_ic_launcher_round.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\mipmap-mdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_node_modules_reactnativedropdownpicker_src_themes_dark_icons_arrowdown.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\node_modules_reactnativedropdownpicker_src_themes_dark_icons_arrowdown.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_src_assets_images_keranjang.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\src_assets_images_keranjang.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi_node_modules_reactnavigation_stack_node_modules_reactnavigation_elements_src_assets_backicon.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-hdpi\\node_modules_reactnavigation_stack_node_modules_reactnavigation_elements_src_assets_backicon.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_src_assets_icons_transaksiicon.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\src_assets_icons_transaksiicon.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxhdpi_ic_launcher_foreground.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\mipmap-xxhdpi\\ic_launcher_foreground.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_node_modules_reactnativedropdownpicker_src_themes_dark_icons_arrowup.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\node_modules_reactnativedropdownpicker_src_themes_dark_icons_arrowup.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_src_assets_images_logo.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\src_assets_images_logo.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_src_assets_images_iconkonfirmasi.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\src_assets_images_iconkonfirmasi.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi_ic_launcher_round.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\mipmap-hdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_src_assets_images_iconkaryawan.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\src_assets_images_iconkaryawan.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\mipmap-hdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_src_assets_images_laundrymaps.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\src_assets_images_laundrymaps.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_src_assets_images_keranjang1.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\src_assets_images_keranjang1.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_node_modules_reactnativedropdownpicker_src_themes_light_icons_close.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\node_modules_reactnativedropdownpicker_src_themes_light_icons_close.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_src_assets_images_motor.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\src_assets_images_motor.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_src_assets_images_iconoutlet.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\src_assets_images_iconoutlet.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_src_assets_images_illustrationregister.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\src_assets_images_illustrationregister.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_node_modules_reactnativedropdownpicker_src_themes_dark_icons_close.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\node_modules_reactnativedropdownpicker_src_themes_dark_icons_close.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi_ic_launcher_round.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\mipmap-xhdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_src_assets_images_jas.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\src_assets_images_jas.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi_node_modules_reactnavigation_drawer_src_views_assets_toggledrawericon.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-hdpi\\node_modules_reactnavigation_drawer_src_views_assets_toggledrawericon.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-mdpi_ic_launcher_foreground.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\mipmap-mdpi\\ic_launcher_foreground.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\mipmap-xxxhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_src_assets_images_markicon.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\src_assets_images_markicon.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_node_modules_reactnativedropdownpicker_src_themes_light_icons_arrowup.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\node_modules_reactnativedropdownpicker_src_themes_light_icons_arrowup.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxxhdpi_node_modules_reactnavigation_drawer_src_views_assets_toggledrawericon.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-xxxhdpi\\node_modules_reactnavigation_drawer_src_views_assets_toggledrawericon.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_src_assets_icons_homeicon.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\src_assets_icons_homeicon.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_node_modules_reactnavigation_stack_node_modules_reactnavigation_elements_src_assets_backicon.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\node_modules_reactnavigation_stack_node_modules_reactnavigation_elements_src_assets_backicon.png"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable_ic_launcher_background.xml.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable\\ic_launcher_background.xml"
+    },
+    {
+        "merged": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_src_assets_images_shirt.png.flat",
+        "source": "C:\\Users\\PC NOOB\\Documents\\android\\Laundream-RN\\android\\app\\src\\main\\res\\drawable-mdpi\\src_assets_images_shirt.png"
+    }
+]
