@@ -10,7 +10,7 @@ import { bgHeader } from '../../assets/images';
 import SIZES, { ColorPrimary } from '../../utils/constanta';
 import { globalStyles } from '../../utils/global';
 
-export default HeaderBar = ({ navigation, screenName, title, data, address, coordinate }) => {
+export default HeaderBar = ({ navigation, screenName, title, data, address, coordinate, catalog }) => {
   return (
     <ImageBackground
       source={bgHeader}
@@ -40,7 +40,9 @@ export default HeaderBar = ({ navigation, screenName, title, data, address, coor
             onPress={() => {
               if (screenName == "DetailPesanan") {
                 navigation.navigate(screenName, { data: data, address: address, coordinate: coordinate })
-              } else {
+              } else if(screenName == "KonfirmasiPesanan") {
+                navigation.navigate(screenName, {data:data, address: address, coordinate: coordinate, catalog: catalog})
+              }else {
                 navigation.navigate(screenName)
               }
             }}>

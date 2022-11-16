@@ -17,7 +17,7 @@ import BottomSheet from 'reanimated-bottom-sheet';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { KeranjangIcon, outletLogo } from '../../../../assets/images';
 import { HeaderBar, Maps } from '../../../../components';
-import SIZES, { API, ColorPrimary, STATUS_DELIVER, STATUS_READY } from '../../../../utils/constanta';
+import SIZES, { API, ColorPrimary, ColorDanger, STATUS_DELIVER, STATUS_READY } from '../../../../utils/constanta';
 import { globalStyles } from '../../../../utils/global';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -30,7 +30,7 @@ const StatusSelesai = ({ navigation, route }) => {
     latitudeDelta: 0.05,
     longitudeDelta: 0.05,
   });
-  const [info, setInfo] = useState('')
+  const [info, setInfo] = useState(data.additional_information_laundry);
 
   const processPressed = async () => {
     const token = await AsyncStorage.getItem('token');
@@ -61,26 +61,58 @@ const StatusSelesai = ({ navigation, route }) => {
       style={{
         backgroundColor: 'white',
         paddingHorizontal: 30,
-        paddingTop: 22,
-        height: 310,
+        height: 330,
         // marginTop:-10
       }}>
-      <Text style={{ alignSelf: 'center', ...globalStyles.bodyText }}>
-        Total Tagihan
-      </Text>
+      
+      <Text style={{ alignSelf: 'center', fontSize: 16, fontWeight: '600', color: 'black',paddingTop:20 }}>Total Tagihan</Text>
       <Text
         style={{
           alignSelf: 'center',
-          ...globalStyles.bodyText2,
           fontSize: 36,
+          fontWeight: '700',
+          color: 'black',
         }}>
-        {data.amount}
+        {data.amount + data.delivery_fee}
       </Text>
       <View>
-        <Text style={globalStyles.bodyText2}>Detail Tagihan</Text>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <Text style={globalStyles.captionText}>Subtotal</Text>
-          <Text style={globalStyles.captionText}>{data.amount}</Text>
+        <Text style={{ fontSize: 16, fontWeight: '600', color: 'black' }}>
+          Detail Tagihan
+        </Text>
+        <View style={{ marginLeft: 5, flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={{ fontSize: 15, fontWeight: '500', color: 'black' }}> Harga :</Text>
+          {data.amount == null?(
+              <Text style={{ fontSize: 14, fontWeight: '500', color: ColorPrimary }}> Menunggu dihitung pihak laundry</Text>
+            ):(
+              <Text style={{ fontSize: 15, fontWeight: '500', color: 'black' }}> {data.amount}</Text>
+            )
+          }
+        </View>
+        <View style={{ marginLeft: 5, flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={{ fontSize: 15, fontWeight: '500', color: 'black' }}> Ongkir :</Text>
+          <Text style={{ fontSize: 15, fontWeight: '500', color: 'black' }}> {data.delivery_fee}</Text>
+        </View>
+
+        <Text style={{ fontSize: 16, fontWeight: '600', color: 'black' }}>
+          Detail Layanan
+        </Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginLeft: 5
+          }}>
+          <Text style={{ fontSize: 15, fontWeight: '500', color:'black' }}>Nama Layanan</Text>
+          <Text style={{ fontSize: 15, fontWeight: '500', color:'black' }}>{data.catalog.name}</Text>
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginLeft: 5
+          }}>
+          <Text style={{ fontSize: 15, fontWeight: '500', color:'black' }}>Harga Layanan</Text>
+          <Text style={{ fontSize: 15, fontWeight: '500', color:'black' }}>{data.catalog.price}/{data.catalog.unit}</Text>
         </View>
         <View
           style={{
@@ -88,18 +120,9 @@ const StatusSelesai = ({ navigation, route }) => {
             justifyContent: 'space-between',
             marginLeft: 8,
           }}>
-          <Text style={globalStyles.captionText}>{data.catalog.name}</Text>
-          <Text style={globalStyles.captionText}>{data.catalog.price}</Text>
+          <Text>Ongkir</Text>
+          <Text>{data.delivery_fee}</Text>
         </View>
-        {/* <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            marginLeft: 8,
-          }}>
-          <Text style={globalStyles.captionText}>Ongkir</Text>
-          <Text style={globalStyles.captionText}>3000</Text>
-        </View> */}
       </View>
       <View
         style={{
@@ -109,14 +132,23 @@ const StatusSelesai = ({ navigation, route }) => {
           marginVertical: 5,
         }}
       />
-      <Text style={{ alignSelf: 'center', ...globalStyles.bodyText }}>
-        Pembayaran
-      </Text>
-      <TouchableOpacity
-        style={[styles.button, { backgroundColor: '#22C058' }]}
+      <Text style={{ alignSelf: 'center', color: 'black' }}>Status Pembayaran</Text>
+      {/* <TouchableOpacity
+        style={[styles.button, { backgroundColor: 'white', borderWidth:2, borderColor:ColorPrimary }]}
         onPress={() => sheetRef.current.snapTo(1)}>
-        <Text style={styles.textLogin}>{data.payment_type == '1' ? 'Lunas Awal' : 'Lunas Akhir'}</Text>
-      </TouchableOpacity>
+          
+        <Text style={[styles.textLogin, {color:'black'}]}>Lunas Akhir</Text>
+      </TouchableOpacity> */}
+      
+      {data.payment_type == 1 ? 
+        (
+          <Text style={[styles.textLogin, {color:'#22C058', alignSelf:'center'}]}>Lunas Awal</Text>
+        ):(
+          <Text style={[styles.textLogin, {color: ColorDanger, alignSelf:'center'}]}>Lunas Akhir</Text>
+        )
+      }
+      
+      
     </View>
   );
 
@@ -246,10 +278,10 @@ const StatusSelesai = ({ navigation, route }) => {
             <TouchableOpacity
               style={{ flexDirection: 'row' }}
               onPress={() => sheetRef.current.snapTo(0)}>
-              <Text style={{ ...globalStyles.bodyText2, color: '#22C058' }}>
+              <Text style={{ ...globalStyles.bodyText2, color: data.payment_type == '1' ? '#22C058': ColorDanger }}>
                 {data.payment_type == '1' ? 'Lunas Awal' : 'Lunas Akhir'}
               </Text>
-              <Icon name="chevron-forward-outline" size={20} color="#22C058" />
+              <Icon name="chevron-forward-outline" size={20} color={ data.payment_type == '1' ? '#22C058': ColorDanger} />
             </TouchableOpacity>
           </View>
 
@@ -285,7 +317,7 @@ const StatusSelesai = ({ navigation, route }) => {
           </View>
 
           <Text style={[styles.textBold, { marginTop: 15 }]}>
-            Informasi Tambahan
+            Informasi Tambahan Customer
           </Text>
           {info?
             <Text
@@ -310,8 +342,35 @@ const StatusSelesai = ({ navigation, route }) => {
               ...globalStyles.bodyText,
             }}
             >Tidak Ada</Text>
-        
-        }
+          }
+
+          <Text style={[styles.textBold, { marginTop: 15 }]}>
+            Informasi Tambahan Laundry
+          </Text>
+          {info?
+            <Text
+            style={{
+              borderWidth: 1,
+              borderColor: '#C4C4C4',
+              borderRadius: 20,
+              textAlignVertical: 'top',
+              paddingHorizontal: 15,
+              paddingVertical: 20,
+              ...globalStyles.bodyText,
+            }}
+            >{info}</Text>:
+            <Text
+            style={{
+              borderWidth: 1,
+              borderColor: '#C4C4C4',
+              borderRadius: 20,
+              textAlignVertical: 'top',
+              paddingHorizontal: 15,
+              paddingVertical: 20,
+              ...globalStyles.bodyText,
+            }}
+            >Tidak Ada</Text>
+          }
           
           
           <View style={{ height: 120 }} />

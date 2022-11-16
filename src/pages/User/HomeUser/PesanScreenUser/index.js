@@ -19,6 +19,7 @@ const DetailPesanan = ({ navigation, route }) => {
   const { data, address, coordinate } = route.params
   const [isPress, setIsPress] = useState(false);
   const [catalog, setCatalog] = useState({ id: null });
+  
 
   function renderItem({ item, index }) {
     const touchProps = {

@@ -28,6 +28,9 @@ const RegisterScreen = ({ navigation }) => {
 
           if (password == passwordConf) {
             if (netInfo.isConnected) {
+              
+              setEmail(email.replace(/\s/g, ''))
+              setPassword(password.replace(/\s/g, ''))
             await fetch(`${API}/api/v1/register`, { 
               method: 'POST',
               headers: {
@@ -72,6 +75,7 @@ const RegisterScreen = ({ navigation }) => {
   }
 
   return (
+    <ScrollView style={{backgroundColor:'white'}}>
     <View style={styles.container}>
       <Text style={styles.headerText}>Daftar Akun</Text>
       <Image source={IlustrasiRegister} resizeMode='center' style={{width: SIZES.width/2, height: SIZES.width/2 }}/>
@@ -188,7 +192,8 @@ const RegisterScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+  </View>
+  </ScrollView>
   );
 };
 

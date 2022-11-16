@@ -80,7 +80,7 @@ export default class Maps extends React.Component {
         return data.region.longitude != 'Pilih Lokasi' ? (
             <View style={styles.map}>
                 <MapView
-                    style={{ height: 200 }}
+                    style={{ height:data.type != 'user' ?SIZES.height/4 : SIZES.height/2 }}
                     onMapReady={this.mapReady}
                     provider={PROVIDER_GOOGLE}
                     initialRegion={data.region}

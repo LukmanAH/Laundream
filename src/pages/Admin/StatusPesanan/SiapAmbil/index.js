@@ -17,7 +17,7 @@ import BottomSheet from 'reanimated-bottom-sheet';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { KeranjangIcon, outletLogo } from '../../../../assets/images';
 import { HeaderBar, Maps } from '../../../../components';
-import SIZES,{ API, ColorPrimary, STATUS_CLEAR } from '../../../../utils/constanta';
+import SIZES,{ API, ColorPrimary, ColorDanger, STATUS_CLEAR } from '../../../../utils/constanta';
 import { globalStyles } from '../../../../utils/global';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -30,7 +30,7 @@ const Pengambilan = ({ navigation, route }) => {
     latitudeDelta: 0.05,
     longitudeDelta: 0.05,
   });
-  const [info, setInfo] = useState('')
+  const [info, setInfo] = useState(data.additional_information_laundry);
 
   const readyPressed = async () => {
     const token = await AsyncStorage.getItem('token');
@@ -183,13 +183,23 @@ const Pengambilan = ({ navigation, route }) => {
           title="Detail Pesanan"
         />
         <ScrollView style={{ padding: 20 }}>
-          <Text style={globalStyles.bodyText}>{data.serial}</Text>
+          
+        <Text style={globalStyles.bodyText2}>{data.serial}</Text>
+        <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginBottom: 10,
+            }}>
+            <Text style={globalStyles.bodyText2}>Tanggal Pesan</Text>
+            <Text style={globalStyles.bodyText2}>{data.created_at}</Text>
+        </View>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <View style={{ flexDirection: 'row' }}>
               <Image source={outletLogo} style={{ width: 60, height: 60 }} />
               <View style={{ marginTop: 10 }}>
                 <Text style={globalStyles.bodyText2}>{data.user.name}</Text>
-                <Text style={globalStyles.captionText}>{data.user.no_hp}</Text>
+                <Text style={globalStyles.bodyText}>{data.user.no_hp}</Text>
               </View>
             </View>
             {data.user.no_hp.substring(0,1) == '0'?
@@ -243,10 +253,10 @@ const Pengambilan = ({ navigation, route }) => {
             <TouchableOpacity
               style={{ flexDirection: 'row' }}
               onPress={() => sheetRef.current.snapTo(0)}>
-              <Text style={{ ...globalStyles.bodyText2, color: '#22C058' }}>
+              <Text style={{ ...globalStyles.bodyText2, color: data.payment_type == '1' ? '#22C058': ColorDanger }}>
                 {data.payment_type == '1' ? 'Lunas Awal' : 'Lunas Akhir'}
               </Text>
-              <Icon name="chevron-forward-outline" size={20} color="#22C058" />
+              <Icon name="chevron-forward-outline" size={20} color={ data.payment_type == '1' ? '#22C058': ColorDanger} />
             </TouchableOpacity>
           </View>
 
@@ -290,8 +300,36 @@ const Pengambilan = ({ navigation, route }) => {
             </View>
           </View>
 
+          {data.additional_information_user?
+          <View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  marginTop: 20,
+                }}>
+                  <Text style={styles.textBold}>
+                    Informasi Tambahan Customer
+                  </Text>
+              </View>
+              
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      backgroundColor: '#F6F6F6',
+                      borderRadius: 10,
+                      marginTop: 10,
+                      alignItems: 'center',
+                    }}>
+
+                  <Text style={[globalStyles.bodyText,{margin:10}]}>
+                      {data.additional_information_user}
+                  </Text>
+              </View>
+          </View>:null}
+
           <Text style={[styles.textBold, { marginTop: 15 }]}>
-            Informasi Tambahan
+            Informasi Tambahan Laundry
           </Text>
           <TextInput
             multiline={true}

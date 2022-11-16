@@ -35,7 +35,7 @@ const Penjemputan = ({ navigation, route }) => {
   })
 
   const [amount, setAmount] = useState('')
-  const [info, setInfo] = useState('')
+  const [info, setInfo] = useState(data.additional_information_laundry);
 
   const pickUpPressed = async () => {
     if(amount){
@@ -79,7 +79,7 @@ const Penjemputan = ({ navigation, route }) => {
 
     Alert.alert(
       `Peringatan`,
-      `Hapus Transaksi Ini ?`,
+      `Apakah anda ingin membatalkan transaksi ini ?`,
       [
         {
           text: 'Tidak',
@@ -100,7 +100,7 @@ const Penjemputan = ({ navigation, route }) => {
               .then(responseJson => {
                 console.log(responseJson)
                 navigation.replace('MainApp')
-                ToastAndroid.show(`${responseJson.message}`, ToastAndroid.SHORT)
+                ToastAndroid.show(`Berhasil membatalkan transaksi`, ToastAndroid.SHORT)
               });
           },
         },
@@ -116,12 +116,21 @@ const Penjemputan = ({ navigation, route }) => {
         title="Detail Pesanan"
       />
       <ScrollView style={{ padding: 20 }}>
-        <Text style={globalStyles.bodyText}>{data.serial}</Text>
+        <Text style={globalStyles.bodyText2}>{data.serial}</Text>
+        <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginBottom: 10,
+            }}>
+            <Text style={globalStyles.bodyText2}>Tanggal Pesan</Text>
+            <Text style={globalStyles.bodyText2}>{data.created_at}</Text>
+        </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <View style={{ flexDirection: 'row' }}>
             <View style={{ marginTop: 10 }}>
               <Text style={globalStyles.bodyText2}>{data.user.name}</Text>
-              <Text style={globalStyles.captionText}>{data.user.no_hp}</Text>
+              <Text style={globalStyles.bodyText}>{data.user.no_hp}</Text>
             </View>
           </View>
           {data.user.no_hp.substring(0,1) == '0'?
@@ -232,13 +241,15 @@ const Penjemputan = ({ navigation, route }) => {
               <TextInput
                 keyboardType="numeric"
                 style={{
+                  backgroundColor: '#ffffff',
+                  marginBottom:10,
                   borderWidth: 1,
-                  width: '70%',
+                  width: '80%',
                   borderColor: '#c4c4c4',
                   borderRadius: 20,
                   paddingHorizontal: 15,
                   ...globalStyles.captionText,
-                  fontSize: 17
+                  fontSize: 17,
                 }}
                 value={amount}
                 onChangeText={(e) => setAmount(e)} />
@@ -246,8 +257,36 @@ const Penjemputan = ({ navigation, route }) => {
           </View>
         </View>
 
+        {data.additional_information_user?
+          <View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  marginTop: 20,
+                }}>
+                  <Text style={styles.textBold}>
+                    Informasi Tambahan Customer
+                  </Text>
+              </View>
+              
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      backgroundColor: '#F6F6F6',
+                      borderRadius: 10,
+                      marginTop: 10,
+                      alignItems: 'center',
+                    }}>
+
+                  <Text style={[globalStyles.bodyText,{margin:10}]}>
+                      {data.additional_information_user}
+                  </Text>
+              </View>
+          </View>:null}
+
         <Text style={[styles.textBold, { marginTop: 15 }]}>
-          Informasi Tambahan
+          Informasi Tambahan Laundry
         </Text>
         <TextInput
           multiline={true}

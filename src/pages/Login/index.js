@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Text, View, Alert, Image, StyleSheet, Button } from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
-import SIZES, { ColorPrimary, ROLE_CUSTOMER, API } from '../../utils/constanta';
+import SIZES, { ColorPrimary, ROLE_CUSTOMER, API, ROLE_OWNER, ROLE_EMPLOYEE } from '../../utils/constanta';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import { Fumi } from 'react-native-textinput-effects';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -12,8 +12,8 @@ import {useNetInfo} from "@react-native-community/netinfo";
 import OfflineNotice from '../../components/OfflineNotice';
 
 const LoginScreen = ({ navigation }) => {
-  const [email, setEmail] = useState('lukmandihakimi07@gmail.com');
-  const [password, setPassword] = useState('kharisma');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [checked, setChecked] = useState(false);
   const netInfo = useNetInfo();
 
@@ -23,6 +23,8 @@ const LoginScreen = ({ navigation }) => {
       if (emailRegex.test(email)) {
         if(password.length >= 8){
             if (netInfo.isConnected) {
+              setEmail(email.replace(/\s/g, ''))
+              setPassword(password.replace(/\s/g, ''))
               await fetch(`${API}/api/v1/login`, {
                 method: 'POST',
                 headers: {
@@ -49,8 +51,10 @@ const LoginScreen = ({ navigation }) => {
 
                     if (responseJson.user.role == ROLE_CUSTOMER) {
                       navigation.replace('Tabs'); //home customer screen
-                    } else {
+                    } else if (responseJson.user.role == ROLE_OWNER || responseJson.user.role == ROLE_EMPLOYEE){
                       navigation.replace('MainApp'); //home Admin/employee screen
+                    } else {
+                      Alert.alert("Akun anda tidak terdaftar!");
                     }
                   } else {
                     Alert.alert(responseJson.error);

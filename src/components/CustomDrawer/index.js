@@ -36,12 +36,15 @@ const CustomDrawer = props => {
             })
               .then(response => response.json())
               .then(responseJson => {
-                console.log(responseJson)
+                if (responseJson.error != null) {
+                  console.log(responseJson.error)
+                }
               });
+              await AsyncStorage.removeItem('token');
+              ToastAndroid.show(`Berhasil Logout`, ToastAndroid.SHORT)
+              navigation.navigate('LoginScreen')
             
-            await AsyncStorage.removeItem('token');
-            ToastAndroid.show(`Berhasil Logout`, ToastAndroid.SHORT)
-            navigation.navigate('LoginScreen')
+            
           },
         },
       ],

@@ -37,6 +37,8 @@ import {
   DetailTransaksi,
   EditProfile,
   EditOngkirScreen,
+  Pesan,
+  Latihan
 } from '../pages';
 import Tabs from '../bottomTabs';
 import DrawerMenu from './drawer';
@@ -187,6 +189,10 @@ const Route = () => {
         component={KonfirmasiPesanan}
       />
       <Stack.Screen
+        name="Pesan"
+        component={Pesan}
+      />
+      <Stack.Screen
         name="DetailTransaksi"
         component={DetailTransaksi}
       />
@@ -198,6 +204,7 @@ const Route = () => {
         name="Profil"
         component={Profil}
       />
+      
     </Stack.Navigator>
   );
 };

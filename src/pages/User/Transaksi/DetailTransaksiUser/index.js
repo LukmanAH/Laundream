@@ -340,6 +340,63 @@ const DetailTransaksi = ({ navigation, route }) => {
               <Text style={globalStyles.captionText}>Rp. {data.catalog.price} / {data.catalog.unit}</Text>
             </View>
           </View>
+
+          {data.additional_information_user?
+          <View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  marginTop: 20,
+                }}>
+                  <Text style={globalStyles.H3}>
+                    Informasi Tambahan Customer
+                  </Text>
+              </View>
+              
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      backgroundColor: '#F6F6F6',
+                      borderRadius: 10,
+                      marginTop: 10,
+                      alignItems: 'center',
+                    }}>
+
+                  <Text style={[globalStyles.bodyText,{margin:10}]}>
+                      {data.additional_information_user}
+                  </Text>
+              </View>
+          </View>:null}
+          
+          {data.additional_information_laundry?
+          <View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  marginTop: 20,
+                }}>
+                  <Text style={globalStyles.H3}>
+                    Informasi Tambahan Laundry
+                  </Text>
+              </View>
+              
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      backgroundColor: '#F6F6F6',
+                      borderRadius: 10,
+                      marginTop: 10,
+                      alignItems: 'center',
+                    }}>
+
+                  <Text style={[globalStyles.bodyText,{margin:10}]}>
+                      {data.additional_information_laundry}
+                  </Text>
+              </View>
+          </View>:null}
+
           <View
             style={{
               flexDirection: 'row',

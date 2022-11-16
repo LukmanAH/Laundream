@@ -29,7 +29,7 @@ const Konfirmasi = ({ navigation, route }) => {
     longitudeDelta: 0.05,
   });
   const [amount, setAmount] = useState('')
-  const [info, setInfo] = useState('')
+  const [info, setInfo] = useState(data.additional_information_laundry);
 
   const confirmPressed = async () => {
     if(amount){
@@ -68,7 +68,7 @@ const Konfirmasi = ({ navigation, route }) => {
 
     Alert.alert(
       `Peringatan`,
-      `Hapus Transaksi Ini ?`,
+      `Apakah anda ingin membatalkan transaksi ini ?`,
       [
         {
           text: 'Tidak',
@@ -89,7 +89,7 @@ const Konfirmasi = ({ navigation, route }) => {
               .then(responseJson => {
                 console.log(responseJson)
                 navigation.replace('MainApp')
-                ToastAndroid.show(`${responseJson.message}`, ToastAndroid.SHORT)
+                ToastAndroid.show(`Berhasil membatalkan transaksi`, ToastAndroid.SHORT)
               });
           },
         },
@@ -105,12 +105,21 @@ const Konfirmasi = ({ navigation, route }) => {
         title="Detail Pesanan"
       />
       <ScrollView style={{ padding: 20 }}>
-        <Text style={globalStyles.bodyText}>{data.serial}</Text>
+        <Text style={globalStyles.bodyText2}>{data.serial}</Text>
+        <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginBottom: 10,
+            }}>
+            <Text style={globalStyles.bodyText2}>Tanggal Pesan</Text>
+            <Text style={globalStyles.bodyText2}>{data.created_at}</Text>
+        </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <View style={{ flexDirection: 'row' }}>
             <View style={{ marginTop: 10 }}>
               <Text style={globalStyles.bodyText2}>{data.user.name}</Text>
-              <Text style={globalStyles.captionText}>{data.user.no_hp}</Text>
+              <Text style={globalStyles.bodyText}>{data.user.no_hp}</Text>
             </View>
           </View>
           {data.user.no_hp.substring(0,1) == '0'?
@@ -217,7 +226,9 @@ const Konfirmasi = ({ navigation, route }) => {
                   borderRadius: 20,
                   paddingHorizontal: 15,
                   ...globalStyles.captionText,
-                  fontSize: 17
+                  fontSize: 17,
+                  backgroundColor: '#ffffff',
+                  marginBottom:10,
                 }}
                 value={amount}
                 onChangeText={(e) => setAmount(e)} />
@@ -225,8 +236,36 @@ const Konfirmasi = ({ navigation, route }) => {
           </View>
         </View>
 
+       {data.additional_information_user?
+          <View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  marginTop: 20,
+                }}>
+                  <Text style={styles.textBold}>
+                    Informasi Tambahan Customer
+                  </Text>
+              </View>
+              
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      backgroundColor: '#F6F6F6',
+                      borderRadius: 10,
+                      marginTop: 10,
+                      alignItems: 'center',
+                    }}>
+
+                  <Text style={[globalStyles.bodyText,{margin:10}]}>
+                      {data.additional_information_user}
+                  </Text>
+              </View>
+          </View>:null}
+
         <Text style={[styles.textBold, { marginTop: 15 }]}>
-          Informasi Tambahan
+          Informasi Tambahan Laundry
         </Text>
         <TextInput
           multiline={true}

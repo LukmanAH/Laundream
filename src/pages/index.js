@@ -33,6 +33,7 @@ import Transaksi from './User/Transaksi';
 import DetailPesanan from './User/HomeUser/PesanScreenUser';
 import DetailInfo from './User/HomeUser/DetailInformasi';
 import KonfirmasiPesanan from './User/HomeUser/KonfirmasiPesananUser';
+import Pesan from './User/HomeUser/KonfirmasiPesananUser/pesan';
 import DetailTransaksi from './User/Transaksi/DetailTransaksiUser';
 import EditProfile from './User/Profil/EditProfil';
 import EditAdmin from './Admin/HomeAdmin/EditAdmin';
@@ -74,9 +75,10 @@ export {
   DetailPesanan,
   DetailInfo,
   KonfirmasiPesanan,
+  Pesan,
   DetailTransaksi,
   EditProfile,
   EditAdmin,
   ExportTransaksi,
-  EditOngkirScreen
+  EditOngkirScreen,
 };

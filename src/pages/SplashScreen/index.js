@@ -4,9 +4,6 @@ import { Logo } from '../../assets/images';
 import { ColorPrimary, ROLE_CUSTOMER } from '../../utils/constanta';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
-
-
 const SplashScreen = ({navigation}) => {
 
   const checkSesion = async () =>{
@@ -29,6 +26,7 @@ const SplashScreen = ({navigation}) => {
   useEffect(() => {
     setTimeout(() => {
         checkSesion();
+        //navigation.replace('Latihan');
     }, 5000);
     
   }, []);

@@ -53,7 +53,7 @@ const Profil = ({navigation}) => {
             })
               .then(response => response.json())
               .then(responseJson => {
-                console.log(responseJson)
+                console.log(responseJson.error)
               });
             await AsyncStorage.removeItem('token');
             ToastAndroid.show(`Berhasil Logout`, ToastAndroid.SHORT)
